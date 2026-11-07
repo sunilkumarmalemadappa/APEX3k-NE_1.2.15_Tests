@@ -170,7 +170,7 @@ Input Method: Unicast video streams via GigE
 **Monitoring Points:**
 - Verify via APEX-NE EM: Blade > Blade<1> > Config > Gateway VOD MC Simulcrypt
 - Verify via APEX-NE EM: Blade > Blade<2> > Config > Gateway VOD MC Simulcrypt
-- Capture MPEG Tracker output from both blades
+- Monitor MPEG Tracker output from both blades
 - Verify ECM PID presence/absence per blade configuration
 
 ---
@@ -363,7 +363,7 @@ Input Method: Unicast video streams via GigE
 2. Verify CTE module is present and enabled
 3. Verify SCTE-52 algorithm is selected/configured
 4. Create test Gateway VOD stream
-5. Capture output TS on MPEG Tracker (minimum 1 minute capture)
+5. Monitor output TS on MPEG Tracker (minimum 1 minute monitoring)
 6. Analyze packets for:
    - Control words present
    - Encryption algorithm metadata (should show SCTE-52)
@@ -398,7 +398,7 @@ Input Method: Unicast video streams via GigE
 **Test Steps:**
 1. Start 10 different Gateway VOD streams via M3-Server to Virtual IP
 2. For each stream:
-   - Capture output on MPEG Tracker
+   - Monitor output on MPEG Tracker
    - Analyze encryption algorithm
    - Verify key structure matches SCTE-52
    - Check control word insertion pattern
@@ -474,7 +474,7 @@ Input Method: Unicast video streams via GigE
 1. Verify ECMG server running and accessible
 2. Start VOD stream input via M3-Server to Virtual IP
 3. Monitor stream in: **APEX3K-NE EM >> Blades >> Select Blade<1> >> Gateway VOD Status** (TS and Mappings table - should appear)
-4. Capture transport stream output on MPEG Tracker (minimum 100 packets)
+4. Monitor transport stream output on MPEG Tracker (minimum 100 packets)
 5. Analyze captured packets:
    - Search for ECM (0x80) tables
    - Identify ECM PID assigned
@@ -781,7 +781,7 @@ Input Method: Unicast video streams via GigE
 4. On source device: Modify DTCP descriptor (e.g., change APS value)
 5. Send modified descriptor to APEX NE (Blade<1>)
 6. Wait for output update (should be immediate or within 1-2 seconds)
-7. Capture new descriptor from output via MPEG Tracker
+7. Monitor new descriptor from output via MPEG Tracker
 8. Verify modified APS value reflected in output
 9. Repeat modification: Change Image_Constraint_Token on source
 10. Verify output reflects new Image_Constraint_Token
