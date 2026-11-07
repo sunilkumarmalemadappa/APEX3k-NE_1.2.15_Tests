@@ -2164,7 +2164,10 @@ Input Method: Unicast video streams via GigE
 - Source device capable of modifying DTCP descriptors on the fly
 - MPEG Tracker connected after APEX3K RF output for packet analysis
 
-**Test Steps:**
+#### 5.0.2.2 Objectives
+**Objective:** Verify APEX3K-NE handles DTCP descriptor modifications from source device
+
+#### 5.0.2.3 Procedure
 1. Start DTCP stream to Blade<1> with known DTCP descriptor values
 2. Capture baseline descriptor: APS, CCI, Image_Constraint_Token values
 3. Verify output stream descriptor via MPEG Tracker
@@ -2177,9 +2180,6 @@ Input Method: Unicast video streams via GigE
 10. Verify output reflects new Image_Constraint_Token
 11. Repeat for multiple CCI values (Full, FWK, FPK, Clear, Unencrypted)
 12. Monitor no disruption to stream delivery during modifications
-
-#### 5.0.2.2 Objectives
-**Objective:** Verify APEX3K-NE handles DTCP descriptor modifications from source device
 
 #### 5.0.2.4 Expected Results
 - DTCP descriptor modifications followed immediately
@@ -2201,7 +2201,10 @@ Input Method: Unicast video streams via GigE
 - MPEG Tracker monitoring output
 - Stopwatch/timer available to measure reversion time
 
-**Test Steps:**
+#### 5.0.3.2 Objectives
+**Objective:** Verify VOD_X6_022 - When input DTCP descriptor lost, output PRKM RMD settings revert to CTE settings within **10 seconds** (APEX NE specific)
+
+#### 5.0.3.3 Procedure
 1. Establish DTCP stream with valid descriptor to Blade<1>
 2. Verify output descriptor shows DTCP values (APS, CCI, etc.)
 3. Record CTE Configuration settings from: **Chassis >> VOD >> CTE Configuration**
@@ -2215,7 +2218,7 @@ Input Method: Unicast video streams via GigE
 11. Verify no stream interruption during transition
 12. Verify tier level info on: **APEX-NE EM >> Blade >> Config >> GVOD Status GUI** reflects CTE tier
 
-**Expected Results (Per APEX NE PFS):**
+#### 5.0.3.4 Expected Results
 - Reversion to CTE settings completes within **10 seconds**
 - Output PRKM RMD settings match CTE configuration
 - No stream interruption
@@ -2231,15 +2234,15 @@ APEX 3000 reverts within 15 seconds; APEX NE reverts within **10 seconds** (5-se
 ### 5.0.4 Test Case: DTCP Follow Disabled - CTE Settings Enforcement
 **Test ID:** TC_REL1.2.15-050_004  
 **Severity:** HIGH  
-#### 5.0.3.2 Objectives
-**Objective:** Verify VOD_X6_022 - When input DTCP descriptor lost, output PRKM RMD settings revert to CTE settings within **10 seconds** (APEX NE specific)
-
 #### 5.0.4.1 Initial Condition
 - APEX3K-NE configured for Gateway VOD
 - DTCP test streams available
 - CTE Configuration settings known
 
-**Test Steps:**
+#### 5.0.4.2 Objectives
+**Objective:** Verify when "Follow DTCP Session Control" is Disabled, CTE settings are used exclusively
+
+#### 5.0.4.3 Procedure
 1. Access: **APEX-NE EM >> Chassis >> VOD**
 2. Set "Follow DTCP Session Control" to **Disabled** (default)
 3. Click Save/Apply
@@ -2250,9 +2253,6 @@ APEX 3000 reverts within 15 seconds; APEX NE reverts within **10 seconds** (5-se
 8. Modify source DTCP descriptor (change APS/CCI values)
 9. Verify output does NOT follow modifications (still uses CTE settings)
 10. Monitor output stream quality/encryption
-
-#### 5.0.4.2 Objectives
-**Objective:** Verify when "Follow DTCP Session Control" is Disabled, CTE settings are used exclusively
 
 #### 5.0.4.4 Expected Results
 - Follow DTCP disabled → CTE settings applied to all streams
@@ -2280,6 +2280,8 @@ APEX 3000 reverts within 15 seconds; APEX NE reverts within **10 seconds** (5-se
   - Input WITHOUT CA_descriptor → Detected as clear → ENCRYPT normally and INSERT CTE CA_descriptor
 - When **Pre-encrypted Checking = DISABLED:**
   - Any input → STRIP CA_descriptor (if present) → ENCRYPT with CTE → INSERT new CTE CA_descriptor (re-encryption)
+
+---
 
 ### 5.0.5 Test Case: Pre-encrypted Service Detection - Full Encryption Input (ENABLED = PASS-THROUGH)
 **Test ID:** TC_REL1.2.15-050_005  
@@ -2360,7 +2362,10 @@ When Pre-encrypted Checking = ENABLED:
 - CTE Encryption setting = FULL
 - Input must have CA_descriptor to be treated as pre-encrypted
 
-**Test Steps:**
+#### 5.0.6.2 Objectives
+**Objective:** Verify when Pre-encrypted Checking ENABLED: FWK input with CA_descriptor → Pass-through with same CA_descriptor
+
+#### 5.0.6.3 Procedure
 1. Configure source device: Generate FWK encrypted stream WITH CA_descriptor
 2. Record source CA_descriptor: CA_System_ID, ECM PID, parameters
 3. Unicast FWK stream to Blade<1> Virtual IP
@@ -2379,9 +2384,6 @@ When Pre-encrypted Checking = ENABLED:
 11. **STB Test:** CTE Authorized STB (does not have source's CAS key)
     - Connect separate Motorola DCX STB to APEX3K-NE output
     - Should NOT be able to view (different CA_descriptor, different CAS)
-
-#### 5.0.6.2 Objectives
-**Objective:** Verify when Pre-encrypted Checking ENABLED: FWK input with CA_descriptor → Pass-through with same CA_descriptor
 
 #### 5.0.6.4 Expected Results
 - FWK with CA_descriptor detected and passed through
@@ -2408,12 +2410,15 @@ Only difference is stream type (FWK vs Full), behavior should be identical for p
 - CTE Encryption = FULL
 - MPEG Tracker monitoring output
 
+#### 5.0.7.2 Objectives
+**Objective:** Verify when Pre-encrypted Checking DISABLED: APEX-NE strips CA_descriptor, re-encrypts, and inserts CTE CA_descriptor
+
+#### 5.0.7.3 Procedure
 **Critical Behavior (Per Spec - PRE-ENCRYPTED CHECKING DISABLED):**
 - APEX-NE SHALL STRIP OUT input CA_descriptor
 - APEX-NE SHALL ENCRYPT NORMALLY (CTE encryption)
 - APEX-NE SHALL INSERT NEW CA_descriptor (CTE's CA_descriptor)
 
-**Test Steps:**
 1. Access: **APEX-NE EM >> VOD >> Session control configurations**
 2. Set Pre-encrypted Checking = **DISABLED**
 3. Record source CA_descriptor (source's CA_System_ID, source's ECM PID)
@@ -2438,9 +2443,6 @@ Only difference is stream type (FWK vs Full), behavior should be identical for p
     - Monitor video playback for minimum 1.5 minutes
     - Verify encrypted TS content plays WITHOUT glitches or macroblocks
     - Confirm smooth video rendering and audio sync
-
-#### 5.0.7.2 Objectives
-**Objective:** Verify when Pre-encrypted Checking DISABLED: APEX-NE strips CA_descriptor, re-encrypts, and inserts CTE CA_descriptor
 
 #### 5.0.7.4 Expected Results
 - Input CA_descriptor STRIPPED (removed from output)
@@ -2469,12 +2471,15 @@ Only difference is stream type (FWK vs Full), behavior should be identical for p
 - Pre-encrypted Checking = **ENABLED**
 - CTE Encryption = FULL
 
+#### 5.0.8.2 Objectives
+**Objective:** Verify when Pre-encrypted Checking ENABLED: Clear input (NO CA_descriptor) → Encrypt normally and insert CTE CA_descriptor
+
+#### 5.0.8.3 Procedure
 **Key Behavior (Per Spec - PRE-ENCRYPTED CHECKING ENABLED, INPUT = CLEAR):**
 - Input without CA_descriptor → Treated as CLEAR content
 - APEX-NE SHALL ENCRYPT NORMALLY
 - APEX-NE SHALL INSERT CTE CA_descriptor
 
-**Test Steps:**
 1. Access: **APEX-NE EM >> VOD >> Session control configurations**
 2. Verify: Pre-encrypted Checking = ENABLED
 3. Send CLEAR (unencrypted) stream to Blade<1> Virtual IP
@@ -2492,9 +2497,6 @@ Only difference is stream type (FWK vs Full), behavior should be identical for p
     - Monitor video playback for minimum 1.5 minutes
     - Verify encrypted TS content plays WITHOUT glitches or macroblocks
     - Confirm smooth video rendering and audio sync
-
-#### 5.0.8.2 Objectives
-**Objective:** Verify when Pre-encrypted Checking ENABLED: Clear input (NO CA_descriptor) → Encrypt normally and insert CTE CA_descriptor
 
 #### 5.0.8.4 Expected Results
 - Clear input (no CA_descriptor) encrypted with CTE
@@ -2516,7 +2518,10 @@ Only difference is stream type (FWK vs Full), behavior should be identical for p
 - Stream 2: Clear WITHOUT CA_descriptor
 - CTE Encryption = FULL
 
-**Test Steps:**
+#### 5.0.9.2 Objectives
+**Objective:** Verify Pre-encrypted Checking ENABLED handles mixed inputs correctly on same Blade
+
+#### 5.0.9.3 Procedure
 1. Configure Blade<1> with Pre-encrypted Checking = ENABLED
 2. **Stream 1:** Send pre-encrypted WITH CA_descriptor to Virtual IP
 3. **Stream 2:** Send clear WITHOUT CA_descriptor to Virtual IP
@@ -2534,9 +2539,6 @@ Only difference is stream type (FWK vs Full), behavior should be identical for p
    - Broadcast Auth: Cannot view (encrypted with CTE)
    - CTE Auth: Connect Motorola DCX STB, can view (CTE encrypted), monitor for 1 minute, verify smooth playback without glitches
 9. Verify no cross-stream interference
-
-#### 5.0.9.2 Objectives
-**Objective:** Verify Pre-encrypted Checking ENABLED handles mixed inputs correctly on same Blade
 
 #### 5.0.9.4 Expected Results
 - Stream 1 (pre-encrypted with CA): Passed through with SAME CA_descriptor
@@ -2562,13 +2564,16 @@ Only difference is stream type (FWK vs Full), behavior should be identical for p
 - MPEG Tracker monitoring output
 - Ability to change Pre-encrypted Checking setting
 
+#### 5.0.10.2 Objectives
+**Objective:** Verify Pre-encrypted Checking setting determines stream handling (CA_descriptor preservation vs replacement)
+
+#### 5.0.10.3 Procedure
 **Key Specification:**
 | Setting | Input with CA_descriptor | Result |
 | --- | --- | --- |
 | ENABLED | Pre-encrypted (has CA_descriptor) | PASS-THROUGH: Same CA_descriptor to output |
 | DISABLED | Any input | RE-ENCRYPT: Strip CA_descriptor, insert CTE CA_descriptor |
 
-**Test Steps:**
 1. Access: **APEX-NE EM >> VOD >> Session control configurations**
 2. Set Pre-encrypted Checking = **ENABLED**
 3. Send pre-encrypted stream WITH CA_descriptor to Blade<1>
@@ -2589,9 +2594,6 @@ Only difference is stream type (FWK vs Full), behavior should be identical for p
     - Monitor video playback for 1 minute, verify smooth playback without glitches
 12. Compare Blade<1> vs Blade<2> outputs
 13. Verify different CA_descriptor handling based on setting
-
-#### 5.0.10.2 Objectives
-**Objective:** Verify Pre-encrypted Checking setting determines stream handling (CA_descriptor preservation vs replacement)
 
 #### 5.0.10.4 Expected Results
 - Blade<1> (ENABLED): Input CA_descriptor preserved in output
