@@ -1885,7 +1885,10 @@ Input Method: Unicast video streams via GigE
 - Sufficient system resources for 1,300 concurrent streams
 - MPEG Tracker connected after APEX3K RF output for monitoring
 
-**Test Steps:**
+#### 4.0.1.2 Objectives
+**Objective:** Verify APEX3K-NE Gateway VOD can handle 1,300 simultaneous unicast streams from M3 server and display all mappings with correct input/output IPs and program numbers in GVOD Status
+
+#### 4.0.1.3 Procedure
 1. Verify Gateway VOD configuration in APEX-NE EM:
    - Navigate to: **APEX3K-NE EM >> Blades >> Select Blade<1> >> Config**
    - Confirm Gateway VOD = **Enable**
@@ -1952,9 +1955,6 @@ Input Method: Unicast video streams via GigE
     - Confirm no packet loss or errors
     - Sample 10-20 program numbers to verify correct content routing
 
-#### 4.0.1.2 Objectives
-**Objective:** Verify APEX3K-NE Gateway VOD can handle 1,300 simultaneous unicast streams from M3 server and display all mappings with correct input/output IPs and program numbers in GVOD Status
-
 #### 4.0.1.4 Expected Results
 - All 1,300 unicast streams from M3-Server successfully ingested by APEX3K-NE
 - GVOD Status displays exactly 1,300 TS mappings in the table
@@ -1977,7 +1977,10 @@ Input Method: Unicast video streams via GigE
 - 1,300 mappings already created and active
 - Attempting to add 1,301st mapping
 
-**Test Steps:**
+#### 4.0.2.2 Objectives
+**Objective:** Verify APEX3K-NE rejects mapping creation exceeding capacity limit
+
+#### 4.0.2.3 Procedure
 1. Verify 1,300 mappings in: **APEX3K-NE EM >> Blades >> Select Blade<1> >> Gateway VOD Status** (TS and Mappings table)
 2. Attempt to create 1,301st mapping (via M3-Server or manual)
 3. Monitor APEX-NE EM for mapping creation
@@ -1985,9 +1988,6 @@ Input Method: Unicast video streams via GigE
 5. Document error message text
 6. Verify existing 1,300 mappings remain unaffected
 7. Verify no system instability
-
-#### 4.0.2.2 Objectives
-**Objective:** Verify APEX3K-NE rejects mapping creation exceeding capacity limit
 
 #### 4.0.2.4 Expected Results
 - 1,301st mapping rejected
@@ -2002,7 +2002,10 @@ Input Method: Unicast video streams via GigE
 - 3-blade APEX3K-NE system
 - All blades support Gateway VOD
 
-**Test Steps:**
+#### 4.0.3.2 Objectives
+**Objective:** Verify each blade has independent 1,300 mapping capacity
+
+#### 4.0.3.3 Procedure
 1. Configure Blade<1>: **Blade >> Select Blade<1> >> Config >> Enable Gateway VOD**
    - Virtual IP: 192.168.1.100
    - Output IP: 192.168.1.101
@@ -2019,9 +2022,6 @@ Input Method: Unicast video streams via GigE
 8. Attempt 1,301st on Blade<2> (should fail)
 9. Verify Blade<1> and <3> unaffected
 
-#### 4.0.3.2 Objectives
-**Objective:** Verify each blade has independent 1,300 mapping capacity
-
 #### 4.0.3.4 Expected Results
 - Each blade supports full 1,300 independent
 - Total 3,900 mappings across 3 blades
@@ -2035,7 +2035,10 @@ Input Method: Unicast video streams via GigE
 - Starting with 1,000 active mappings
 - Adding 300 more to reach 1,300 capacity
 
-**Test Steps:**
+#### 4.0.4.2 Objectives
+**Objective:** Verify capacity handling during dynamic stream addition
+
+#### 4.0.4.3 Procedure
 1. Monitor 1,000 active mappings baseline
 2. Monitor performance metrics (CPU, memory, throughput)
 3. Start adding 300 new streams (may use script)
@@ -2043,9 +2046,6 @@ Input Method: Unicast video streams via GigE
 5. Verify all 1,300 active after completion
 6. Verify existing 1,000 remain uninterrupted
 7. Monitor performance after reaching capacity
-
-#### 4.0.4.2 Objectives
-**Objective:** Verify capacity handling during dynamic stream addition
 
 #### 4.0.4.4 Expected Results
 - 300 added successfully
