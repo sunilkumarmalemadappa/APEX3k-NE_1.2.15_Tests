@@ -2623,7 +2623,10 @@ Per APEX NE Specification:
 - Gateway VOD configured on Blade<1>
 - MediaCipher SimulCrypt enabled
 
-**Test Steps:**
+#### 6.0.1.2 Objectives
+**Objective:** Verify encryption status and mapping details displayed in GVOD Status table
+
+#### 6.0.1.3 Procedure
 1. Navigate to: **APEX3K-NE EM >> Blades >> Select Blade<1> >> GVOD status**
 2. Verify GVOD status table displays all GVOD TS entries
 3. Verify table columns include mapping details
@@ -2638,9 +2641,6 @@ Per APEX NE Specification:
 8. Create new GVOD mapping and verify status updates in table in real-time
 9. Disable MediaCipher Simulcrypt at blade level and verify status changes
 10. Verify MPEG Tracker analysis matches displayed encryption status
-
-#### 6.0.1.2 Objectives
-**Objective:** Verify encryption status and mapping details displayed in GVOD Status table
 
 #### 6.0.1.4 Expected Results
 - GVOD status table displays all GVOD TS entries
@@ -2657,7 +2657,10 @@ Per APEX NE Specification:
 - Mapping with multiple CAS configured (MediaCipher + SuperCAS)
 - APEX-NE EM Mappings view accessible
 
-**Test Steps:**
+#### 6.0.2.2 Objectives
+**Objective:** Verify detailed status showing which CAS systems active
+
+#### 6.0.2.3 Procedure
 1. Display mapping details in APEX-NE EM
 2. Verify encryption status shown
 3. Click for detailed status/information
@@ -2668,9 +2671,6 @@ Per APEX NE Specification:
    - SuperCAS 3 ✓ (if configured)
 5. Test with different CAS configurations
 6. Verify detail level comprehensive
-
-#### 6.0.2.2 Objectives
-**Objective:** Verify detailed status showing which CAS systems active
 
 #### 6.0.2.4 Expected Results
 - Detailed status accessible
@@ -2685,7 +2685,10 @@ Per APEX NE Specification:
 - 1,000+ mappings configured
 - Various encryption states
 
-**Test Steps:**
+#### 6.0.3.2 Objectives
+**Objective:** Verify Element Manager handles large mapping sets efficiently
+
+#### 6.0.3.3 Procedure
 1. Navigate to: **Blade >> Select Blade<1> >> Gateway VOD >> Mappings**
 2. Load full list of 1,000+ mappings
 3. Verify performance (target: < 5 sec load time)
@@ -2696,9 +2699,6 @@ Per APEX NE Specification:
 5. Verify filter results accurate
 6. Test bulk status operations
 7. Verify pagination if applicable
-
-#### 6.0.3.2 Objectives
-**Objective:** Verify Element Manager handles large mapping sets efficiently
 
 #### 6.0.3.4 Expected Results
 - All mappings displayed
@@ -2719,7 +2719,10 @@ Per APEX NE Specification:
 - SDM plug-in for APEX3K-NE installed
 - SDM interface functional
 
-**Test Steps:**
+#### 7.0.1.2 Objectives
+**Objective:** Verify SDM plug-in supports MediaCipher SimulCrypt configuration
+
+#### 7.0.1.3 Procedure
 1. Access SDM interface
 2. Navigate to Gateway VOD configuration module
 3. Verify MediaCipher SimulCrypt option present
@@ -2727,9 +2730,6 @@ Per APEX NE Specification:
 5. Configure at blade level
 6. Configure external SuperCAS (up to 3)
 7. Verify configuration persists
-
-#### 7.0.1.2 Objectives
-**Objective:** Verify SDM plug-in supports MediaCipher SimulCrypt configuration
 
 #### 7.0.1.4 Expected Results
 - SDM displays all configuration options
@@ -2746,7 +2746,10 @@ Per APEX NE Specification:
 - SNMP monitoring tools available (optional for full verification)
 - MIB files installed on APEX3K-NE
 
-**Test Steps:**
+#### 7.0.2.2 Objectives
+**Objective:** Verify MIB files contain Gateway VOD MC Simulcrypt parameter with per-blade configuration
+
+#### 7.0.2.3 Procedure
 1. Locate build package files
 2. Find and open **config.ini** file
 3. Search for parameter: **"Gateway VOD MC simulcrypt"**
@@ -2768,9 +2771,6 @@ Per APEX NE Specification:
     - Set Gateway VOD MC simulcrypt = DISABLE
     - Verify reflected in APEX3K-NE EM
 
-#### 7.0.2.2 Objectives
-**Objective:** Verify MIB files contain Gateway VOD MC Simulcrypt parameter with per-blade configuration
-
 #### 7.0.2.4 Expected Results
 - Gateway VOD MC simulcrypt parameter found in MIB
 - Parameter documented with correct name
@@ -2790,14 +2790,19 @@ Per APEX NE Specification:
 - Scheduled maintenance window
 - No active traffic (or traffic transferred to backup)
 
-**Test Steps - Pre-Upgrade:**
+#### 7.0.3.2 Objectives
+**Objective:** Verify APEX3K-NE upgrade from 1.2.14-00 to 1.2.15-00 via SDM includes all new features
+
+#### 7.0.3.3 Procedure
+
+**Pre-Upgrade:**
 1. Document current APEX3K-NE version: Should show **1.2.14-00**
 2. Navigate to: **APEX3K-NE EM >> About >> System Info**
 3. Document current configuration details
 4. Back up all configuration files
 5. Verify Gateway VOD MC Simulcrypt NOT present in current version
 
-**Test Steps - Upgrade Process:**
+**Upgrade Process:**
 1. Access SDM device
 2. Initiate APEX3K-NE upgrade process
 3. Select target version: **1.2.15-00**
@@ -2812,14 +2817,14 @@ Per APEX NE Specification:
 8. Expected duration: 15-45 minutes
 9. Wait for APEX3K-NE to reboot and stabilize
 
-**Test Steps - Post-Upgrade Verification:**
+**Post-Upgrade Verification:**
 1. Wait for APEX3K-NE fully operational (5-10 min)
 2. Access APEX3K-NE EM
 3. Navigate to: **APEX3K-NE EM >> About >> System Info**
 4. Verify version shows: **1.2.15-00**
 5. Verify configuration persisted after upgrade
 
-**Test Steps - New Feature Verification:**
+**New Feature Verification:**
 1. Verify Gateway VOD MC Simulcrypt parameter present:
    - Navigate to: **APEX3K-NE >> Blade >> Select Blade<1>**
    - Verify **Gateway VOD MC Simulcrypt** option visible
@@ -2842,7 +2847,7 @@ Per APEX NE Specification:
    - Check for Gateway VOD MC simulcrypt in config.ini
    - Verify SNMP OID available (if applicable)
 
-**Test Steps - Functionality Testing:**
+**Functionality Testing:**
 1. Create test Gateway VOD stream:
    - Configure Virtual IP on Blade<1>
    - Enable Gateway VOD
@@ -2865,9 +2870,6 @@ Per APEX NE Specification:
    - Performance nominal
    - Resource utilization normal
 
-#### 7.0.3.2 Objectives
-**Objective:** Verify APEX3K-NE upgrade from 1.2.14-00 to 1.2.15-00 via SDM includes all new features
-
 #### 7.0.3.4 Expected Results
 - MIB file properly loaded
 - All new objects accessible
@@ -2887,7 +2889,10 @@ Per APEX NE Specification:
 - Administrator authenticated
 - Aurora Networks branding guidelines available (if applicable)
 
-**Test Steps:**
+#### 8.0.1.2 Objectives
+**Objective:** Verify Aurora Networks logo displays consistently and persistently across all APEX-NE EM screens
+
+#### 8.0.1.3 Procedure
 1. Access APEX-NE EM main home screen
 2. Locate Aurora Networks logo on screen
 3. Document logo position, size, and appearance
@@ -2913,9 +2918,6 @@ Per APEX NE Specification:
 23. Verify no legacy company logos visible
 24. Document all screens with logo verification
 
-#### 8.0.1.2 Objectives
-**Objective:** Verify Aurora Networks logo displays consistently and persistently across all APEX-NE EM screens
-
 #### 8.0.1.4 Expected Results
 - Aurora Networks logo visible on every screen
 - Logo appearance consistent across all navigation
@@ -2934,7 +2936,10 @@ Per APEX NE Specification:
 - Network connectivity to external websites available
 - Patient URL: www.an-pat.com should be live
 
-**Test Steps:**
+#### 8.0.2.2 Objectives
+**Objective:** Verify Aurora Networks patent URL (www.an-pat.com) correctly displayed in About section and functional
+
+#### 8.0.2.3 Procedure
 1. Access APEX-NE EM main interface
 2. Navigate to: **APEX3K-NE EM >> About** (typically in top menu or help section)
 3. Locate patent information section
@@ -2953,9 +2958,6 @@ Per APEX NE Specification:
 16. Close browser window and return to APEX-NE EM
 17. Verify About section still displays correctly
 18. Test URL multiple times to ensure consistency
-
-#### 8.0.2.2 Objectives
-**Objective:** Verify Aurora Networks patent URL (www.an-pat.com) correctly displayed in About section and functional
 
 #### 8.0.2.4 Expected Results
 - Patent URL clearly displayed in About section
