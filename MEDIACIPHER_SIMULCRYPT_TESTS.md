@@ -504,7 +504,7 @@ Input Method: Unicast video streams via GigE
 6. Navigate to: **APEX3K-NE EM >> Simulcrypt >> General** and verify MediaCipher SimulCrypt = **Enable**
 7. Restart same VOD stream on M3-Server with encryption enabled
 8. Wait 3-5 seconds for re-ingestion
-9. Capture 200 new TS packets from output on MPEG Tracker
+9. Monitor 200 new TS packets from output on MPEG Tracker
 10. Locate new PMT (should appear quickly after stream restart)
 11. Document new PMT:
     - New PMT version number (should be 1 or higher)
@@ -759,11 +759,11 @@ Input Method: Unicast video streams via GigE
 #### 3.0.8.3 Procedure
 1. Verify current state:
    - Stream active: **APEX3K-NE EM >> Blades >> Select Blade<1> >> Gateway VOD Status** shows stream as Active
-   - MPEG Tracker capturing output with 3 ECMs present (MediaCipher + SuperCAS1 + SuperCAS2)
+   - MPEG Tracker monitoring output with 3 ECMs present (MediaCipher + SuperCAS1 + SuperCAS2)
    - Document baseline 3 ECM PIDs
-2. Capture continuous MPEG Tracker output (do not stop capture):
-   - Continue recording TS packets from output
-   - Note timestamp when starting capture
+2. Monitor continuous MPEG Tracker output (do not stop monitoring):
+   - Continue monitoring TS packets from output
+   - Note timestamp when starting monitoring
 3. Navigate to: **APEX3K-NE EM >> Simulcrypt >> CAS configuration**
 4. While stream is still active and flowing, add 3rd SuperCAS:
    - Click **Add** or **Configure CAS**
@@ -956,18 +956,18 @@ Input Method: Unicast video streams via GigE
 - Baseline PMT version documented
 
 #### 3.0.11.3 Procedure
-1. Capture current PMT from stream via MPEG Tracker
+1. Monitor current PMT from stream via MPEG Tracker
 2. Extract and document:
    - Current PMT version (example: version 3)
    - All 4 CA descriptors with CAS system IDs
-   - Timestamp of PMT capture
+   - Timestamp of PMT monitoring
 3. Navigate to: **APEX3K-NE EM >> Simulcrypt >> CAS configuration**
 4. Make configuration change (e.g., remove SuperCAS2)
 5. Click **Save** or **Apply**
 6. Note timestamp of configuration change
 7. Wait 3-5 seconds for APEX3K-NE to process
 8. Verify stream still active
-9. Capture new PMT from stream via MPEG Tracker (after configuration change)
+9. Monitor new PMT from stream via MPEG Tracker (after configuration change)
 10. Extract and document:
     - New PMT version (should be 4 or higher)
     - CA descriptors now present (3 instead of 4)
@@ -1057,7 +1057,7 @@ Input Method: Unicast video streams via GigE
 - CAS system specifications available for reference
 
 #### 3.0.13.3 Procedure
-1. Capture ECM packets from stream via MPEG Tracker
+1. Monitor ECM packets from stream via MPEG Tracker
 2. Extract sample ECM packets (at least 5-10 for each CAS):
    - 5 MediaCipher ECMs
    - 5 SuperCAS1 ECMs
@@ -1117,8 +1117,8 @@ Input Method: Unicast video streams via GigE
 - All 4 ECM PIDs identified
 
 #### 3.0.14.3 Procedure
-1. Capture 2000+ TS packets (20-30 seconds continuous) via MPEG Tracker
-2. Identify all ECM packets for each CAS in captured stream:
+1. Monitor 2000+ TS packets (20-30 seconds continuous) via MPEG Tracker
+2. Identify all ECM packets for each CAS in monitored stream:
    - Extract MediaCipher ECM packets (ECM PID 1)
    - Extract SuperCAS1 ECM packets (ECM PID 2)
    - Extract SuperCAS2 ECM packets (ECM PID 3)
@@ -1168,7 +1168,7 @@ Input Method: Unicast video streams via GigE
 - All 4 ECM PIDs identified
 
 #### 3.0.15.3 Procedure
-1. Capture 3000+ TS packets (30+ seconds) via MPEG Tracker
+1. Monitor 3000+ TS packets (30+ seconds) via MPEG Tracker
 2. Extract all ECM packets (all 4 ECMs combined) in chronological order
 3. For each ECM PID, verify continuity:
    - Extract ECM counter or sequence indicator if present in ECM data
@@ -1293,7 +1293,7 @@ Input Method: Unicast video streams via GigE
 - MPEG Tracker connected
 
 #### 3.0.17.3 Procedure
-1. Capture TS packets from stream via MPEG Tracker (100+ packets minimum)
+1. Monitor TS packets from stream via MPEG Tracker (100+ packets minimum)
 2. Locate CAT (Conditional Access Table):
    - Search for table ID 0x01 (CAT)
    - CAT has PID 0x0001
@@ -1644,14 +1644,14 @@ Input Method: Unicast video streams via GigE
      - SuperCAS1: [actual CAS ID] (example: 0x4B46)
      - SuperCAS2: [actual CAS ID] (example: 0x4BB8)
      - SuperCAS3: [actual CAS ID] (example: 0x5601)
-2. Capture TS packets via MPEG Tracker
-3. Extract all ECM packets from captured stream
+2. Monitor TS packets via MPEG Tracker
+3. Extract all ECM packets from monitored stream
 4. For each ECM, validate CAS system ID:
    - Parse ECM header to extract CAS system ID field
    - Cross-reference extracted ID with configured ID list
    - Verify match: Each ECM CAS ID matches one of configured CAS IDs
 5. Verify all configured CAS have ECMs:
-   - Count unique CAS system IDs found in captured ECMs
+   - Count unique CAS system IDs found in monitored ECMs
    - Should equal number of configured CAS (4 in this test)
    - All configured IDs should be present
 6. Verify no unexpected CAS IDs:
@@ -1690,9 +1690,9 @@ Input Method: Unicast video streams via GigE
 - All 4 CAS systems configured
 
 #### 3.0.24.3 Procedure
-1. Perform PMT Capture Session 1:
-   - Capture 500 TS packets via MPEG Tracker
-   - Extract PMT (table ID 0x02) from captured stream
+1. Perform PMT Monitoring Session 1:
+   - Monitor 500 TS packets via MPEG Tracker
+   - Extract PMT (table ID 0x02) from monitored stream
    - Document:
      - PMT version
      - Program number
@@ -1756,11 +1756,11 @@ Input Method: Unicast video streams via GigE
 3. Monitor system performance metrics:
    - CPU utilization: [monitor via APEX-NE EM System Dashboard]
    - Memory utilization: [monitor]
-   - ECM processing rate: [calculate from packet capture]
+   - ECM processing rate: [calculate from packet monitoring]
    - Total output bitrate: [monitor]
-4. Capture 20,000+ TS packets (2-5 minutes continuous) via MPEG Tracker
+4. Monitor 20,000+ TS packets (2-5 minutes continuous) via MPEG Tracker
 5. Analyze ECM insertion across all 1,300 streams:
-   - Extract all ECM packets from capture
+   - Extract all ECM packets from monitoring
    - Count total ECM packets: [value]
    - Calculate ECM packets per second: [value]
 6. Verify ECM coverage for active streams:
