@@ -107,11 +107,7 @@ Input Method: Unicast video streams via GigE
 - Configuration persists across system restart
 - No error messages or warnings
 - System logs show configuration change event with timestamp
-
-**Monitoring Points:**
-- Monitor in APEX-NE EM: Simulcrypt >> General >> Mediacipher Simulcrypt = Enable
-- Check system logs: [Timestamp] Configuration: Mediacipher Simulcrypt enabled by [User]
-- Monitor MPEG Tracker for ECM PID presence (if streams active)
+- **Monitoring Points:** Monitor in APEX-NE EM: Simulcrypt >> General >> Mediacipher Simulcrypt = Enable, Check system logs: [Timestamp] Configuration: Mediacipher Simulcrypt enabled by [User], Monitor MPEG Tracker for ECM PID presence (if streams active)
 
 ---
 
@@ -158,12 +154,7 @@ Input Method: Unicast video streams via GigE
 - Blade<2> streams NOT encrypted (or per configured state)
 - No cross-blade interference
 - Configuration isolated per blade
-
-**Monitoring Points:**
-- Verify via APEX-NE EM: Blade > Blade<1> > Config > Gateway VOD MC Simulcrypt
-- Verify via APEX-NE EM: Blade > Blade<2> > Config > Gateway VOD MC Simulcrypt
-- Monitor MPEG Tracker output from both blades
-- Verify ECM PID presence/absence per blade configuration
+- **Monitoring Points:** Verify via APEX-NE EM: Blade > Blade<1> > Config > Gateway VOD MC Simulcrypt, Verify via APEX-NE EM: Blade > Blade<2> > Config > Gateway VOD MC Simulcrypt, Monitor MPEG Tracker output from both blades, Verify ECM PID presence/absence per blade configuration
 
 ---
 
@@ -204,12 +195,7 @@ Input Method: Unicast video streams via GigE
 - Service continuity maintained
 - ECM generation stops (ECMG no longer generating)
 - Minimal service interruption (< 5 seconds per stream)
-
-**Monitoring Points:**
-- Monitor APEX-NE EM: Simulcrypt >> General >> Mediacipher Simulcrypt = Disable
-- Track MPEG Tracker output: ECM PIDs should disappear
-- Monitor ECMG server: ECM generation should stop
-- Check system logs for disable event
+- **Monitoring Points:** Monitor APEX-NE EM: Simulcrypt >> General >> Mediacipher Simulcrypt = Disable, Track MPEG Tracker output: ECM PIDs should disappear, Monitor ECMG server: ECM generation should stop, Check system logs for disable event
 
 ---
 
@@ -251,12 +237,7 @@ Input Method: Unicast video streams via GigE
 - Help documentation confirms no per-stream option exists
 - Only global/chassis and blade-level configurations available
 - All streams inherit settings from global level
-
-**Monitoring Points:**
-- Scan all stream configuration menus systematically
-- Check VOD Mapping configuration screen thoroughly
-- Review APEX-NE EM Help and user guides
-- Document any findings of per-stream encryption (should be zero)
+- **Monitoring Points:** Scan all stream configuration menus systematically, Check VOD Mapping configuration screen thoroughly, Review APEX-NE EM Help and user guides, Document any findings of per-stream encryption (should be zero)
 
 ---
 
@@ -309,12 +290,7 @@ Input Method: Unicast video streams via GigE
 - Disabling Gateway VOD restores other TS types configuration availability
 - Configuration is properly isolated per-blade
 - No error messages during toggling
-
-**Monitoring Points:**
-- Monitor: **Blade<1> >> Config >> Enable Gateway VOD** parameter
-- Check: **APEX3K-NE EM >> Blades >> Select Blade<1> >> Gateway VOD Status** display after enabling (TS and Mappings table)
-- Verify: **Blade<2> >> TS >> Mappings** (or regular location) remains visible
-- Document: Visibility state changes during enable/disable cycle
+- **Monitoring Points:** Monitor: **Blade<1> >> Config >> Enable Gateway VOD** parameter, Check: **APEX3K-NE EM >> Blades >> Select Blade<1> >> Gateway VOD Status** display after enabling (TS and Mappings table), Verify: **Blade<2> >> TS >> Mappings** (or regular location) remains visible, Document: Visibility state changes during enable/disable cycle
 
 ---
 
@@ -447,11 +423,7 @@ Input Method: Unicast video streams via GigE
 - ECM syntax valid per DVB-CSA2
 - MediaCipher credentials in ECM
 - MPEG Tracker confirms ECM presence
-
-**Monitoring Points:**
-- MPEG Tracker: Verify ECM packets and PID
-- APEX-NE EM: Monitor ECMG connectivity at **Simulcrypt >> HOST configuration**
-- Check ECM error rate (target: < 0.01%)
+- **Monitoring Points:** MPEG Tracker: Verify ECM packets and PID, APEX-NE EM: Monitor ECMG connectivity at **Simulcrypt >> HOST configuration**, Check ECM error rate (target: < 0.01%)
 
 ---
 
@@ -2046,12 +2018,7 @@ Input Method: Unicast video streams via GigE
 - Tier type for CTE based on APS setting of DTCP
 - Output streams match input DTCP requirements
 - Tier level info visible in GVOD Status GUI
-
-**Monitoring Points:**
-- DTCP descriptor presence/absence in output
-- CCI/APS values preservation
-- Tier level information accuracy
-- Per-blade stream routing
+- **Monitoring Points:** DTCP descriptor presence/absence in output, CCI/APS values preservation, Tier level information accuracy, Per-blade stream routing
 
 ---
 
@@ -2080,12 +2047,7 @@ Input Method: Unicast video streams via GigE
 - Tier type for CTE based on APS setting of DTCP
 - Output streams match input DTCP requirements
 - Tier level info visible in GVOD Status GUI
-
-**Monitoring Points:**
-- DTCP descriptor presence/absence in output
-- CCI/APS values preservation
-- Tier level information accuracy
-- Per-blade stream routing
+- **Monitoring Points:** DTCP descriptor presence/absence in output, CCI/APS values preservation, Tier level information accuracy, Per-blade stream routing
 
 ---
 
@@ -2120,12 +2082,7 @@ Input Method: Unicast video streams via GigE
 - CCI/APS values updated correctly
 - Stream continuity maintained
 - No service interruption during changes
-
-**Monitoring Points:**
-- DTCP descriptor field changes
-- APS/CCI value updates
-- Output stream quality/continuity
-- Descriptor update latency (should be < 2 seconds)
+- **Monitoring Points:** DTCP descriptor field changes, APS/CCI value updates, Output stream quality/continuity, Descriptor update latency (should be < 2 seconds)
 
 ---
 
@@ -2161,12 +2118,7 @@ Input Method: Unicast video streams via GigE
 - No stream interruption
 - Tier level updated on GVOD Status GUI
 - Tier type based on CTE settings
-
-**Monitoring Points:**
-- Exact reversion time measurement
-- PRKM RMD value changes
-- Stream delivery during transition
-- Tier level info updates
+- **Monitoring Points:** Exact reversion time measurement, PRKM RMD value changes, Stream delivery during transition, Tier level info updates
 
 **Key APEX NE Specific Difference:**
 APEX 3000 reverts within 15 seconds; APEX NE reverts within **10 seconds** (5-second improvement)
@@ -2274,13 +2226,7 @@ APEX 3000 reverts within 15 seconds; APEX NE reverts within **10 seconds** (5-se
 - CTE Authorized STB cannot view (does not have source's CAS key, uses different CA_descriptor)
 - No additional encryption layers added
 - No CTE ECM inserted
-
-**Monitoring Points:**
-- Input vs Output CA_descriptor comparison (MUST BE IDENTICAL)
-- ECM PID preservation
-- CTE CA_descriptor absence verification
-- PMT structure analysis
-- STB authorization verification (different CAS systems)
+- **Monitoring Points:** Input vs Output CA_descriptor comparison (MUST BE IDENTICAL), ECM PID preservation, CTE CA_descriptor absence verification, PMT structure analysis, STB authorization verification (different CAS systems)
 
 **Critical Behavior Documented:**
 When Pre-encrypted Checking = ENABLED:
@@ -2324,13 +2270,7 @@ When Pre-encrypted Checking = ENABLED:
 - CTE Authorized STB cannot view (does not have source's CAS key, uses different CA_descriptor)
 - No additional encryption layers added
 - No CTE ECM inserted
-
-**Monitoring Points:**
-- Input vs Output CA_descriptor comparison (MUST BE IDENTICAL)
-- ECM PID preservation
-- CTE CA_descriptor absence verification
-- PMT structure analysis
-- STB authorization verification (different CAS systems)
+- **Monitoring Points:** Input vs Output CA_descriptor comparison (MUST BE IDENTICAL), ECM PID preservation, CTE CA_descriptor absence verification, PMT structure analysis, STB authorization verification (different CAS systems)
 
 **Critical Behavior Documented:**
 When Pre-encrypted Checking = ENABLED:
@@ -2424,13 +2364,7 @@ Only difference is stream type (FWK vs Full), behavior should be identical for p
 - Broadcast Auth cannot view (source descriptor removed)
 - CTE Auth can view (CTE descriptor applied)
 - No source descriptor influence on output
-
-**Monitoring Points:**
-- Input vs Output CA_descriptor comparison (MUST BE DIFFERENT)
-- Input vs Output ECM PID comparison (MUST BE DIFFERENT)
-- CA_descriptor replacement (not addition)
-- ECM stream change
-- STB authorization outcome
+- **Monitoring Points:** Input vs Output CA_descriptor comparison (MUST BE DIFFERENT), Input vs Output ECM PID comparison (MUST BE DIFFERENT), CA_descriptor replacement (not addition), ECM stream change, STB authorization outcome
 
 **Critical Difference vs TC_050_005:**
 - TC_050_005 (ENABLED): Input CA_descriptor → Output CA_descriptor (SAME, pass-through)
@@ -2918,3 +2852,6 @@ Per APEX NE Specification:
 **Total Test Cases:** 50+  
 **Created:** 2026-11-04  
 **Reference:** Inputs_to_github-copilot.docx
+
+
+
