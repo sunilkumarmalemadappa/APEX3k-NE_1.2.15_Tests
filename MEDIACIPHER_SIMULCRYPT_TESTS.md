@@ -280,53 +280,54 @@ Input Method: Unicast video streams via GigE
 ### Test Case 1.5: Gateway VOD Enabled - Regular TS Mappings Hidden on Blade
 **Test ID:** TC_REL1.2.15-010_005  
 **Severity:** MEDIUM  
-**Objective:** Verify that enabling Gateway VOD on a blade hides regular TS mappings for that blade
+**Objective:** Verify that enabling Gateway VOD on a blade makes other TS types unavailable for configuration on that blade (TS mapping configuration is restricted when GVOD is enabled)
 
 **Pre-conditions:**
 - APEX3K-NE multi-blade system operational (minimum 2 blades)
-- Blade<1> has existing regular TS mappings configured
-- Blade<2> also has regular TS mappings configured
+- Blade<1> has existing TS mappings configured (regular/standard TS)
+- Blade<2> also has TS mappings configured
 - APEX-NE EM fully accessible
-- No active Gateway VOD on Blade<1>
+- Gateway VOD disabled on Blade<1> (other TS types available)
 
 **Detailed Test Steps:**
-1. Navigate to: **APEX3K-NE EM >> Blades >> Select Blade<1> >> Gateway VOD Status**
-2. Verify all TS and Mappings currently displayed for Blade<1> in the table
-3. Document number of TS and Mappings visible in the table (e.g., 10 mappings)
+1. Navigate to: **APEX3K-NE EM >> Blades >> Select Blade<1> >> TS >> Mappings** (or regular TS configuration)
+2. Verify that other TS types are currently available for configuration on Blade<1>
+3. Document the TS types and mappings visible (e.g., 10 mappings)
 4. Navigate to: **APEX3K-NE EM >> Blades >> Select Blade<1> >> Config**
 5. Locate "Enable Gateway VOD" parameter
 6. Change setting: **Disable >> Enable**
 7. Click **Save** or **Apply**
 8. Wait for configuration propagation (< 5 seconds)
-9. Navigate back to: **APEX3K-NE EM >> Blades >> Select Blade<1> >> Gateway VOD Status**
-10. Verify behavior: All TS and Mappings should be displayed in the table (status view)
-11. Screen should show ONLY Gateway VOD mappings (likely empty if none created yet)
-12. Attempt to navigate to regular TS mappings location:
-    - Path: **Blade >> Select Blade<1> >> TS >> Mappings** (if such path exists)
-    - Should show hidden/disabled or "not available" message
+9. Navigate back to: **APEX3K-NE EM >> Blades >> Select Blade<1> >> TS >> Mappings** (or regular TS configuration location)
+10. Verify behavior: Other TS types configuration should NOT be available (not accessible/not displayed)
+11. Confirm that configuration interface shows "GVOD enabled - other TS types not available" or similar message/behavior
+12. Attempt to navigate to other TS types configuration location:
+    - Path: **APEX3K-NE EM >> Blades >> Select Blade<1> >> TS >> Mappings** (or similar)
+    - Should show "Not available" or disabled state, or be completely hidden
+    - Configuration access should be restricted
 13. Verify Blade<2> is NOT affected:
-    - Navigate to: **APEX3K-NE EM >> Blades >> Select Blade<2> >> TS >> Mappings** (or regular location)
-    - Regular TS mappings should STILL BE VISIBLE on Blade<2>
+    - Navigate to: **APEX3K-NE EM >> Blades >> Select Blade<2> >> TS >> Mappings** (or regular TS configuration)
+    - Other TS types should STILL BE AVAILABLE and visible on Blade<2>
 14. Disable Gateway VOD on Blade<1>:
     - Navigate to: **APEX3K-NE EM >> Blades >> Select Blade<1> >> Config**
     - Set **Enable Gateway VOD = Disable**
     - Click **Save**
-15. Navigate back to: **APEX3K-NE EM >> Blades >> Select Blade<1> >> TS >> Mappings** (or regular location)
-16. Verify regular TS mappings are NOW VISIBLE again
-17. Document that disabling Gateway VOD restores regular TS mapping visibility
+15. Navigate back to: **APEX3K-NE EM >> Blades >> Select Blade<1> >> TS >> Mappings** (or regular TS configuration location)
+16. Verify other TS types are NOW AVAILABLE again for configuration
+17. Document that disabling Gateway VOD restores other TS types configuration availability
 
 **Expected Results:**
-- Regular TS mappings visible before Gateway VOD enabled
-- After enabling Gateway VOD, regular TS mappings hidden from display
-- Gateway VOD location shows empty or only GVOD mappings
-- Blade<2> regular TS mappings unaffected
-- Disabling Gateway VOD restores regular TS mapping visibility
+- Other TS types available before Gateway VOD enabled
+- After enabling Gateway VOD, other TS types NOT available for configuration on Blade<1>
+- Configuration interface properly restricts access to other TS types
+- Blade<2> other TS types unaffected by Blade<1> GVOD setting
+- Disabling Gateway VOD restores other TS types configuration availability
 - Configuration is properly isolated per-blade
 - No error messages during toggling
 
 **Pass Criteria:**
-- Regular TS mappings hidden when Gateway VOD enabled
-- Regular TS mappings visible when Gateway VOD disabled
+- Other TS types configuration unavailable when Gateway VOD enabled
+- Other TS types configuration available when Gateway VOD disabled
 - Isolation confirmed between blades
 - Toggle functionality works correctly
 - No configuration loss when toggling
