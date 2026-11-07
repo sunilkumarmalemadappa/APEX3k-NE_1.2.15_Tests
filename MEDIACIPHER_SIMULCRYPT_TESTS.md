@@ -505,37 +505,1463 @@ Input Method: Unicast video streams via GigE
 
 ---
 
-### Test Case 3.2-3.10: [Multiple ECMs, PMT Updates, SuperCAS, Dynamic Config - DETAILED]
-[These test cases follow same structure with APEX3K-NE specific paths and procedures]
+### Test Case 3.2: Multiple Streams - Individual ECMs per Stream
+**Test ID:** TC_REL1.2.15-030_002
+**Severity:** HIGH
+**Objective:** Verify that 5-10 simultaneous Gateway VOD streams receive individual ECMs with correct MediaCipher ID
 
-**Test Case 3.2:** Multiple Streams - Individual ECMs per Stream
-**Test Case 3.3:** PMT Update - ECM Descriptor Addition (verify via MPEG Tracker)
-**Test Case 3.4:** External SuperCAS 1 - ECM Insertion
-**Test Case 3.5:** External SuperCAS 2 - ECM Insertion
-**Test Case 3.6:** External SuperCAS 3 - Maximum Config (4 Total CAS)
-**Test Case 3.7:** Reject 4th External SuperCAS (System Limit)
-**Test Case 3.8:** ECM Insertion After CAS Configuration Change
-**Test Case 3.9:** ECM Insertion After CAS Configuration Removal
-**Test Case 3.10:** PMT Descriptor for All CAS Systems
+**Pre-conditions:**
+- MediaCipher SimulCrypt enabled: **Simulcrypt >> General = Enable**
+- Gateway VOD configured: **Blade >> Select Blade<1> >> Config >> Enable Gateway VOD**
+- ECMG server configured: **Simulcrypt >> HOST configuration**
+- M3-Server capable of sending 5-10 simultaneous unicast streams
+- MPEG Tracker connected and operational
+
+**Detailed Test Steps:**
+1. Navigate to: **APEX3K-NE EM >> Simulcrypt >> General** and confirm MediaCipher SimulCrypt = **Enable**
+2. Navigate to: **APEX3K-NE EM >> Simulcrypt >> HOST configuration** and verify ECMG server is configured and online
+3. Launch M3-Server and configure 5-10 different unicast streams with unique program numbers (e.g., PN 1000-1009)
+4. Send all streams simultaneously to the Virtual IP (ingress) configured in Gateway VOD
+5. Wait 5-10 seconds for streams to ingress into APEX3K-NE
+6. Navigate to: **APEX3K-NE EM >> Blades >> Select Blade<1> >> Gateway VOD Status** and verify all 5-10 streams appear in TS and Mappings table with status **Active**
+7. Connect MPEG Tracker to the output of APEX3K-NE RF card
+8. For each stream, capture 500+ TS packets and analyze:
+   - Filter for ECM tables (table ID 0x80)
+   - Identify unique ECM PIDs for each stream
+   - Extract MediaCipher system ID from each ECM
+9. Document all 5-10 ECM PIDs and their associated streams
+10. Verify each stream has received at least 2-3 ECM packets
+11. Verify ECM frequency consistent (100-200ms intervals per DVB spec)
+12. Export MPEG Tracker analysis and save results
+
+**Expected Results:**
+- All 5-10 streams appear in APEX3K-NE Gateway VOD Status as Active
+- Each stream generates unique ECM packets with distinct PID
+- Each ECM contains correct MediaCipher CAS system ID
+- ECM packets detected for all 5-10 streams in MPEG Tracker output
+- ECM insertion frequency within specification (100-200ms intervals)
+- No ECM collisions or duplicate PIDs across streams
+
+**Pass Criteria:**
+- 100% of 5-10 streams have ECMs inserted
+- Each stream ECM PID is unique
+- MediaCipher system ID present and correct in all ECMs
+- ECM frequency consistent across all streams
 
 ---
 
-### Test Case 3.11-3.25: [Advanced ECM/PMT Tests - DETAILED]
-**Test Case 3.11:** PMT Version Increment on CAS Change
-**Test Case 3.12:** ECM Bandwidth Impact with All CAS
-**Test Case 3.13:** ECM Encryption and Validity
-**Test Case 3.14:** ECM Insertion Frequency for Each CAS
-**Test Case 3.15:** ECM Splicing and Continuity
-**Test Case 3.16:** ECM PIDs Allocation and Management (1,300+ mappings)
-**Test Case 3.17:** CAT Table Update for ECM PIDs
-**Test Case 3.18:** Service-Specific ECM Configuration Uniformity
-**Test Case 3.19:** ECM Handling During Stream Pause/Resume
-**Test Case 3.20:** Dynamic CAS Addition with Active ECMs
-**Test Case 3.21:** ECM Update Propagation Time
-**Test Case 3.22:** ECM Error Recovery
-**Test Case 3.23:** ECM Validation Against CAS System IDs
-**Test Case 3.24:** PMT Consistency Across Multiple Captures
-**Test Case 3.25:** ECM Performance Under Load (1,300+ mappings per blade)
+### Test Case 3.3: PMT Update - ECM Descriptor Addition
+**Test ID:** TC_REL1.2.15-030_003
+**Severity:** HIGH
+**Objective:** Verify PMT is updated with ECM descriptor when encryption is enabled, and PMT version increments
+
+**Pre-conditions:**
+- Gateway VOD configured and operational
+- Single VOD stream ready to start
+- MPEG Tracker connected
+- Initial PMT version documented (before starting encrypted stream)
+
+**Detailed Test Steps:**
+1. Start unencrypted VOD stream input via M3-Server to Virtual IP
+2. Wait 2-3 seconds and connect MPEG Tracker to APEX3K-NE output
+3. Capture 200 TS packets and locate PMT (table ID 0x02)
+4. Document initial PMT:
+   - PMT version number (typically 0)
+   - Program number
+   - PCR PID
+   - ES (Elementary Stream) PIDs
+   - Current descriptors present
+5. Stop stream on M3-Server (keep APEX3K-NE running)
+6. Navigate to: **APEX3K-NE EM >> Simulcrypt >> General** and verify MediaCipher SimulCrypt = **Enable**
+7. Restart same VOD stream on M3-Server with encryption enabled
+8. Wait 3-5 seconds for re-ingestion
+9. Capture 200 new TS packets from output on MPEG Tracker
+10. Locate new PMT (should appear quickly after stream restart)
+11. Document new PMT:
+    - New PMT version number (should be 1 or higher)
+    - Compare version to initial PMT
+    - Identify new/added descriptors
+    - Search for CA descriptor (tag 0x09) with MediaCipher CAS system ID
+    - Note ECM PID reference in descriptor
+12. Verify descriptor structure:
+    - Descriptor tag = 0x09 (CA descriptor)
+    - CAS system ID = MediaCipher ID (typically 0x4AD0 or configured value)
+    - ECM PID field contains valid PID
+13. Compare PMT content (exclude version field):
+    - Verify ES information unchanged (except descriptor addition)
+    - Confirm PCR PID unchanged
+    - Verify only descriptors added, no removal of existing elements
+
+**Expected Results:**
+- PMT version incremented (increased by at least 1)
+- New CA descriptor added to PMT with MediaCipher system ID
+- ECM PID correctly referenced in CA descriptor
+- PMT syntax valid per DVB standard
+- All ES information preserved
+- MPEG Tracker confirms PMT descriptor presence
+
+**Pass Criteria:**
+- PMT version incremented from baseline
+- CA descriptor with MediaCipher system ID present in PMT
+- ECM PID valid and referenced correctly
+- PMT structure valid per DVB-SI specification
+
+---
+
+### Test Case 3.4: External SuperCAS 1 - ECM Insertion
+**Test ID:** TC_REL1.2.15-030_004
+**Severity:** HIGH
+**Objective:** Verify ECM insertion for 1st external SuperCAS when configured at Simulcrypt >> CAS configuration
+
+**Pre-conditions:**
+- MediaCipher SimulCrypt enabled
+- Gateway VOD configured
+- No external SuperCAS configured yet (only internal MediaCipher)
+- ECMG server capable of handling external CAS (SuperCAS)
+- M3-Server ready with test stream
+
+**Detailed Test Steps:**
+1. Verify current configuration:
+   - Navigate to: **APEX3K-NE EM >> Simulcrypt >> CAS configuration**
+   - Document current CAS list (should show only Internal MediaCipher initially)
+2. Click **Add** or **Configure CAS** button
+3. Select or enter 1st external SuperCAS details:
+   - CAS Type: **External SuperCAS**
+   - CAS System ID: **0x4B46** (Nagravision) or configured SuperCAS ID
+   - ECMG IP/Port: Configure external ECMG server details
+4. Assign ECMG to this CAS (if separate assignment required)
+5. Click **Save** or **Apply**
+6. Wait for confirmation message (target: < 3 seconds)
+7. Verify configuration persists: Navigate back to **CAS configuration** and confirm 1st SuperCAS listed
+8. Start VOD stream on M3-Server (stream should now be encrypted for both MediaCipher and SuperCAS1)
+9. Monitor: **APEX3K-NE EM >> Blades >> Select Blade<1> >> Gateway VOD Status** for stream appearing
+10. Connect MPEG Tracker to output and capture 500+ TS packets
+11. Analyze captured packets:
+    - Search for ECM tables (0x80)
+    - Identify all ECM PIDs present
+    - Should have minimum 2 ECM PIDs: one for MediaCipher, one for SuperCAS1
+12. For SuperCAS1 ECM, verify:
+    - CAS system ID = 0x4B46 (or configured SuperCAS ID)
+    - ECM data structure valid per SuperCAS specification
+    - ECM frequency within spec (100-200ms)
+13. Extract and document both ECM streams:
+    - ECM PID 1: MediaCipher (system ID 0x4AD0)
+    - ECM PID 2: SuperCAS1 (system ID 0x4B46)
+
+**Expected Results:**
+- 1st external SuperCAS successfully added to CAS configuration
+- VOD stream now receives ECMs for both MediaCipher and SuperCAS1
+- Two distinct ECM PIDs present in transport stream
+- SuperCAS1 CAS system ID correctly present in its ECM
+- Both ECM streams have valid structure and frequency
+
+**Pass Criteria:**
+- CAS configuration accepts 1st external SuperCAS without error
+- ECMs generated for both internal and 1st external CAS
+- SuperCAS1 ECM PID unique and distinct from MediaCipher
+- Stream continues without interruption
+
+---
+
+### Test Case 3.5: External SuperCAS 2 - ECM Insertion
+**Test ID:** TC_REL1.2.15-030_005
+**Severity:** HIGH
+**Objective:** Verify 2nd external SuperCAS ECM insertion and verify both SuperCAS1 and SuperCAS2 ECMs present
+
+**Pre-conditions:**
+- Test Case 3.4 passed (1st SuperCAS operational)
+- 1st external SuperCAS (SuperCAS1) configured and verified
+- 2nd external SuperCAS available (different CAS system ID)
+- VOD stream still active with SuperCAS1 ECMs
+
+**Detailed Test Steps:**
+1. With stream still active (from 3.4), navigate to: **APEX3K-NE EM >> Simulcrypt >> CAS configuration**
+2. Verify SuperCAS1 currently listed with its CAS system ID
+3. Click **Add** or **Configure CAS** button
+4. Configure 2nd external SuperCAS:
+   - CAS Type: **External SuperCAS**
+   - CAS System ID: **0x4BB8** (Kudelski) or alternate SuperCAS ID
+   - ECMG IP/Port: Configure external ECMG server for SuperCAS2
+5. Assign ECMG to SuperCAS2
+6. Click **Save** or **Apply**
+7. Wait 3-5 seconds for configuration update
+8. Navigate back to verify both SuperCAS1 and SuperCAS2 listed in **CAS configuration**
+9. Monitor stream in: **APEX3K-NE EM >> Blades >> Select Blade<1> >> Gateway VOD Status** - should show as Active and updated
+10. Stop and restart VOD stream on M3-Server (or allow current stream to continue if automatic re-encryption applied)
+11. Connect MPEG Tracker to output and capture 500+ TS packets
+12. Search for ECM tables and identify all ECM PIDs:
+    - Should have minimum 3 ECM PIDs: MediaCipher + SuperCAS1 + SuperCAS2
+13. For each ECM, verify CAS system ID:
+    - ECM 1: MediaCipher (0x4AD0)
+    - ECM 2: SuperCAS1 (0x4B46)
+    - ECM 3: SuperCAS2 (0x4BB8)
+14. Document all 3 ECM PIDs and verify each has continuous insertion (100-200ms frequency)
+15. Extract 50 packets of each ECM type and verify structure validity
+
+**Expected Results:**
+- 2nd external SuperCAS successfully added to configuration
+- Stream now receives ECMs for MediaCipher, SuperCAS1, and SuperCAS2
+- Three distinct ECM PIDs present in transport stream
+- Each ECM contains correct CAS system ID
+- All ECM streams have valid structure and consistent frequency
+- Original SuperCAS1 ECM continues unaffected
+
+**Pass Criteria:**
+- CAS configuration accepts 2nd external SuperCAS
+- Total of 3 ECMs present (1 internal + 2 external)
+- All three ECM PIDs unique and distinct
+- Each ECM correctly identifies its CAS system
+- Stream stability maintained throughout configuration change
+
+---
+
+### Test Case 3.6: External SuperCAS 3 - Maximum Config (4 Total CAS)
+**Test ID:** TC_REL1.2.15-030_006
+**Severity:** HIGH
+**Objective:** Configure 3rd external SuperCAS to reach maximum system configuration (1 Internal MediaCipher + 3 External SuperCAS = 4 total CAS) and verify all 4 CAS ECMs inserted
+
+**Pre-conditions:**
+- Test Case 3.5 passed (SuperCAS1 and SuperCAS2 operational)
+- 1st and 2nd external SuperCAS configured with working ECMs
+- VOD stream active with 3 ECMs (MediaCipher + SuperCAS1 + SuperCAS2)
+- 3rd external SuperCAS available
+
+**Detailed Test Steps:**
+1. With stream still active, navigate to: **APEX3K-NE EM >> Simulcrypt >> CAS configuration**
+2. Verify MediaCipher, SuperCAS1, and SuperCAS2 currently listed
+3. Click **Add** or **Configure CAS** button to add 3rd SuperCAS
+4. Configure 3rd external SuperCAS:
+   - CAS Type: **External SuperCAS**
+   - CAS System ID: **0x5601** (Conax) or alternate SuperCAS ID
+   - ECMG IP/Port: Configure external ECMG server for SuperCAS3
+5. Assign ECMG to SuperCAS3
+6. Click **Save** or **Apply**
+7. Wait 5 seconds for configuration update and ECM re-generation
+8. Navigate back to **CAS configuration** and verify all 4 CAS listed:
+   - Internal MediaCipher
+   - External SuperCAS1 (0x4B46)
+   - External SuperCAS2 (0x4BB8)
+   - External SuperCAS3 (0x5601)
+9. Monitor: **APEX3K-NE EM >> Blades >> Select Blade<1> >> Gateway VOD Status** - stream status should remain Active
+10. Connect MPEG Tracker and capture 500+ TS packets
+11. Search for all ECM tables:
+    - Should identify 4 distinct ECM PIDs total
+12. For each ECM, extract and verify:
+    - ECM 1: MediaCipher (0x4AD0)
+    - ECM 2: SuperCAS1 (0x4B46)
+    - ECM 3: SuperCAS2 (0x4BB8)
+    - ECM 4: SuperCAS3 (0x5601)
+13. Verify each ECM:
+    - Correct CAS system ID
+    - Valid structure per DVB specification
+    - Consistent insertion frequency (100-200ms)
+    - PID unique and distinct from others
+14. Monitor PMT for CA descriptors:
+    - Should have 4 CA descriptors total
+    - Each descriptor references correct CAS system ID and ECM PID
+15. Calculate total ECM bandwidth:
+    - Measure total ECM packets per second
+    - Document bandwidth impact on stream
+
+**Expected Results:**
+- 3rd external SuperCAS successfully configured
+- Maximum configuration reached (4 total CAS systems)
+- All 4 CAS ECMs present in transport stream
+- Each ECM correctly identified with its CAS system ID
+- PMT contains 4 CA descriptors with correct CAS IDs and ECM PIDs
+- Stream bandwidth accommodates all 4 ECM streams
+- No stream discontinuities or errors
+
+**Pass Criteria:**
+- CAS configuration successfully accepts 3rd external SuperCAS
+- Total of 4 ECM PIDs present and verified
+- All ECM PIDs unique and consistent
+- All CAS system IDs correct and verified
+- PMT properly updated with all 4 CA descriptors
+- Stream remains stable throughout
+
+---
+
+### Test Case 3.7: Reject 4th External SuperCAS (System Limit)
+**Test ID:** TC_REL1.2.15-030_007
+**Severity:** HIGH
+**Objective:** Verify system rejects 4th external SuperCAS addition (system limit is 3 external, 1 internal = 4 max total)
+
+**Pre-conditions:**
+- Test Case 3.6 passed (4 CAS systems operational)
+- Maximum configuration reached (1 Internal + 3 External)
+- 4 ECMs actively inserted for all CAS
+- APEX-NE EM interface accessible
+
+**Detailed Test Steps:**
+1. Navigate to: **APEX3K-NE EM >> Simulcrypt >> CAS configuration**
+2. Verify all 4 CAS listed (MediaCipher + 3 external SuperCAS)
+3. Verify stream still active: **APEX3K-NE EM >> Blades >> Select Blade<1> >> Gateway VOD Status** shows stream as Active
+4. Verify MPEG Tracker showing all 4 ECM streams active
+5. Attempt to add 4th external SuperCAS:
+   - Click **Add** or **Configure CAS** button
+   - Select CAS Type: **External SuperCAS**
+   - Enter 4th SuperCAS system ID: **0x9801** (or alternate)
+   - Configure ECMG server for 4th SuperCAS
+6. Click **Save** or **Apply**
+7. Observe system response (should show error within 2-3 seconds)
+8. Verify error message displayed:
+   - Message should indicate "Maximum number of CAS reached" or similar
+   - Should specify limit is 3 external SuperCAS
+   - Should clarify total limit is 4 CAS (1 internal + 3 external)
+9. Verify no 4th CAS added to configuration list
+10. Click **OK** or **Close** to dismiss error dialog
+11. Navigate back to **CAS configuration** and verify still shows only 4 CAS (original configuration preserved)
+12. Verify stream still active: **Gateway VOD Status** should show stream as Active
+13. Connect MPEG Tracker and verify:
+    - Still detecting 4 ECM streams (no new 4th ECM added)
+    - Original 4 ECMs still present and valid
+    - No interruption or stream discontinuity
+14. Document error message and timestamp
+
+**Expected Results:**
+- System properly rejects 4th external SuperCAS addition
+- Error message clearly indicates maximum limit reached
+- Configuration reverts to previous state (4 CAS systems preserved)
+- Stream continues uninterrupted
+- Original 4 ECM streams remain active and valid
+- No system instability or errors
+
+**Pass Criteria:**
+- 4th SuperCAS addition is rejected with appropriate error
+- Error message explains system limit (3 external SuperCAS max)
+- CAS configuration remains unchanged at 4 systems
+- Stream stability maintained
+- No ECM insertion failures or stream discontinuities
+
+---
+
+### Test Case 3.8: ECM Insertion After CAS Configuration Change
+**Test ID:** TC_REL1.2.15-030_008
+**Severity:** HIGH
+**Objective:** Verify ECMs updated to include new CAS when 3rd SuperCAS added while stream active
+
+**Pre-conditions:**
+- Test Case 3.5 passed (SuperCAS1 and SuperCAS2 active with 3 ECMs)
+- VOD stream active and transmitting with 3 ECMs
+- 3 ECM PIDs documented from Test Case 3.5
+- 3rd SuperCAS available but not yet configured
+
+**Detailed Test Steps:**
+1. Verify current state:
+   - Stream active: **APEX3K-NE EM >> Blades >> Select Blade<1> >> Gateway VOD Status** shows stream as Active
+   - MPEG Tracker capturing output with 3 ECMs present (MediaCipher + SuperCAS1 + SuperCAS2)
+   - Document baseline 3 ECM PIDs
+2. Capture continuous MPEG Tracker output (do not stop capture):
+   - Continue recording TS packets from output
+   - Note timestamp when starting capture
+3. Navigate to: **APEX3K-NE EM >> Simulcrypt >> CAS configuration**
+4. While stream is still active and flowing, add 3rd SuperCAS:
+   - Click **Add** or **Configure CAS**
+   - Enter 3rd SuperCAS details (0x5601 or configured ID)
+   - Click **Save** or **Apply**
+5. Note timestamp when configuration saved
+6. Wait 2-5 seconds for APEX3K-NE to process configuration change
+7. Observe stream status: **Gateway VOD Status** should show stream as Active (no interruption)
+8. Continue MPEG Tracker capture for another 10 seconds
+9. Stop MPEG Tracker capture
+10. Analyze captured packets:
+    - Identify point where configuration change occurred (based on timestamp)
+    - Look for ECM changes after timestamp
+    - Identify when 4th ECM (SuperCAS3) first appears
+11. Search for new/additional ECM PID:
+    - Should identify new ECM PID appearing after configuration change
+    - New ECM should have CAS system ID 0x5601 (SuperCAS3)
+12. Verify ECM insertion timeline:
+    - ECMs 1-3 (MediaCipher + SuperCAS1 + SuperCAS2) appear throughout capture
+    - New ECM 4 (SuperCAS3) appears within 2-5 seconds after configuration change
+    - All 4 ECMs continue after insertion of 3rd ECM
+13. Verify stream continuity:
+    - No gaps in TS packet sequence
+    - No CRC errors or discontinuities
+    - PCR (Program Clock Reference) remains continuous
+14. Compare PMT before/after:
+    - Capture PMT packets before and after configuration change
+    - Verify PMT version incremented
+    - Verify 4th CA descriptor added for SuperCAS3
+
+**Expected Results:**
+- Configuration change accepted without stream interruption
+- 4th ECM (SuperCAS3) begins appearing within 2-5 seconds of configuration change
+- All 4 ECMs present simultaneously after 3rd SuperCAS insertion
+- Stream packet continuity maintained (no gaps or discontinuities)
+- PMT updated with 4th CA descriptor
+- No ECM insertion failures or errors
+
+**Pass Criteria:**
+- CAS configuration updated successfully
+- New ECM appears in transport stream within 5 seconds
+- All ECM PIDs unique and distinct
+- Stream continues without interruption
+- PMT properly updated
+- No packet loss or stream corruption
+
+---
+
+### Test Case 3.9: ECM Insertion After CAS Configuration Removal
+**Test ID:** TC_REL1.2.15-030_009
+**Severity:** HIGH
+**Objective:** Verify ECMs updated when external CAS removed from configuration while stream active
+
+**Pre-conditions:**
+- Test Case 3.6 passed (all 4 CAS systems operational with 4 ECMs)
+- VOD stream active with all 4 ECMs flowing continuously
+- All 4 ECM PIDs documented
+- All 4 CAS listed in configuration
+
+**Detailed Test Steps:**
+1. Verify current state:
+   - Stream active: **APEX3K-NE EM >> Blades >> Select Blade<1> >> Gateway VOD Status** shows stream Active
+   - MPEG Tracker capturing with all 4 ECMs present
+   - Document baseline 4 ECM PIDs and CAS system IDs
+2. Start continuous MPEG Tracker capture:
+   - Begin recording TS packets
+   - Note timestamp
+3. Navigate to: **APEX3K-NE EM >> Simulcrypt >> CAS configuration**
+4. Identify which SuperCAS to remove:
+   - Example: Remove SuperCAS2 (0x4BB8) - middle one
+5. Select SuperCAS2 from the configuration list
+6. Click **Delete** or **Remove** button
+7. Confirm deletion when prompted
+8. Note timestamp when deletion confirmed
+9. Click **Save** or **Apply** to persist change
+10. Wait 2-5 seconds for APEX3K-NE to process removal
+11. Verify stream status: **Gateway VOD Status** should still show stream as Active
+12. Continue MPEG Tracker capture for another 10 seconds after removal
+13. Stop MPEG Tracker capture
+14. Analyze captured packets:
+    - Identify when SuperCAS2 ECM stops appearing (after configuration removal)
+    - Should see ECMs 1, 2, 4 (MediaCipher, SuperCAS1, SuperCAS3) continuing
+    - Should NOT see ECM 3 (SuperCAS2) in post-removal packets
+15. Verify timing:
+    - SuperCAS2 ECM should disappear within 2-5 seconds of configuration removal
+    - Remaining 3 ECMs continue with consistent frequency
+16. Verify stream continuity:
+    - No gaps or discontinuities around ECM removal point
+    - PCR remains continuous
+    - No CRC errors or stream artifacts
+17. Capture PMT after removal:
+    - Should have 3 CA descriptors (down from 4)
+    - SuperCAS2 descriptor should be removed
+    - MediaCipher, SuperCAS1, and SuperCAS3 descriptors remain
+
+**Expected Results:**
+- CAS removal accepted without stream interruption
+- Removed CAS ECM disappears within 2-5 seconds of configuration change
+- Remaining 3 ECMs continue appearing normally
+- Stream packet continuity maintained (no gaps)
+- PMT updated with removal of corresponding CA descriptor
+- ECM insertion continues for remaining 3 CAS systems
+
+**Pass Criteria:**
+- CAS successfully removed from configuration
+- Removed CAS ECM stops appearing in stream
+- Removal occurs within acceptable timeframe (2-5 seconds)
+- Stream continuity preserved
+- Remaining ECMs unaffected
+- PMT descriptor count decremented correctly
+
+---
+
+### Test Case 3.10: PMT Descriptor for All CAS Systems
+**Test ID:** TC_REL1.2.15-030_010
+**Severity:** HIGH
+**Objective:** Verify PMT contains CA descriptors for all 4 CAS systems with correct CAS system IDs and ECM PID references
+
+**Pre-conditions:**
+- Test Case 3.6 passed (all 4 CAS configured)
+- VOD stream active with all 4 CAS systems
+- All 4 ECM PIDs identified and documented
+- MPEG Tracker connected
+
+**Detailed Test Steps:**
+1. Verify configuration:
+   - Navigate to: **APEX3K-NE EM >> Simulcrypt >> CAS configuration**
+   - Confirm all 4 CAS listed:
+     - MediaCipher (Internal)
+     - SuperCAS1 (0x4B46)
+     - SuperCAS2 (0x4BB8)
+     - SuperCAS3 (0x5601)
+2. Verify stream active: **APEX3K-NE EM >> Blades >> Select Blade<1> >> Gateway VOD Status** shows stream Active
+3. Connect MPEG Tracker to output and begin capture
+4. Capture 300-500 TS packets
+5. Locate PMT table (table ID 0x02) from captured packets
+6. Extract PMT and analyze:
+   - Program number: [documented value]
+   - PMT version: [value]
+   - PCR PID: [value]
+7. Scan PMT descriptors for CA descriptors (descriptor tag 0x09):
+   - Should find 4 CA descriptors total (one for each CAS)
+8. For each CA descriptor, extract and verify:
+   - **CA Descriptor 1 (MediaCipher):**
+     - Descriptor tag: 0x09 (CA)
+     - CAS system ID: 0x4AD0
+     - ECM PID: [value] (should match known MediaCipher ECM PID)
+     - CA data: [present and valid]
+   - **CA Descriptor 2 (SuperCAS1):**
+     - Descriptor tag: 0x09 (CA)
+     - CAS system ID: 0x4B46
+     - ECM PID: [value] (should match SuperCAS1 ECM PID)
+     - CA data: [present and valid]
+   - **CA Descriptor 3 (SuperCAS2):**
+     - Descriptor tag: 0x09 (CA)
+     - CAS system ID: 0x4BB8
+     - ECM PID: [value] (should match SuperCAS2 ECM PID)
+     - CA data: [present and valid]
+   - **CA Descriptor 4 (SuperCAS3):**
+     - Descriptor tag: 0x09 (CA)
+     - CAS system ID: 0x5601
+     - ECM PID: [value] (should match SuperCAS3 ECM PID)
+     - CA data: [present and valid]
+9. Verify descriptor ordering:
+   - Note order of CA descriptors in PMT
+   - Verify consistency across multiple PMT instances
+10. Verify ECM PID mapping:
+    - Cross-reference each CA descriptor ECM PID with captured ECM streams
+    - Confirm each referenced PID has active ECM packets
+11. Verify CA data content:
+    - Extract CA data fields
+    - Verify they match expected format for each CAS system
+12. Check for any missing or malformed descriptors
+13. Capture and compare 3 different PMT instances to verify consistency
+14. Document PMT descriptor table with all 4 descriptors
+
+**Expected Results:**
+- PMT contains exactly 4 CA descriptors
+- Each descriptor correctly identifies its CAS system ID
+- Each descriptor ECM PID matches actual ECM stream PID
+- All descriptors have valid structure per DVB-SI
+- Descriptor ordering consistent across multiple PMTs
+- All CA data fields present and properly formatted
+- No missing or corrupted descriptors
+
+**Pass Criteria:**
+- All 4 CA descriptors present in PMT
+- Each descriptor has correct CAS system ID
+- ECM PID references match actual ECM streams
+- Descriptor structure valid per DVB specification
+- Descriptor content consistent across PMT instances
+
+---
+
+### Test Case 3.11: PMT Version Increment on CAS Change
+**Test ID:** TC_REL1.2.15-030_011
+**Severity:** MEDIUM
+**Objective:** Verify PMT version increments correctly when CAS configuration changes
+
+**Pre-conditions:**
+- Test Case 3.6 passed (4 CAS systems operational)
+- VOD stream active with known PMT version
+- MPEG Tracker connected
+- Baseline PMT version documented
+
+**Detailed Test Steps:**
+1. Capture current PMT from stream via MPEG Tracker
+2. Extract and document:
+   - Current PMT version (example: version 3)
+   - All 4 CA descriptors with CAS system IDs
+   - Timestamp of PMT capture
+3. Navigate to: **APEX3K-NE EM >> Simulcrypt >> CAS configuration**
+4. Make configuration change (e.g., remove SuperCAS2)
+5. Click **Save** or **Apply**
+6. Note timestamp of configuration change
+7. Wait 3-5 seconds for APEX3K-NE to process
+8. Verify stream still active
+9. Capture new PMT from stream via MPEG Tracker (after configuration change)
+10. Extract and document:
+    - New PMT version (should be 4 or higher)
+    - CA descriptors now present (3 instead of 4)
+    - Timestamp of new PMT
+11. Compare versions:
+    - Verify new version > previous version
+    - Verify version incremented by at least 1
+12. Add 3rd SuperCAS back (or add different SuperCAS to reconfigure)
+13. Click **Save** or **Apply**
+14. Wait 3-5 seconds
+15. Capture another new PMT
+16. Verify PMT version incremented again (e.g., from 4 to 5)
+17. Repeat configuration change 2-3 more times, documenting version increment each time
+
+**Expected Results:**
+- PMT version increments with each configuration change
+- Version numbers sequential and correct
+- Descriptor count matches CAS configuration count
+- PMT version changes occur within 2-5 seconds of configuration update
+
+**Pass Criteria:**
+- PMT version increments on each configuration change
+- Version numbering correct per DVB specification
+- Descriptor updates synchronized with version changes
+
+---
+
+### Test Case 3.12: ECM Bandwidth Impact with All CAS
+**Test ID:** TC_REL1.2.15-030_012
+**Severity:** MEDIUM
+**Objective:** Measure and verify ECM bandwidth usage with all 4 CAS systems active
+
+**Pre-conditions:**
+- Test Case 3.6 passed (all 4 CAS operational)
+- VOD stream active with all 4 ECMs
+- MPEG Tracker connected
+- All 4 ECM PIDs identified
+
+**Detailed Test Steps:**
+1. Verify configuration: **APEX3K-NE EM >> Simulcrypt >> CAS configuration** shows 4 CAS systems
+2. Connect MPEG Tracker to output
+3. Capture 1000-2000 TS packets (continuous stream, approximately 10-20 seconds)
+4. Analyze captured packets:
+   - Count total TS packets: [value]
+   - Count ECM packets for each PID:
+     - MediaCipher ECM count: [value]
+     - SuperCAS1 ECM count: [value]
+     - SuperCAS2 ECM count: [value]
+     - SuperCAS3 ECM count: [value]
+   - Total ECM packets: [value]
+5. Calculate ECM bandwidth:
+   - Total TS bitrate (example: 3.75 Mbps for DVB)
+   - ECM packet ratio = ECM packets / Total packets
+   - ECM bandwidth = Total bitrate × ECM packet ratio
+6. Document for each individual ECM:
+   - ECM frequency (packets per second)
+   - Estimated bandwidth per CAS
+   - Example: MediaCipher ECM: 10 packets/sec × 184 bytes = 18.4 kbps
+7. Calculate total ECM bandwidth:
+   - Sum of all 4 ECM bandwidths
+   - Express as percentage of total stream bitrate
+8. Verify bandwidth acceptable:
+   - Compare to typical DVB ECM overhead (2-5% is typical)
+   - Verify total ECM bandwidth < [acceptable threshold]
+9. Verify ECM frequency consistency:
+   - Measure time intervals between consecutive ECMs for each PID
+   - Verify frequency within spec (100-200ms per DVB)
+   - Calculate jitter/variance
+
+**Expected Results:**
+- Total ECM bandwidth measurable and quantifiable
+- ECM bandwidth typically 2-5% of total stream
+- All ECM frequencies within specification
+- No excessive bandwidth consumption
+- Stream bitrate remains stable with 4 ECMs
+
+**Pass Criteria:**
+- ECM bandwidth < 10% of total stream bitrate
+- Individual ECM frequencies within 100-200ms spec
+- Consistent ECM insertion rates for all 4 CAS systems
+
+---
+
+### Test Case 3.13: ECM Encryption and Validity
+**Test ID:** TC_REL1.2.15-030_013
+**Severity:** HIGH
+**Objective:** Verify ECM data is properly encrypted and valid per CAS specification
+
+**Pre-conditions:**
+- Test Case 3.6 passed
+- VOD stream active with all 4 ECMs
+- MPEG Tracker capture available with ECM packets
+- CAS system specifications available for reference
+
+**Detailed Test Steps:**
+1. Capture ECM packets from stream via MPEG Tracker
+2. Extract sample ECM packets (at least 5-10 for each CAS):
+   - 5 MediaCipher ECMs
+   - 5 SuperCAS1 ECMs
+   - 5 SuperCAS2 ECMs
+   - 5 SuperCAS3 ECMs
+3. Analyze MediaCipher ECMs:
+   - Verify table ID = 0x80 (ECM)
+   - Verify syntax_indicator = 1
+   - Extract ECM header information
+   - Verify CAS system ID = 0x4AD0
+   - Examine encrypted data section
+   - Verify data appears random/encrypted (no obvious patterns)
+   - Check CRC-32 field validity (should match calculated CRC)
+4. Analyze SuperCAS1 ECMs (0x4B46):
+   - Repeat checks from step 3
+   - Verify CAS system ID = 0x4B46
+   - Compare encryption pattern to MediaCipher (should be different format)
+   - Validate CRC-32
+5. Analyze SuperCAS2 and SuperCAS3 similarly
+6. Verify encryption characteristics:
+   - No ECM packets from same CAS have identical payload
+   - Encrypted data varies between consecutive ECMs
+   - No recognizable plaintext patterns
+7. Verify ECM validity period:
+   - Extract validity information if present
+   - Verify ECMs have reasonable validity windows
+8. Compare ECM structures to DVB-CSA2 specification:
+   - Verify compliance with specification format
+   - Check descriptor structures
+   - Validate field sizes and types
+9. Test ECM error detection:
+   - Intentionally corrupt sample ECM CRC in analysis
+   - Verify CRC check would fail
+
+**Expected Results:**
+- All ECM data properly encrypted with no readable plaintext
+- Encryption varies between ECM instances
+- CRC validation passes for all captured ECMs
+- ECM structures match CAS specifications
+- No unencrypted sensitive data visible
+- ECM validity periods reasonable
+
+**Pass Criteria:**
+- ECM data encrypted and unreadable
+- CRC-32 checksums valid for all samples
+- Encryption proper and specification-compliant
+- No data integrity issues detected
+
+---
+
+### Test Case 3.14: ECM Insertion Frequency for Each CAS
+**Test ID:** TC_REL1.2.15-030_014
+**Severity:** MEDIUM
+**Objective:** Verify ECM insertion frequency meets DVB specification (100-200ms typical) for all CAS systems
+
+**Pre-conditions:**
+- Test Case 3.6 passed
+- VOD stream active with all 4 ECMs
+- MPEG Tracker capturing with sufficient resolution
+- All 4 ECM PIDs identified
+
+**Detailed Test Steps:**
+1. Capture 2000+ TS packets (20-30 seconds continuous) via MPEG Tracker
+2. Identify all ECM packets for each CAS in captured stream:
+   - Extract MediaCipher ECM packets (ECM PID 1)
+   - Extract SuperCAS1 ECM packets (ECM PID 2)
+   - Extract SuperCAS2 ECM packets (ECM PID 3)
+   - Extract SuperCAS3 ECM packets (ECM PID 4)
+3. For MediaCipher ECMs, measure time intervals:
+   - Calculate time between ECM N and ECM N+1
+   - Example: if ECM 1 at packet 100, ECM 2 at packet 225, interval = 125 packets ≈ 125ms (assuming ~1000 packets/sec)
+   - Calculate intervals for all consecutive MediaCipher ECM pairs
+   - Determine min, max, average, and standard deviation of intervals
+4. Repeat for SuperCAS1, SuperCAS2, and SuperCAS3 ECM intervals
+5. Verify each CAS meets specification:
+   - Minimum interval: > 100ms (minimum frequency)
+   - Maximum interval: < 200ms (maximum frequency)
+   - Average interval should be consistent
+6. Analyze frequency distribution:
+   - Plot or tabulate interval values
+   - Verify no anomalies or irregular patterns
+   - Verify consistency throughout capture
+7. Check for synchronization:
+   - Verify ECM insertion patterns for different CAS are independent
+   - Confirm no unexpected synchronization between different CAS ECMs
+8. Measure jitter (variance):
+   - Calculate standard deviation of intervals
+   - Verify jitter acceptable (target: < 10% of mean interval)
+
+**Expected Results:**
+- All ECM insertion intervals between 100-200ms per DVB spec
+- Consistent frequency for each CAS system
+- Low jitter/variance (< 10% of mean)
+- No irregular gaps or burst patterns
+- Each CAS maintains independent insertion schedule
+
+**Pass Criteria:**
+- 100% of ECM intervals within 100-200ms specification
+- Average frequency consistent for each CAS
+- Jitter acceptable (< 10% variance)
+- No anomalous gaps or insertions
+
+---
+
+### Test Case 3.15: ECM Splicing and Continuity
+**Test ID:** TC_REL1.2.15-030_015
+**Severity:** HIGH
+**Objective:** Verify ECM continuity across stream samples with no gaps or duplicates
+
+**Pre-conditions:**
+- Test Case 3.6 passed
+- VOD stream active with all 4 ECMs
+- MPEG Tracker capturing full stream
+- All 4 ECM PIDs identified
+
+**Detailed Test Steps:**
+1. Capture 3000+ TS packets (30+ seconds) via MPEG Tracker
+2. Extract all ECM packets (all 4 ECMs combined) in chronological order
+3. For each ECM PID, verify continuity:
+   - Extract ECM counter or sequence indicator if present in ECM data
+   - Verify counter increments sequentially for each CAS
+   - Check for gaps in sequence
+4. Verify no duplicate ECMs:
+   - Compare consecutive ECMs from same PID
+   - Verify each ECM unique (not duplicated)
+   - Verify payload differs between consecutive ECMs
+5. Verify no missing ECMs:
+   - Measure time gaps between consecutive ECMs of same PID
+   - Gaps should never exceed 250ms (approximately twice max insertion interval)
+   - Document any gaps approaching 200ms
+6. Verify splicing points (if stream spliced/edited):
+   - If captured across multiple splice events, verify ECM continuity maintained
+   - Verify no loss of ECM at splice boundaries
+7. Check for ECM ordering:
+   - Verify TS packet sequence numbers continuous and sequential
+   - No skipped or out-of-order packets
+   - PCR (Program Clock Reference) continuous
+8. Analyze across multiple capture sessions:
+   - Capture stream in 3 separate sessions (30 seconds each)
+   - Verify continuity consistent across all sessions
+9. Simulate real-world stream conditions:
+   - If possible, capture during network jitter or load changes
+   - Verify ECM continuity maintained under stress
+
+**Expected Results:**
+- No gaps in ECM insertion (except normal max intervals)
+- No duplicate ECM packets detected
+- ECM sequence continuous and sequential
+- TS packet sequence unbroken
+- PCR continuous and monotonically increasing
+- Stream remains synchronous and valid
+
+**Pass Criteria:**
+- No ECM gaps > 250ms detected
+- Zero duplicate ECMs
+- 100% sequence continuity for all 4 ECM streams
+- No packet loss or reordering
+
+---
+
+### Test Case 3.16: ECM PIDs Allocation and Management (1,300+ mappings)
+**Test ID:** TC_REL1.2.15-030_016
+**Severity:** HIGH
+**Objective:** Create 1,300 simultaneous streams and verify each receives unique ECM PID(s) with no collisions
+
+**Pre-conditions:**
+- Single blade or isolated test blade (APEX3K-NE EM >> Blades >> Select Blade<1>)
+- Gateway VOD enabled on blade
+- M3-Server capable of generating 1,300 simultaneous unicast streams
+- Sufficient system resources (CPU, memory, bandwidth)
+- MPEG Tracker connected to output
+- Configuration with 4 CAS systems (maximum)
+
+**Detailed Test Steps:**
+1. Verify configuration:
+   - Navigate to: **APEX3K-NE EM >> Blades >> Select Blade<1> >> Config**
+   - Confirm Gateway VOD = **Enable**
+   - Confirm Virtual IP (Ingress) configured (e.g., 192.168.1.100)
+   - Confirm Output IP (Egress) configured (e.g., 192.168.1.101)
+2. Verify CAS configuration: **APEX3K-NE EM >> Simulcrypt >> CAS configuration** shows 4 CAS systems
+3. Launch M3-Server and configure 1,300 different unicast streams:
+   - Program numbers: 1000-2299 (or appropriate range for 1,300 streams)
+   - Each stream unique source IP/port
+   - All streams target Virtual IP (192.168.1.100)
+4. Start all 1,300 streams from M3-Server:
+   - Begin streaming all 1,300 simultaneously (or in waves if necessary)
+   - Verify streams are ingested into APEX3K-NE
+5. Monitor ingestion: **APEX3K-NE EM >> Blades >> Select Blade<1> >> Gateway VOD Status**:
+   - Observe TS and Mappings table populates
+   - Wait for all 1,300 to complete ingestion (may take 30-60 seconds)
+   - Verify table shows 1,300 active mappings
+6. Start MPEG Tracker capture after all streams stabilized
+7. Capture 10,000+ TS packets (or 1-2 minutes of stream)
+8. Analyze captured packets:
+   - Extract all ECM PIDs present in stream
+   - Calculate expected number of unique ECM PIDs:
+     - 1,300 streams × 4 CAS per stream = 5,200 potential ECM PIDs
+     - However, CAS may share ECM PIDs across streams (if same encryption key)
+     - Or each stream may have unique ECMs (if different encryption keys)
+   - Document actual number of unique ECM PIDs found: [value]
+9. Verify PID allocation:
+   - Check for PID collisions:
+     - Two different CAS systems should NOT share ECM PID
+     - Same CAS across different streams should have consistent PID or unique PIDs per stream
+   - Verify all ECM PIDs within valid DVB range (13-bit values: 0-8191)
+   - No PIDs in reserved ranges (0-31)
+10. Verify stream-specific PID mapping:
+    - Select 10 random streams from the 1,300
+    - For each, identify its ECM PIDs (should be 4 if each CAS has unique PID per stream)
+    - Verify no two streams share identical ECM PID set
+11. Verify ECM insertion:
+    - For random sample of streams (at least 100), verify:
+    - ECM packets present for each stream
+    - ECM frequency within spec (100-200ms)
+    - No ECM packet loss
+12. Monitor system performance:
+    - Check APEX3K-NE stability: **APEX-NE EM** interface responsive, no warnings/errors
+    - Verify CPU, memory, temperature levels reasonable
+    - Check output throughput stable
+
+**Expected Results:**
+- All 1,300 streams ingested and active in Gateway VOD Status
+- Unique ECM PIDs allocated for each stream-CAS combination
+- No PID collisions detected
+- All ECM PIDs valid (within 13-bit range, outside reserved)
+- ECMs present for all streams with correct frequency
+- System remains stable with 1,300 active streams
+- APEX-NE EM responsive and no errors
+
+**Pass Criteria:**
+- 1,300 streams successfully active simultaneously
+- Zero PID collisions detected
+- All ECM PIDs unique and valid
+- 100% ECM insertion rate for all 1,300 streams
+- System stability maintained under load
+
+---
+
+### Test Case 3.17: CAT Table Update for ECM PIDs
+**Test ID:** TC_REL1.2.15-030_017
+**Severity:** MEDIUM
+**Objective:** Verify CAT (Conditional Access Table) includes all ECM PIDs and updates when CAS configuration changes
+
+**Pre-conditions:**
+- Test Case 3.6 passed (4 CAS systems operational)
+- VOD stream active
+- MPEG Tracker connected
+
+**Detailed Test Steps:**
+1. Capture TS packets from stream via MPEG Tracker (100+ packets minimum)
+2. Locate CAT (Conditional Access Table):
+   - Search for table ID 0x01 (CAT)
+   - CAT has PID 0x0001
+   - Extract first CAT instance
+3. Extract CAT descriptor section:
+   - Look for CA descriptors (descriptor tag 0x09)
+   - Should have descriptor for each ECM PID in system
+4. Document each CA descriptor in CAT:
+   - **Descriptor 1:** CA_system_ID = [value], ECM_PID = [value]
+   - **Descriptor 2:** CA_system_ID = [value], ECM_PID = [value]
+   - **Descriptor 3:** CA_system_ID = [value], ECM_PID = [value]
+   - **Descriptor 4:** CA_system_ID = [value], ECM_PID = [value]
+5. Verify ECM PIDs in CAT match actual ECM PIDs in stream:
+   - Cross-reference CAT ECM PIDs with ECM packets captured
+   - Verify each ECM PID in CAT has actual packets in stream
+   - Verify no extra PIDs listed
+6. Record baseline CAT version: [value]
+7. Make CAS configuration change:
+   - Navigate to: **APEX3K-NE EM >> Simulcrypt >> CAS configuration**
+   - Add, remove, or reconfigure SuperCAS
+   - Click **Save** or **Apply**
+8. Wait 3-5 seconds for APEX3K-NE to process
+9. Capture new TS packets including new CAT
+10. Locate new CAT and extract:
+    - Verify CAT version incremented (should be different from baseline)
+    - Extract updated descriptor list
+11. Compare CAT descriptor updates:
+    - If SuperCAS added: Verify new CA descriptor present for new CAS
+    - If SuperCAS removed: Verify removed CA descriptor absent
+    - If SuperCAS reconfigured: Verify CAS system ID and/or ECM PID updated
+12. Verify ECM PID mapping consistency:
+    - Cross-reference updated CAT with new ECM packets in stream
+    - All CAT descriptors should have corresponding ECM packets
+    - All ECM PIDs in stream should be in CAT
+13. Check CAT update timing:
+    - Measure time from configuration change to new CAT appearance
+    - Should appear within 2-5 seconds
+
+**Expected Results:**
+- CAT contains CA descriptors for all ECM systems
+- Each descriptor has correct CAS system ID and ECM PID
+- ECM PIDs in CAT match actual ECM packets in stream
+- CAT updates correctly when configuration changes
+- CAT version increments appropriately
+- Update occurs within 2-5 seconds
+
+**Pass Criteria:**
+- CAT descriptors match configured CAS systems
+- All ECM PIDs in CAT have corresponding packets
+- CAT updates correctly with configuration changes
+- No missing or extra descriptors in CAT
+
+### Test Case 3.18: Service-Specific ECM Configuration Uniformity
+**Test ID:** TC_REL1.2.15-030_018
+**Severity:** MEDIUM
+**Objective:** Verify multiple streams with different services receive correct ECM configuration consistently
+
+**Pre-conditions:**
+- Test Case 3.6 passed
+- Multiple services configured (if available)
+- 5-10 streams active, possibly with different services
+- MPEG Tracker connected
+
+**Detailed Test Steps:**
+1. Verify multiple services configured:
+   - Navigate to: **APEX3K-NE EM >> Blades >> Select Blade<1>**
+   - Check service configuration (if service-level configuration available)
+2. Start 5 streams with different service configurations (if supported):
+   - Stream 1-5 configured to different services/programs
+   - All streams share same CAS configuration (4 CAS systems)
+3. Monitor: **APEX3K-NE EM >> Blades >> Select Blade<1> >> Gateway VOD Status**
+4. Verify all 5 streams show as Active
+5. Connect MPEG Tracker and capture packets
+6. For each stream, extract:
+   - PMT (program-specific information)
+   - All CA descriptors in PMT
+   - All ECM PIDs for that program
+7. Verify uniformity:
+   - All 5 streams have ECMs for same 4 CAS systems
+   - CA descriptor ordering consistent
+   - CAS system IDs identical across all services
+   - ECM PID scheme consistent
+8. Compare ECM delivery:
+   - Verify each stream receives regular ECMs (100-200ms frequency)
+   - Verify no service-specific ECM gaps
+9. Document comparison table:
+   - Service/Stream | CAS1 | CAS2 | CAS3 | CAS4 | ECM Frequency | Status
+10. Verify consistency across all services
+
+**Expected Results:**
+- All services/streams receive identical CAS configuration
+- All 4 ECMs present for each service
+- No service-specific variations
+- ECM frequency consistent across services
+- Uniform delivery regardless of service
+
+**Pass Criteria:**
+- All services uniformly configured with 4 CAS systems
+- 100% ECM delivery consistency
+- No service-specific anomalies
+
+---
+
+### Test Case 3.19: ECM Handling During Stream Pause/Resume
+**Test ID:** TC_REL1.2.15-030_019
+**Severity:** MEDIUM
+**Objective:** Verify ECM insertion continues or handles gracefully during stream pause/resume on M3-Server
+
+**Pre-conditions:**
+- VOD stream active with all 4 ECMs flowing
+- M3-Server pause/resume capability available
+- MPEG Tracker capturing
+
+**Detailed Test Steps:**
+1. Verify stream active:
+   - Monitor: **APEX3K-NE EM >> Blades >> Select Blade<1> >> Gateway VOD Status** shows stream Active
+   - MPEG Tracker showing regular TS packets and ECMs
+2. Document baseline ECM pattern:
+   - Count ECM packets over 10-second window before pause
+   - Verify normal frequency (100-200ms intervals)
+3. Issue pause command on M3-Server:
+   - Using M3-Server interface, pause the VOD playback
+   - Stream input halts but connection remains open
+4. Note timestamp of pause command
+5. Continue MPEG Tracker capture during pause (10-20 seconds)
+6. Monitor APEX3K-NE status during pause:
+   - Verify stream status in Gateway VOD Status (may show Paused or Active depending on implementation)
+   - Check for any error messages or warnings
+7. Analyze captured packets during pause:
+   - Determine if APEX3K-NE continues generating ECMs (likely yes, with no new content)
+   - Or if ECM generation pauses (acceptable alternative)
+   - Document observed behavior
+8. Issue resume command on M3-Server:
+   - Resume playback on M3-Server
+   - Stream content flow resumes
+9. Note timestamp of resume command
+10. Continue MPEG Tracker capture after resume (10-20 seconds)
+11. Analyze post-resume packets:
+    - Verify TS packet sequence resumes
+    - Verify ECM generation resumes/continues
+    - Verify PCR (Program Clock Reference) properly handles resume transition
+    - Check for any packet loss or gaps
+12. Verify stream stability:
+    - No CRC errors after resume
+    - No discontinuities or corruption
+    - Stream playback normal
+13. Test pause/resume cycle multiple times (3-5 cycles)
+
+**Expected Results:**
+- Stream pause handled gracefully
+- ECM behavior consistent (either continues or pauses with stream)
+- Stream resumes successfully
+- No packet loss or corruption during pause/resume
+- PCR and stream timing maintained
+- No errors or warnings generated
+
+**Pass Criteria:**
+- Pause/resume transitions handled without errors
+- Stream remains active or appropriately paused during pause
+- Resume successful with no data loss
+- ECM continuity maintained across pause/resume
+
+---
+
+### Test Case 3.20: Dynamic CAS Addition with Active ECMs
+**Test ID:** TC_REL1.2.15-030_020
+**Severity:** HIGH
+**Objective:** Add 3rd SuperCAS to running stream with existing ECMs and verify new ECM inserted without stream interruption
+
+**Pre-conditions:**
+- 2 SuperCAS + 1 MediaCipher (3 CAS total) operational with 3 ECMs flowing
+- VOD stream active and stable
+- MPEG Tracker capturing continuous stream
+- 3rd SuperCAS available but not configured
+
+**Detailed Test Steps:**
+1. Verify baseline state:
+   - Stream active: **APEX3K-NE EM >> Blades >> Select Blade<1> >> Gateway VOD Status** shows Active
+   - MPEG Tracker capturing with 3 ECMs present
+   - Document baseline 3 ECM PIDs and CAS system IDs
+2. Begin continuous MPEG Tracker capture:
+   - Record TS stream continuously
+   - Note timestamp at start
+3. Navigate to: **APEX3K-NE EM >> Simulcrypt >> CAS configuration**
+4. Add 3rd SuperCAS while stream is flowing:
+   - Click **Add** or **Configure CAS**
+   - Enter 3rd SuperCAS (0x5601) details
+   - Click **Save** or **Apply**
+   - Note timestamp of configuration save
+5. Observe APEX3K-NE response (target: < 5 seconds for ECM update):
+   - Monitor Gateway VOD Status for stream status
+   - Should remain Active (no interruption)
+   - Check for any error messages (should be none)
+6. Continue MPEG Tracker capture for 15 additional seconds after configuration change
+7. Stop MPEG Tracker capture
+8. Analyze captured stream:
+   - Identify exact point when configuration changed (based on timestamp)
+   - Before configuration change: Should see 3 ECMs (MediaCipher, SuperCAS1, SuperCAS2)
+   - After configuration change: Should see 4 ECMs (+ SuperCAS3)
+   - Measure time from configuration change to first new ECM (SuperCAS3) appearance
+9. Verify ECM insertion characteristics for new SuperCAS3:
+   - ECM PID is unique (not collision with existing 3)
+   - CAS system ID = 0x5601
+   - Insertion frequency within spec (100-200ms)
+10. Verify stream continuity:
+    - No packet loss around configuration change point
+    - TS packet sequence continuous
+    - PCR continuous
+    - No CRC errors
+11. Verify original 3 ECMs unaffected:
+    - Original ECM PIDs unchanged
+    - Original ECM frequencies maintained
+    - No interruption in original ECM streams
+
+**Expected Results:**
+- 3rd SuperCAS added without stream interruption
+- New ECM (SuperCAS3) appears within 5 seconds of configuration change
+- Original 3 ECMs continue unaffected
+- All 4 ECMs present and functioning after addition
+- Stream packet continuity maintained
+- No errors or warnings
+- Stream quality unaffected
+
+**Pass Criteria:**
+- Configuration accepted without stream restart
+- New ECM inserted within 5 seconds
+- All 4 ECMs operational post-addition
+- Zero packet loss or corruption
+- Original ECM service uninterrupted
+
+---
+
+### Test Case 3.21: ECM Update Propagation Time
+**Test ID:** TC_REL1.2.15-030_021
+**Severity:** MEDIUM
+**Objective:** Measure time from CAS configuration change to ECM update in transport stream
+
+**Pre-conditions:**
+- VOD stream active with baseline CAS configuration
+- MPEG Tracker with precise timing capabilities
+- CAS configuration ready to change (add, remove, or modify)
+
+**Detailed Test Steps:**
+1. Establish baseline configuration:
+   - Navigate to: **APEX3K-NE EM >> Simulcrypt >> CAS configuration**
+   - Document current CAS systems
+2. Synchronize timing:
+   - Set up precise timing reference (MPEG Tracker clock or system clock)
+   - Start continuous MPEG Tracker capture
+3. Prepare configuration change:
+   - Identify which CAS to add/remove/modify
+   - Have configuration ready
+4. Perform configuration change:
+   - Click **Add** or **Remove** CAS button
+   - Enter configuration details or select to delete
+   - Click **Save** or **Apply**
+   - **Note exact timestamp of configuration save action** (T0)
+5. Immediately continue MPEG Tracker capture with precise timing
+6. Scan captured stream packets:
+   - Starting from time T0, search for ECM changes
+   - If adding CAS: Look for new ECM PID appearance
+   - If removing CAS: Look for ECM PID disappearance
+   - Note timestamp when ECM change first appears (T1)
+7. Calculate propagation time: T1 - T0 = Propagation delay
+8. Repeat configuration change 4 more times to establish average:
+   - Change 1: Add SuperCAS, measure propagation time
+   - Change 2: Remove SuperCAS, measure propagation time
+   - Change 3: Add different SuperCAS, measure propagation time
+   - Change 4: Remove SuperCAS, measure propagation time
+   - Change 5: Modify CAS configuration, measure propagation time
+9. Calculate statistics:
+   - Minimum propagation time: [value]
+   - Maximum propagation time: [value]
+   - Average propagation time: [value]
+   - Standard deviation: [value]
+10. Document target requirement:
+    - Target propagation time: < 2 seconds
+
+**Expected Results:**
+- Configuration changes reflected in ECM stream within 2 seconds
+- Consistent propagation time across multiple changes
+- Acceptable variance (< 500ms)
+- No excessive delays
+
+**Pass Criteria:**
+- Average propagation time < 2 seconds
+- 100% of changes propagate within 2 seconds
+- Variance < 500ms
+
+---
+
+### Test Case 3.22: ECM Error Recovery
+**Test ID:** TC_REL1.2.15-030_022
+**Severity:** HIGH
+**Objective:** Verify ECM error handling and recovery
+
+**Pre-conditions:**
+- VOD stream active with all 4 ECMs
+- APEX-NE EM accessible
+- System logging accessible
+- MPEG Tracker connected
+
+**Detailed Test Steps:**
+1. Monitor current state:
+   - Verify stream active: **APEX3K-NE EM >> Blades >> Select Blade<1> >> Gateway VOD Status** shows Active
+   - MPEG Tracker showing regular ECMs for all 4 CAS
+2. Test Scenario A: ECM Server Connectivity Loss (if testable):
+   - If ECMG server connectivity can be interrupted:
+   - Stop or disconnect ECMG server
+   - Monitor APEX3K-NE response (may see degraded service or error messages)
+   - Document error message and system behavior
+   - Restore ECMG server connectivity
+   - Verify ECM recovery (resume within 30 seconds target)
+3. Test Scenario B: CAS Configuration Error (if testable):
+   - Attempt to configure invalid CAS system ID
+   - Verify system rejects or handles gracefully
+   - Verify existing ECMs unaffected
+4. Observe ECM error logging:
+   - Navigate to: **APEX-NE EM >> Logs** (or appropriate logging interface)
+   - Search for ECM-related errors or warnings
+   - Document any ECM error entries: [list]
+5. Verify error recovery mechanisms:
+   - Verify system detects and reports errors
+   - Verify error messages clear and actionable
+   - Verify system attempts recovery (if applicable)
+6. Stream stability during error:
+   - Verify stream continues or gracefully stops (no corruption)
+   - Verify no cascading failures
+   - Verify other services unaffected
+7. Document all error conditions observed and recovery actions
+
+**Expected Results:**
+- System handles ECM errors gracefully
+- Error messages clear and logged
+- Stream continues or safely stops (no corruption)
+- ECMs recover automatically when error condition resolves
+- No cascading failures to other systems
+- Recovery within 30 seconds of error resolution
+
+**Pass Criteria:**
+- Errors detected and logged appropriately
+- System recovery successful
+- Stream quality unaffected or degrades gracefully
+- No system instability or crashes
+
+---
+
+### Test Case 3.23: ECM Validation Against CAS System IDs
+**Test ID:** TC_REL1.2.15-030_023
+**Severity:** MEDIUM
+**Objective:** Verify ECM contains correct CAS system ID matching configured CAS systems
+
+**Pre-conditions:**
+- All 4 CAS systems configured (Test Case 3.6 completed)
+- VOD stream active with all 4 ECMs
+- MPEG Tracker capturing
+
+**Detailed Test Steps:**
+1. Query configured CAS systems:
+   - Navigate to: **APEX3K-NE EM >> Simulcrypt >> CAS configuration**
+   - Document all configured CAS system IDs:
+     - MediaCipher: 0x4AD0 (or actual)
+     - SuperCAS1: [actual CAS ID] (example: 0x4B46)
+     - SuperCAS2: [actual CAS ID] (example: 0x4BB8)
+     - SuperCAS3: [actual CAS ID] (example: 0x5601)
+2. Capture TS packets via MPEG Tracker
+3. Extract all ECM packets from captured stream
+4. For each ECM, validate CAS system ID:
+   - Parse ECM header to extract CAS system ID field
+   - Cross-reference extracted ID with configured ID list
+   - Verify match: Each ECM CAS ID matches one of configured CAS IDs
+5. Verify all configured CAS have ECMs:
+   - Count unique CAS system IDs found in captured ECMs
+   - Should equal number of configured CAS (4 in this test)
+   - All configured IDs should be present
+6. Verify no unexpected CAS IDs:
+   - Verify no ECM with CAS system ID not in configured list
+   - All ECM CAS IDs must match configuration
+7. Sample validation (extract 10-20 ECMs for each CAS):
+   - MediaCipher: Extract 10 ECMs, verify all have CAS ID 0x4AD0
+   - SuperCAS1: Extract 10 ECMs, verify all have correct ID
+   - SuperCAS2: Extract 10 ECMs, verify all have correct ID
+   - SuperCAS3: Extract 10 ECMs, verify all have correct ID
+8. Cross-reference with PMT:
+   - Extract PMT CA descriptors
+   - Verify CAS system IDs in PMT descriptors match ECM CAS IDs
+   - Verify one-to-one mapping
+
+**Expected Results:**
+- All ECM CAS system IDs match configured CAS systems
+- No ECMs with unrecognized CAS IDs
+- All configured CAS have corresponding ECMs
+- PMT descriptors match ECM CAS IDs
+- Complete consistency verified
+
+**Pass Criteria:**
+- 100% of ECMs have valid CAS system ID
+- All CAS IDs match configuration
+- No unexpected CAS IDs found
+
+---
+
+### Test Case 3.24: PMT Consistency Across Multiple Captures
+**Test ID:** TC_REL1.2.15-030_024
+**Severity:** MEDIUM
+**Objective:** Verify PMT content consistent across multiple stream captures
+
+**Pre-conditions:**
+- VOD stream active with stable configuration
+- MPEG Tracker capable of multiple captures
+- All 4 CAS systems configured
+
+**Detailed Test Steps:**
+1. Perform PMT Capture Session 1:
+   - Capture 500 TS packets via MPEG Tracker
+   - Extract PMT (table ID 0x02) from captured stream
+   - Document:
+     - PMT version
+     - Program number
+     - PCR PID
+     - All CA descriptor details (4 descriptors)
+     - All ES information
+2. Wait 5 minutes with stream active
+3. Perform PMT Capture Session 2:
+   - Capture new 500 TS packets
+   - Extract PMT from new capture
+   - Document same information as Session 1
+4. Wait 5 minutes
+5. Perform PMT Capture Session 3:
+   - Repeat capture and documentation
+6. Compare captured PMTs:
+   - PMT structure should be identical across captures (except version if changed)
+   - Program number should be same
+   - PCR PID should be same
+   - CA descriptor count should be same (4)
+   - CA descriptor ordering should be same
+   - Each CA descriptor CAS ID should match exactly
+   - Each CA descriptor ECM PID should match exactly (or be consistent)
+   - All ES information should match
+7. Document differences (if any):
+   - PMT version may increment if configuration changed
+   - Note any other differences: [list]
+8. Verify descriptor consistency:
+   - Extract CA descriptors from each capture
+   - Create side-by-side comparison table
+   - Verify all descriptors identical (except version)
+
+**Expected Results:**
+- PMT structure consistent across all captures
+- PMT descriptors and ES information unchanged
+- CAS system IDs and ECM PIDs consistent
+- Only PMT version may change if configuration updated
+- No unexpected variations
+
+**Pass Criteria:**
+- 100% structural consistency across captures
+- All descriptors match exactly (except version)
+- No anomalies or unexpected changes
+
+---
+
+### Test Case 3.25: ECM Performance Under Load (1,300+ mappings per blade)
+**Test ID:** TC_REL1.2.15-030_025
+**Severity:** CRITICAL
+**Objective:** Verify ECM insertion operational and without delays for 1,300 simultaneous streams on single blade
+
+**Pre-conditions:**
+- Test Case 3.16 completed (1,300 streams active)
+- All 4 CAS systems configured
+- MPEG Tracker connected
+- System monitoring tools available
+
+**Detailed Test Steps:**
+1. Verify baseline state from Test Case 3.16:
+   - 1,300 VOD streams active and ingested
+   - All streams appear in: **APEX3K-NE EM >> Blades >> Select Blade<1> >> Gateway VOD Status**
+   - All streams showing as Active
+2. Connect MPEG Tracker to output
+3. Monitor system performance metrics:
+   - CPU utilization: [monitor via APEX-NE EM System Dashboard]
+   - Memory utilization: [monitor]
+   - ECM processing rate: [calculate from packet capture]
+   - Total output bitrate: [monitor]
+4. Capture 20,000+ TS packets (2-5 minutes continuous) via MPEG Tracker
+5. Analyze ECM insertion across all 1,300 streams:
+   - Extract all ECM packets from capture
+   - Count total ECM packets: [value]
+   - Calculate ECM packets per second: [value]
+6. Verify ECM coverage for active streams:
+   - Sample 100 random streams from the 1,300
+   - For each sample stream, verify:
+     - ECM packets present for all 4 CAS (or appropriate CAS for that stream)
+     - ECM frequency within spec (100-200ms)
+     - No missing ECMs or gaps
+   - Calculate: Number of streams with valid ECMs / 100 sample streams
+   - Target: 100% of sampled streams have valid ECMs
+7. Verify insertion delay:
+   - Measure latency from configuration/stream initialization to ECM appearance
+   - Verify delays acceptable (< 500ms typical, < 2 seconds max)
+8. Monitor for ECM insertion errors:
+   - Check APEX-NE EM logs: **APEX-NE EM >> Logs** for ECM-related errors
+   - Document any error entries: [list]
+   - Count error rate: Errors / 1,300 streams
+   - Target: Error rate < 0.1%
+9. Verify stream stability:
+   - Monitor stream status throughout capture
+   - Check for any streams dropping to Inactive or Error status
+   - Count stability: Streams remaining Active / 1,300 total
+   - Target: 100% of streams remain Active
+10. Analyze resource consumption:
+    - Measure peak CPU utilization during 1,300-stream ECM insertion: [value]%
+    - Measure peak memory utilization: [value]%
+    - Measure peak temperature (if available): [value]°C
+    - Verify all metrics within acceptable ranges
+11. Monitor output quality:
+    - Verify output bitrate consistent
+    - Verify no packet loss on output
+    - Verify PCR continuity
+    - Verify CRC error rate acceptable
+12. Document performance summary:
+    - ECM insertion success rate: [%]
+    - Average ECM frequency: [packets/sec]
+    - Average processing latency: [ms]
+    - Peak CPU utilization: [%]
+    - Stream stability: [%]
+
+**Expected Results:**
+- ECMs successfully inserted for all 1,300 streams
+- Insertion frequency within specification
+- < 0.1% error rate
+- 100% of streams remain active
+- System resources (CPU, memory, temperature) within acceptable ranges
+- Output stream quality maintained
+- No performance degradation observed
+
+**Pass Criteria:**
+- ECM insertion success rate ≥ 99.9%
+- Average ECM frequency within 100-200ms spec
+- Error rate < 0.1%
+- 100% stream stability
+- Peak CPU < 85% utilization
+- Peak memory < 85% utilization
+- Output CRC error rate < 0.01%
 
 ---
 
