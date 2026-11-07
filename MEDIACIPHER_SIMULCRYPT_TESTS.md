@@ -326,6 +326,14 @@ Input Method: Unicast video streams via GigE
    - Valid CRC values
 7. Verify PAT (Program Association Table) present
 8. Verify PMT contains proper CA descriptors
+9. **Video Verification via Motorola DCX Settop Box:**
+   - Connect Motorola DCX STB to APEX3K-NE output
+   - Tune STB to encrypted transport stream
+   - Monitor video playback for minimum 2 minutes
+   - Verify encrypted TS content plays WITHOUT glitches or macroblocks
+   - Confirm smooth video rendering across scene changes
+   - Verify audio synchronization with video (no lip-sync issues)
+   - Document STB display: Signal lock status, Video resolution, Playback quality
 
 #### 2.0.1.4 Expected Results
 - CTE encryption with SCTE-52 active
@@ -333,6 +341,7 @@ Input Method: Unicast video streams via GigE
 - Encryption algorithm matches specification
 - PAT and PMT properly configured
 - MPEG Tracker analysis confirms SCTE-52
+- **Video Playback Verification:** Motorola DCX STB displays encrypted content without glitches or macroblocks, Video plays continuously for 2+ minutes without interruption, Audio properly synchronized with video, STB signal locked with optimal quality
 
 ### 2.0.2 Test Case: SCTE-52 Compliance Across Multiple Streams (APEX3K-NE)
 **Test ID:** TC_REL1.2.15-020_002  
@@ -354,12 +363,21 @@ Input Method: Unicast video streams via GigE
    - Validate CRC checksums
 3. Create compliance report documenting results
 4. Compare consistency across all 10 streams
+5. **Video Verification via Motorola DCX Settop Box:**
+   - Connect Motorola DCX STB to APEX3K-NE output
+   - Sequentially tune STB to each of the 10 encrypted streams
+   - For each stream, monitor video playback for minimum 1 minute
+   - Verify all 10 streams play WITHOUT glitches or macroblocks
+   - Verify smooth video rendering without pixelation or frame drops
+   - Confirm consistent audio synchronization across all streams
+   - Document results for each stream
 
 #### 2.0.2.4 Expected Results
 - All 10 streams use SCTE-52 encryption
 - Key structure consistent and valid across all
 - Control words properly inserted in all
 - 100% SCTE-52 compliance achieved
+- **Video Playback Verification:** All 10 streams display on Motorola DCX STB without glitches or macroblocks, Video plays smoothly on each stream for 1+ minute without interruption, No pixelation, frame drops, or rendering errors detected, Audio synchronized across all streams
 
 ### 2.0.3 Test Case: CTE-SCTE-52 Uniformity Across System
 **Test ID:** TC_REL1.2.15-020_003  
@@ -377,11 +395,20 @@ Input Method: Unicast video streams via GigE
 3. Verify all streams use CTE encryption
 4. Verify all streams use SCTE-52 algorithm
 5. Generate uniformity report
+6. **Video Verification via Motorola DCX Settop Box:**
+   - Connect Motorola DCX STB to APEX3K-NE output
+   - Sample and tune to 5 random streams from the 20+ active
+   - For each sampled stream, monitor video playback for minimum 1.5 minutes
+   - Verify encrypted TS content plays WITHOUT glitches or macroblocks
+   - Confirm no visual degradation (pixelation, frame rate drops, artifacts)
+   - Verify audio quality and synchronization
+   - Document video quality metrics for each stream
 
 #### 2.0.3.4 Expected Results
 - All 20+ streams use CTE-SCTE-52
 - 100% consistency achieved
 - Zero deviations from standard
+- **Video Playback Verification:** Random sample of 5 streams play on Motorola DCX STB without glitches or macroblocks, All sampled streams display continuous, smooth video without visual artifacts, Encryption uniformity confirmed through consistent playback quality across all samples, No frame drops or pixelation detected
 
 **Requirement:** For each Gateway VOD transport stream using MediaCipher SimulCrypt, the NE shall insert ECMs for MediaCipher and all globally configured external SuperCAS systems and shall update the associated PMT accordingly. The NE shall support one internal MediaCipher CAS and up to three external SuperCAS systems.
 
@@ -2264,9 +2291,14 @@ APEX 3000 reverts within 15 seconds; APEX NE reverts within **10 seconds** (5-se
 10. Verify output ECM PID matches source ECM PID (same ECM stream)
 11. Verify NO CTE CA_descriptor inserted (no re-encryption)
 12. **STB Test 1:** Broadcast Authorized STB (has source CAS key)
+    - Connect Motorola DCX STB to APEX3K-NE output
     - Should be ABLE to decrypt and view stream
     - Uses source CA_descriptor to decrypt
+    - Monitor video playback for minimum 1.5 minutes
+    - Verify encrypted TS content plays WITHOUT glitches or macroblocks
+    - Confirm smooth video rendering and audio synchronization
 13. **STB Test 2:** CTE Authorized STB (does NOT have source CAS key)
+    - Connect separate Motorola DCX STB to APEX3K-NE output
     - Should NOT be able to decrypt
     - Stream uses source's CA_descriptor, not CTE's
     - Result: Unable to view (NOT because of double encryption, but different CAS)
@@ -2274,60 +2306,19 @@ APEX 3000 reverts within 15 seconds; APEX NE reverts within **10 seconds** (5-se
 15. Move to Blade<2>; repeat steps 3-14
 16. Continue for all 8 Blades
 
+#### 5.0.5.4 Expected Results
 **Expected Results (Per Spec - PRE-ENCRYPTED CHECKING ENABLED):**
 - Input with CA_descriptor detected as pre-encrypted
 - **APEX-NE DOES NOT RE-ENCRYPT** the stream
 - **SAME CA_descriptor copied to output PMT** (pass-through behavior)
 - Source ECM PID preserved in output
 - Broadcast Authorized STB can view (has source's CAS key)
+  - **Video Playback Verified on Motorola DCX STB:** Encrypted TS plays without glitches or macroblocks
+  - **Continuous 1.5+ minute playback with smooth rendering and audio synchronization**
 - CTE Authorized STB cannot view (does not have source's CAS key, uses different CA_descriptor)
 - No additional encryption layers added
 - No CTE ECM inserted
-- **Monitoring Points:** Input vs Output CA_descriptor comparison (MUST BE IDENTICAL), ECM PID preservation, CTE CA_descriptor absence verification, PMT structure analysis, STB authorization verification (different CAS systems)
-
-**Critical Behavior Documented:**
-When Pre-encrypted Checking = ENABLED:
-- Input HAS CA_descriptor → Treated as pre-encrypted → PASS-THROUGH with SAME CA_descriptor
-- Input NO CA_descriptor → Treated as clear → Encrypt normally and insert CTE CA_descriptor
-
----
-
-
-1. Verify **PASS CRITERIA:** Pre-encrypted detection confirmed, **CA_descriptor IDENTICAL in output vs input**, No CTE CA_descriptor present, ECM PID preserved, Broadcast Auth viewing successful, CTE Auth viewing unsuccessful (due to different CAS, not double encryption), No re-encryption confirmed
-1. Access: **APEX-NE EM >> VOD >> Session control configurations**
-2. Verify settings:
-   - Pre-encrypted Checking: **ENABLE** (mandatory for this test)
-   - CTE Encryption: FULL
-3. Configure source device to generate Broadcast Encrypted (Full) stream WITH CA_descriptor
-4. Record source CA_descriptor details: CA_System_ID, ECM PID, other parameters
-5. Unicast encrypted stream to Blade<1> Virtual IP
-6. Verify stream routing in: **APEX3K-NE EM >> Blades >> Select Blade<1> >> Gateway VOD Status** (TS and Mappings table)
-7. Monitor output via MPEG Tracker
-8. **VERIFY CRITICAL BEHAVIOR:** Capture output CA_descriptor from PMT
-9. Compare: Input CA_descriptor vs Output CA_descriptor (should be IDENTICAL)
-10. Verify output ECM PID matches source ECM PID (same ECM stream)
-11. Verify NO CTE CA_descriptor inserted (no re-encryption)
-12. **STB Test 1:** Broadcast Authorized STB (has source CAS key)
-    - Should be ABLE to decrypt and view stream
-    - Uses source CA_descriptor to decrypt
-13. **STB Test 2:** CTE Authorized STB (does NOT have source CAS key)
-    - Should NOT be able to decrypt
-    - Stream uses source's CA_descriptor, not CTE's
-    - Result: Unable to view (NOT because of double encryption, but different CAS)
-14. Verify stream quality/continuity unaffected
-15. Move to Blade<2>; repeat steps 3-14
-16. Continue for all 8 Blades
-
-**Expected Results (Per Spec - PRE-ENCRYPTED CHECKING ENABLED):**
-- Input with CA_descriptor detected as pre-encrypted
-- **APEX-NE DOES NOT RE-ENCRYPT** the stream
-- **SAME CA_descriptor copied to output PMT** (pass-through behavior)
-- Source ECM PID preserved in output
-- Broadcast Authorized STB can view (has source's CAS key)
-- CTE Authorized STB cannot view (does not have source's CAS key, uses different CA_descriptor)
-- No additional encryption layers added
-- No CTE ECM inserted
-- **Monitoring Points:** Input vs Output CA_descriptor comparison (MUST BE IDENTICAL), ECM PID preservation, CTE CA_descriptor absence verification, PMT structure analysis, STB authorization verification (different CAS systems)
+- **Monitoring Points:** Input vs Output CA_descriptor comparison (MUST BE IDENTICAL), ECM PID preservation, CTE CA_descriptor absence verification, PMT structure analysis, STB authorization verification (different CAS systems), Video playback quality confirmation
 
 **Critical Behavior Documented:**
 When Pre-encrypted Checking = ENABLED:
@@ -2359,8 +2350,13 @@ When Pre-encrypted Checking = ENABLED:
 8. Verify output ECM PID = source ECM PID
 9. Verify NO CTE CA_descriptor inserted
 10. **STB Test:** Broadcast Authorized STB (has source's CAS key)
+    - Connect Motorola DCX STB to APEX3K-NE output
     - Should be ABLE to view FWK stream
+    - Monitor video playback for minimum 1.5 minutes
+    - Verify encrypted TS content plays WITHOUT glitches or macroblocks
+    - Confirm smooth video rendering and audio sync
 11. **STB Test:** CTE Authorized STB (does not have source's CAS key)
+    - Connect separate Motorola DCX STB to APEX3K-NE output
     - Should NOT be able to view (different CA_descriptor, different CAS)
 
 #### 5.0.6.4 Expected Results
@@ -2368,6 +2364,8 @@ When Pre-encrypted Checking = ENABLED:
 - **Same CA_descriptor copied to output**
 - Source ECM PID preserved
 - No re-encryption applied
+- **Video Playback Verified on Motorola DCX STB:** Broadcast Auth STB displays FWK stream without glitches or macroblocks
+- **Continuous 1.5+ minute playback with smooth rendering and audio synchronization**
 - Broadcast Auth working (source's CAS)
 - CTE Auth not working (different CAS)
 - Stream format preserved
@@ -2411,9 +2409,14 @@ Only difference is stream type (FWK vs Full), behavior should be identical for p
 10. Verify CTE ECM stream present in output
 11. Monitor stream encryption: Should be CTE encrypted (re-encrypted)
 12. **STB Test 1:** Broadcast Authorized STB (has source's CAS key)
+    - Connect Motorola DCX STB to APEX3K-NE output
     - Should NOT be able to view (source's CA_descriptor removed, using CTE instead)
 13. **STB Test 2:** CTE Authorized STB (has CTE's CAS key)
+    - Connect separate Motorola DCX STB to APEX3K-NE output
     - Should be ABLE to view (stream now encrypted with CTE CA_descriptor)
+    - Monitor video playback for minimum 1.5 minutes
+    - Verify encrypted TS content plays WITHOUT glitches or macroblocks
+    - Confirm smooth video rendering and audio sync
 
 #### 5.0.7.4 Expected Results
 - Input CA_descriptor STRIPPED (removed from output)
@@ -2421,6 +2424,8 @@ Only difference is stream type (FWK vs Full), behavior should be identical for p
 - ECM PID changed (source's ECM replaced with CTE's ECM)
 - Stream re-encrypted with CTE encryption
 - Broadcast Auth cannot view (source descriptor removed)
+- **Video Playback Verified on Motorola DCX STB:** CTE Auth STB displays re-encrypted stream without glitches or macroblocks
+- **Continuous 1.5+ minute playback with smooth rendering and audio synchronization**
 - CTE Auth can view (CTE descriptor applied)
 - No source descriptor influence on output
 - **Monitoring Points:** Input vs Output CA_descriptor comparison (MUST BE DIFFERENT), Input vs Output ECM PID comparison (MUST BE DIFFERENT), CA_descriptor replacement (not addition), ECM stream change, STB authorization outcome
@@ -2458,15 +2463,22 @@ Only difference is stream type (FWK vs Full), behavior should be identical for p
 7. Verify output has CTE ECM PID (new ECM inserted)
 8. Verify output is CTE encrypted
 9. **STB Test:** Broadcast Authorized STB
+    - Connect Motorola DCX STB to APEX3K-NE output
     - Should NOT be able to view (stream encrypted with CTE, not Broadcast's CA)
 10. **STB Test:** CTE Authorized STB
+    - Connect Motorola DCX STB to APEX3K-NE output
     - Should be ABLE to view (encrypted with CTE's CA_descriptor)
+    - Monitor video playback for minimum 1.5 minutes
+    - Verify encrypted TS content plays WITHOUT glitches or macroblocks
+    - Confirm smooth video rendering and audio sync
 
 #### 5.0.8.4 Expected Results
 - Clear input (no CA_descriptor) encrypted with CTE
 - CTE CA_descriptor inserted in output
 - CTE ECM stream present
 - Broadcast Auth cannot view
+- **Video Playback Verified on Motorola DCX STB:** CTE Auth STB displays CTE-encrypted stream without glitches or macroblocks
+- **Continuous 1.5+ minute playback with smooth rendering and audio synchronization**
 - CTE Auth can view
 - Stream encrypted normally (per CTE settings)
 
@@ -2495,19 +2507,22 @@ Only difference is stream type (FWK vs Full), behavior should be identical for p
    - Verify: CTE CA_descriptor inserted (new CA_descriptor)
    - Verify: CTE ECM PID inserted (new ECM)
 7. **STB Tests for Stream 1:**
-   - Broadcast Auth: Can view (source's CA_descriptor)
+   - Broadcast Auth: Connect Motorola DCX STB, can view (source's CA_descriptor), monitor for 1 minute, verify smooth playback without glitches
    - CTE Auth: Cannot view (using source's CA_descriptor, not CTE's)
 8. **STB Tests for Stream 2:**
    - Broadcast Auth: Cannot view (encrypted with CTE)
-   - CTE Auth: Can view (CTE encrypted)
+   - CTE Auth: Connect Motorola DCX STB, can view (CTE encrypted), monitor for 1 minute, verify smooth playback without glitches
 9. Verify no cross-stream interference
 
 #### 5.0.9.4 Expected Results
 - Stream 1 (pre-encrypted with CA): Passed through with SAME CA_descriptor
+  - **Video Playback Verified on Motorola DCX STB:** Broadcast Auth STB displays stream without glitches or macroblocks
 - Stream 2 (clear, no CA): Encrypted with CTE, NEW CA_descriptor inserted
+  - **Video Playback Verified on Motorola DCX STB:** CTE Auth STB displays stream without glitches or macroblocks
 - Each handled per its content type
 - No interference between streams
 - Authorization correct for each type
+- Smooth playback without visual artifacts on both streams
 
 **Key Behavior Verified:**
 - Input WITH CA_descriptor → Pre-encrypted → Pass-through (SAME CA_descriptor)
@@ -2538,18 +2553,30 @@ Only difference is stream type (FWK vs Full), behavior should be identical for p
 3. Send pre-encrypted stream WITH CA_descriptor to Blade<1>
 4. Capture output CA_descriptor: Should match input (pass-through)
 5. Capture output ECM PID: Should match input ECM
-6. Now change: Pre-encrypted Checking = **DISABLED**
-7. Send SAME pre-encrypted stream to Blade<2>
-8. Capture output CA_descriptor: Should NOT match input (replaced with CTE)
-9. Capture output ECM PID: Should NOT match input ECM (new CTE ECM)
-10. Compare Blade<1> vs Blade<2> outputs
-11. Verify different CA_descriptor handling based on setting
+6. **STB Test for Blade<1> (ENABLED):**
+   - Connect Motorola DCX STB to APEX3K-NE output
+   - Broadcast Auth STB can view (source's CA_descriptor preserved)
+   - Monitor video playback for 1 minute, verify smooth playback without glitches
+7. Now change: Pre-encrypted Checking = **DISABLED**
+8. Send SAME pre-encrypted stream to Blade<2>
+9. Capture output CA_descriptor: Should NOT match input (replaced with CTE)
+10. Capture output ECM PID: Should NOT match input ECM (new CTE ECM)
+11. **STB Test for Blade<2> (DISABLED):**
+    - Connect Motorola DCX STB to APEX3K-NE output
+    - CTE Auth STB can view (CTE CA_descriptor inserted)
+    - Broadcast Auth STB cannot view (source descriptor stripped)
+    - Monitor video playback for 1 minute, verify smooth playback without glitches
+12. Compare Blade<1> vs Blade<2> outputs
+13. Verify different CA_descriptor handling based on setting
 
 #### 5.0.10.4 Expected Results
 - Blade<1> (ENABLED): Input CA_descriptor preserved in output
+  - **Video Playback Verified on Motorola DCX STB:** Broadcast Auth displays pass-through stream without glitches or macroblocks
 - Blade<2> (DISABLED): Input CA_descriptor stripped, replaced with CTE CA_descriptor
+  - **Video Playback Verified on Motorola DCX STB:** CTE Auth displays re-encrypted stream without glitches or macroblocks
 - Same input stream handled differently based on configuration
 - Setting directly controls CA_descriptor preservation behavior
+- Both scenarios support smooth video playback with proper encryption handling
 
 **Critical Documentation:**
 Per APEX NE Specification:
