@@ -233,12 +233,12 @@ Input Method: Unicast video streams via GigE
 
 **Pre-conditions:**
 - Gateway VOD enabled: **Blade >> Select Blade<1> >> Config >> Enable Gateway VOD**
-- 5+ transport stream mappings exist: **Blade >> Select Blade<1> >> Gateway VOD >> Mappings**
+- 5+ transport stream mappings exist: **Blade >> Select Blade<1> >> Gateway VOD Status** (verify TS and Mappings table)
 - APEX-NE EM fully accessible
 
 **Detailed Test Steps:**
-1. Navigate to: **Blade >> Select Blade<1> >> Gateway VOD >> Mappings**
-2. Display list of all stream mappings
+1. Navigate to: **APEX3K-NE EM >> Blades >> Select Blade<1> >> Gateway VOD Status**
+2. Display list of all transport streams and mappings in the table
 3. Select Stream Mapping #1 (click to open configuration)
 4. Review ALL available configuration tabs/sections for this stream:
    - General/Properties
@@ -290,16 +290,16 @@ Input Method: Unicast video streams via GigE
 - No active Gateway VOD on Blade<1>
 
 **Detailed Test Steps:**
-1. Navigate to: **APEX3K-NE EM >> Blades >> Select Blade<1> >> Gateway VOD >> Mappings**
-2. Verify regular TS mappings currently displayed for Blade<1>
-3. Document number of regular mappings visible (e.g., 10 mappings)
+1. Navigate to: **APEX3K-NE EM >> Blades >> Select Blade<1> >> Gateway VOD Status**
+2. Verify all TS and Mappings currently displayed for Blade<1> in the table
+3. Document number of TS and Mappings visible in the table (e.g., 10 mappings)
 4. Navigate to: **APEX3K-NE EM >> Blades >> Select Blade<1> >> Config**
 5. Locate "Enable Gateway VOD" parameter
 6. Change setting: **Disable >> Enable**
 7. Click **Save** or **Apply**
 8. Wait for configuration propagation (< 5 seconds)
-9. Navigate back to: **APEX3K-NE EM >> Blades >> Select Blade<1> >> Gateway VOD >> Mappings**
-10. Verify behavior: Regular TS mappings should NOW be HIDDEN/NOT DISPLAYED
+9. Navigate back to: **APEX3K-NE EM >> Blades >> Select Blade<1> >> Gateway VOD Status**
+10. Verify behavior: All TS and Mappings should be displayed in the table (status view)
 11. Screen should show ONLY Gateway VOD mappings (likely empty if none created yet)
 12. Attempt to navigate to regular TS mappings location:
     - Path: **Blade >> Select Blade<1> >> TS >> Mappings** (if such path exists)
@@ -333,7 +333,7 @@ Input Method: Unicast video streams via GigE
 
 **Monitoring Points:**
 - Monitor: **Blade<1> >> Config >> Enable Gateway VOD** parameter
-- Check: **Blade<1> >> Gateway VOD >> Mappings** display after enabling
+- Check: **APEX3K-NE EM >> Blades >> Select Blade<1> >> Gateway VOD Status** display after enabling (TS and Mappings table)
 - Verify: **Blade<2> >> TS >> Mappings** (or regular location) remains visible
 - Document: Visibility state changes during enable/disable cycle
 
@@ -472,7 +472,7 @@ Input Method: Unicast video streams via GigE
 **Test Steps:**
 1. Verify ECMG server running and accessible
 2. Start VOD stream input via M3-Server to Virtual IP
-3. Monitor stream in: **Blade >> Select Blade<1> >> Gateway VOD >> Mappings** (should appear)
+3. Monitor stream in: **APEX3K-NE EM >> Blades >> Select Blade<1> >> Gateway VOD Status** (TS and Mappings table - should appear)
 4. Capture transport stream output on MPEG Tracker (minimum 100 packets)
 5. Analyze captured packets:
    - Search for ECM (0x80) tables
@@ -556,7 +556,7 @@ Input Method: Unicast video streams via GigE
 1. Configure Virtual IP: example 192.168.1.100
 2. Configure Output IP: example 192.168.1.101
 3. Start M3-Server with unicast stream input targeting Virtual IP
-4. Monitor in APEX-NE EM: **Blade >> Select Blade<1> >> Gateway VOD >> Mappings**
+4. Monitor in APEX-NE EM: **APEX3K-NE EM >> Blades >> Select Blade<1> >> Gateway VOD Status** (TS and Mappings table)
 5. Create 1,300 different stream mappings (may be automated script)
 6. Verify all 1,300 mappings listed in Mappings screen
 7. Monitor system resource utilization (CPU, memory, throughput)
@@ -588,7 +588,7 @@ Input Method: Unicast video streams via GigE
 - Attempting to add 1,301st mapping
 
 **Test Steps:**
-1. Verify 1,300 mappings in: **Blade >> Select Blade<1> >> Gateway VOD >> Mappings**
+1. Verify 1,300 mappings in: **APEX3K-NE EM >> Blades >> Select Blade<1> >> Gateway VOD Status** (TS and Mappings table)
 2. Attempt to create 1,301st mapping (via M3-Server or manual)
 3. Monitor APEX-NE EM for mapping creation
 4. Verify rejection with error message
@@ -733,7 +733,7 @@ Input Method: Unicast video streams via GigE
 7. Configure M3-Server to send equal load across Blades
 8. Configure source device to unicast DTCP test streams to each Blade's Virtual IP
 9. Start DTCP stream input to Blade<1>
-10. Verify stream routing in: **Blade >> Select Blade<1> >> Gateway VOD >> Mappings**
+10. Verify stream routing in: **APEX3K-NE EM >> Blades >> Select Blade<1> >> Gateway VOD Status** (TS and Mappings table)
 11. Monitor output via: **UDP output streams to CTE authorized set-top**
 12. Verify DTCP descriptor present in output stream
 13. Verify CCI/APS values in output match input (if Follow DTCP enabled)
@@ -944,7 +944,7 @@ APEX 3000 reverts within 15 seconds; APEX NE reverts within **10 seconds** (5-se
 3. Configure source device to generate Broadcast Encrypted (Full) stream WITH CA_descriptor
 4. Record source CA_descriptor details: CA_System_ID, ECM PID, other parameters
 5. Unicast encrypted stream to Blade<1> Virtual IP
-6. Verify stream routing in: **Blade >> Select Blade<1> >> Gateway VOD >> Mappings**
+6. Verify stream routing in: **APEX3K-NE EM >> Blades >> Select Blade<1> >> Gateway VOD Status** (TS and Mappings table)
 7. Monitor output via MPEG Tracker
 8. **VERIFY CRITICAL BEHAVIOR:** Capture output CA_descriptor from PMT
 9. Compare: Input CA_descriptor vs Output CA_descriptor (should be IDENTICAL)
@@ -1009,7 +1009,7 @@ When Pre-encrypted Checking = ENABLED:
 1. Configure source device: Generate FWK encrypted stream WITH CA_descriptor
 2. Record source CA_descriptor: CA_System_ID, ECM PID, parameters
 3. Unicast FWK stream to Blade<1> Virtual IP
-4. Verify stream detection: **Blade >> Gateway VOD >> Mappings** (pre-encrypted status)
+4. Verify stream detection: **APEX3K-NE EM >> Blades >> Select Blade<1> >> Gateway VOD Status** (TS and Mappings table - check pre-encrypted status)
 5. Monitor output via MPEG Tracker
 6. Capture output CA_descriptor from PMT
 7. Verify output CA_descriptor = input CA_descriptor (IDENTICAL, not replaced)
@@ -1171,7 +1171,7 @@ Only difference is stream type (FWK vs Full), behavior should be identical for p
 1. Configure Blade<1> with Pre-encrypted Checking = ENABLED
 2. **Stream 1:** Send pre-encrypted WITH CA_descriptor to Virtual IP
 3. **Stream 2:** Send clear WITHOUT CA_descriptor to Virtual IP
-4. Verify both streams routing: **Blade >> Gateway VOD >> Mappings**
+4. Verify both streams routing: **APEX3K-NE EM >> Blades >> Select Blade<1> >> Gateway VOD Status** (TS and Mappings table)
 5. Monitor output via MPEG Tracker for Stream 1
    - Verify: Source CA_descriptor preserved (SAME CA_descriptor in output)
    - Verify: Source ECM PID preserved
