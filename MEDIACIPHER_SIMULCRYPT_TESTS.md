@@ -99,18 +99,14 @@ Input Method: Unicast video streams via GigE
 16. Navigate to: **Simulcrypt >> General**
 17. Verify "Mediacipher Simulcrypt" still shows **Enable** (persistence confirmed)
 
+
+18. Verify **PASS CRITERIA:** Setting saved and applied without errors, All transport streams show encrypted status, Setting survives APEX3K-NE restart, No per-stream configuration needed
 **Expected Results:**
 - Configuration enabled successfully on first attempt
 - Confirmation appears within 3 seconds
 - Configuration persists across system restart
 - No error messages or warnings
 - System logs show configuration change event with timestamp
-
-**Pass Criteria:**
-- Setting saved and applied without errors
-- All transport streams show encrypted status
-- Setting survives APEX3K-NE restart
-- No per-stream configuration needed
 
 **Monitoring Points:**
 - Monitor in APEX-NE EM: Simulcrypt >> General >> Mediacipher Simulcrypt = Enable
@@ -153,6 +149,8 @@ Input Method: Unicast video streams via GigE
     - Stream 2-A: Verify NOT encrypted (if blade config is Disable)
 17. Monitor both streams simultaneously to confirm isolation
 
+
+18. Verify **PASS CRITERIA:** Blade-level configuration independent and isolated, Each blade maintains separate encryption state, No cross-blade configuration interference, Output streams match blade-level configuration
 **Expected Results:**
 - Blade<1> Gateway VOD MC Simulcrypt = Enable
 - Blade<2> Gateway VOD MC Simulcrypt = Disable (or different state)
@@ -160,12 +158,6 @@ Input Method: Unicast video streams via GigE
 - Blade<2> streams NOT encrypted (or per configured state)
 - No cross-blade interference
 - Configuration isolated per blade
-
-**Pass Criteria:**
-- Blade-level configuration independent and isolated
-- Each blade maintains separate encryption state
-- No cross-blade configuration interference
-- Output streams match blade-level configuration
 
 **Monitoring Points:**
 - Verify via APEX-NE EM: Blade > Blade<1> > Config > Gateway VOD MC Simulcrypt
@@ -203,6 +195,8 @@ Input Method: Unicast video streams via GigE
 12. Monitor system logs for disable event
 13. Verify STB reception continues (graceful transition)
 
+
+14. Verify **PASS CRITERIA:** Configuration change applied within 5 seconds, New streams created without encryption, Existing streams handled gracefully, System remains stable after disabling, No error messages
 **Expected Results:**
 - Configuration disabled successfully
 - Existing streams gracefully transition to unencrypted
@@ -210,13 +204,6 @@ Input Method: Unicast video streams via GigE
 - Service continuity maintained
 - ECM generation stops (ECMG no longer generating)
 - Minimal service interruption (< 5 seconds per stream)
-
-**Pass Criteria:**
-- Configuration change applied within 5 seconds
-- New streams created without encryption
-- Existing streams handled gracefully
-- System remains stable after disabling
-- No error messages
 
 **Monitoring Points:**
 - Monitor APEX-NE EM: Simulcrypt >> General >> Mediacipher Simulcrypt = Disable
@@ -256,18 +243,14 @@ Input Method: Unicast video streams via GigE
 11. Search Help for: "per-stream", "stream encryption", "individual stream"
 12. Document results (should show no per-stream encryption option)
 
+
+13. Verify **PASS CRITERIA:** No encryption option found in stream configuration screens, Verified across minimum 5 different streams, Help documentation confirms absence, Complete absence of per-stream controls confirmed
 **Expected Results:**
 - Zero per-stream encryption configuration options found
 - Zero encryption-related fields in any stream mapping
 - Help documentation confirms no per-stream option exists
 - Only global/chassis and blade-level configurations available
 - All streams inherit settings from global level
-
-**Pass Criteria:**
-- No encryption option found in stream configuration screens
-- Verified across minimum 5 different streams
-- Help documentation confirms absence
-- Complete absence of per-stream controls confirmed
 
 **Monitoring Points:**
 - Scan all stream configuration menus systematically
@@ -316,6 +299,8 @@ Input Method: Unicast video streams via GigE
 16. Verify other TS types are NOW AVAILABLE again for configuration
 17. Document that disabling Gateway VOD restores other TS types configuration availability
 
+
+18. Verify **PASS CRITERIA:** Other TS types configuration unavailable when Gateway VOD enabled, Other TS types configuration available when Gateway VOD disabled, Isolation confirmed between blades, Toggle functionality works correctly, No configuration loss when toggling
 **Expected Results:**
 - Other TS types available before Gateway VOD enabled
 - After enabling Gateway VOD, other TS types NOT available for configuration on Blade<1>
@@ -324,13 +309,6 @@ Input Method: Unicast video streams via GigE
 - Disabling Gateway VOD restores other TS types configuration availability
 - Configuration is properly isolated per-blade
 - No error messages during toggling
-
-**Pass Criteria:**
-- Other TS types configuration unavailable when Gateway VOD enabled
-- Other TS types configuration available when Gateway VOD disabled
-- Isolation confirmed between blades
-- Toggle functionality works correctly
-- No configuration loss when toggling
 
 **Monitoring Points:**
 - Monitor: **Blade<1> >> Config >> Enable Gateway VOD** parameter
@@ -379,13 +357,6 @@ Input Method: Unicast video streams via GigE
 - PAT and PMT properly configured
 - MPEG Tracker analysis confirms SCTE-52
 
-**Pass Criteria:**
-- SCTE-52 algorithm verified in APEX-NE EM
-- Control words present and valid in capture
-- Stream encryption verified via MPEG Tracker analysis
-
----
-
 ### Test Case 2.2: SCTE-52 Compliance Across Multiple Streams (APEX3K-NE)
 **Test ID:** TC_REL1.2.15-020_002  
 **Severity:** HIGH  
@@ -412,13 +383,6 @@ Input Method: Unicast video streams via GigE
 - Control words properly inserted in all
 - 100% SCTE-52 compliance achieved
 
-**Pass Criteria:**
-- 100% of streams SCTE-52 compliant
-- Consistent key structure across streams
-- No deviations from specification
-
----
-
 ### Test Case 2.3: CTE-SCTE-52 Uniformity Across System
 **Test ID:** TC_REL1.2.15-020_003  
 **Severity:** MEDIUM  
@@ -439,14 +403,6 @@ Input Method: Unicast video streams via GigE
 - All 20+ streams use CTE-SCTE-52
 - 100% consistency achieved
 - Zero deviations from standard
-
-**Pass Criteria:**
-- 100% of streams using CTE-SCTE-52
-- Complete uniformity verified
-
----
-
-# REQUIREMENT REL1.2.15-030: ECM Insertion and PMT Update (APEX3K-NE - EXTENSIVE COVERAGE)
 
 **Requirement:** For each Gateway VOD transport stream using MediaCipher SimulCrypt, the NE shall insert ECMs for MediaCipher and all globally configured external SuperCAS systems and shall update the associated PMT accordingly. The NE shall support one internal MediaCipher CAS and up to three external SuperCAS systems.
 
@@ -492,12 +448,6 @@ Input Method: Unicast video streams via GigE
 - MediaCipher credentials in ECM
 - MPEG Tracker confirms ECM presence
 
-**Pass Criteria:**
-- At least one ECM per 200ms identified
-- ECM structure and syntax valid
-- MediaCipher ID confirmed in ECM
-- ECM PID consistent throughout
-
 **Monitoring Points:**
 - MPEG Tracker: Verify ECM packets and PID
 - APEX-NE EM: Monitor ECMG connectivity at **Simulcrypt >> HOST configuration**
@@ -535,6 +485,8 @@ Input Method: Unicast video streams via GigE
 11. Verify ECM frequency consistent (100-200ms intervals per DVB spec)
 12. Export MPEG Tracker analysis and save results
 
+
+13. Verify **PASS CRITERIA:** 100% of 5-10 streams have ECMs inserted, Each stream ECM PID is unique, MediaCipher system ID present and correct in all ECMs, ECM frequency consistent across all streams
 **Expected Results:**
 - All 5-10 streams appear in APEX3K-NE Gateway VOD Status as Active
 - Each stream generates unique ECM packets with distinct PID
@@ -542,14 +494,6 @@ Input Method: Unicast video streams via GigE
 - ECM packets detected for all 5-10 streams in MPEG Tracker output
 - ECM insertion frequency within specification (100-200ms intervals)
 - No ECM collisions or duplicate PIDs across streams
-
-**Pass Criteria:**
-- 100% of 5-10 streams have ECMs inserted
-- Each stream ECM PID is unique
-- MediaCipher system ID present and correct in all ECMs
-- ECM frequency consistent across all streams
-
----
 
 ### Test Case 3.3: PMT Update - ECM Descriptor Addition
 **Test ID:** TC_REL1.2.15-030_003
@@ -594,6 +538,8 @@ Input Method: Unicast video streams via GigE
     - Confirm PCR PID unchanged
     - Verify only descriptors added, no removal of existing elements
 
+
+14. Verify **PASS CRITERIA:** PMT version incremented from baseline, CA descriptor with MediaCipher system ID present in PMT, ECM PID valid and referenced correctly, PMT structure valid per DVB-SI specification
 **Expected Results:**
 - PMT version incremented (increased by at least 1)
 - New CA descriptor added to PMT with MediaCipher system ID
@@ -601,14 +547,6 @@ Input Method: Unicast video streams via GigE
 - PMT syntax valid per DVB standard
 - All ES information preserved
 - MPEG Tracker confirms PMT descriptor presence
-
-**Pass Criteria:**
-- PMT version incremented from baseline
-- CA descriptor with MediaCipher system ID present in PMT
-- ECM PID valid and referenced correctly
-- PMT structure valid per DVB-SI specification
-
----
 
 ### Test Case 3.4: External SuperCAS 1 - ECM Insertion
 **Test ID:** TC_REL1.2.15-030_004
@@ -651,20 +589,14 @@ Input Method: Unicast video streams via GigE
     - ECM PID 1: MediaCipher (system ID 0x4AD0)
     - ECM PID 2: SuperCAS1 (system ID 0x4B46)
 
+
+14. Verify **PASS CRITERIA:** CAS configuration accepts 1st external SuperCAS without error, ECMs generated for both internal and 1st external CAS, SuperCAS1 ECM PID unique and distinct from MediaCipher, Stream continues without interruption
 **Expected Results:**
 - 1st external SuperCAS successfully added to CAS configuration
 - VOD stream now receives ECMs for both MediaCipher and SuperCAS1
 - Two distinct ECM PIDs present in transport stream
 - SuperCAS1 CAS system ID correctly present in its ECM
 - Both ECM streams have valid structure and frequency
-
-**Pass Criteria:**
-- CAS configuration accepts 1st external SuperCAS without error
-- ECMs generated for both internal and 1st external CAS
-- SuperCAS1 ECM PID unique and distinct from MediaCipher
-- Stream continues without interruption
-
----
 
 ### Test Case 3.5: External SuperCAS 2 - ECM Insertion
 **Test ID:** TC_REL1.2.15-030_005
@@ -703,6 +635,8 @@ Input Method: Unicast video streams via GigE
 14. Document all 3 ECM PIDs and verify each has continuous insertion (100-200ms frequency)
 15. Extract 50 packets of each ECM type and verify structure validity
 
+
+16. Verify **PASS CRITERIA:** CAS configuration accepts 2nd external SuperCAS, Total of 3 ECMs present (1 internal + 2 external), All three ECM PIDs unique and distinct, Each ECM correctly identifies its CAS system, Stream stability maintained throughout configuration change
 **Expected Results:**
 - 2nd external SuperCAS successfully added to configuration
 - Stream now receives ECMs for MediaCipher, SuperCAS1, and SuperCAS2
@@ -710,15 +644,6 @@ Input Method: Unicast video streams via GigE
 - Each ECM contains correct CAS system ID
 - All ECM streams have valid structure and consistent frequency
 - Original SuperCAS1 ECM continues unaffected
-
-**Pass Criteria:**
-- CAS configuration accepts 2nd external SuperCAS
-- Total of 3 ECMs present (1 internal + 2 external)
-- All three ECM PIDs unique and distinct
-- Each ECM correctly identifies its CAS system
-- Stream stability maintained throughout configuration change
-
----
 
 ### Test Case 3.6: External SuperCAS 3 - Maximum Config (4 Total CAS)
 **Test ID:** TC_REL1.2.15-030_006
@@ -770,6 +695,8 @@ Input Method: Unicast video streams via GigE
     - Measure total ECM packets per second
     - Document bandwidth impact on stream
 
+
+16. Verify **PASS CRITERIA:** CAS configuration successfully accepts 3rd external SuperCAS, Total of 4 ECM PIDs present and verified, All ECM PIDs unique and consistent, All CAS system IDs correct and verified, PMT properly updated with all 4 CA descriptors, Stream remains stable throughout
 **Expected Results:**
 - 3rd external SuperCAS successfully configured
 - Maximum configuration reached (4 total CAS systems)
@@ -778,16 +705,6 @@ Input Method: Unicast video streams via GigE
 - PMT contains 4 CA descriptors with correct CAS IDs and ECM PIDs
 - Stream bandwidth accommodates all 4 ECM streams
 - No stream discontinuities or errors
-
-**Pass Criteria:**
-- CAS configuration successfully accepts 3rd external SuperCAS
-- Total of 4 ECM PIDs present and verified
-- All ECM PIDs unique and consistent
-- All CAS system IDs correct and verified
-- PMT properly updated with all 4 CA descriptors
-- Stream remains stable throughout
-
----
 
 ### Test Case 3.7: Reject 4th External SuperCAS (System Limit)
 **Test ID:** TC_REL1.2.15-030_007
@@ -828,6 +745,8 @@ Input Method: Unicast video streams via GigE
     - No interruption or stream discontinuity
 14. Document error message and timestamp
 
+
+15. Verify **PASS CRITERIA:** 4th SuperCAS addition is rejected with appropriate error, Error message explains system limit (3 external SuperCAS max), CAS configuration remains unchanged at 4 systems, Stream stability maintained, No ECM insertion failures or stream discontinuities
 **Expected Results:**
 - System properly rejects 4th external SuperCAS addition
 - Error message clearly indicates maximum limit reached
@@ -835,15 +754,6 @@ Input Method: Unicast video streams via GigE
 - Stream continues uninterrupted
 - Original 4 ECM streams remain active and valid
 - No system instability or errors
-
-**Pass Criteria:**
-- 4th SuperCAS addition is rejected with appropriate error
-- Error message explains system limit (3 external SuperCAS max)
-- CAS configuration remains unchanged at 4 systems
-- Stream stability maintained
-- No ECM insertion failures or stream discontinuities
-
----
 
 ### Test Case 3.8: ECM Insertion After CAS Configuration Change
 **Test ID:** TC_REL1.2.15-030_008
@@ -896,6 +806,8 @@ Input Method: Unicast video streams via GigE
     - Verify PMT version incremented
     - Verify 4th CA descriptor added for SuperCAS3
 
+
+15. Verify **PASS CRITERIA:** CAS configuration updated successfully, New ECM appears in transport stream within 5 seconds, All ECM PIDs unique and distinct, Stream continues without interruption, PMT properly updated, No packet loss or stream corruption
 **Expected Results:**
 - Configuration change accepted without stream interruption
 - 4th ECM (SuperCAS3) begins appearing within 2-5 seconds of configuration change
@@ -903,16 +815,6 @@ Input Method: Unicast video streams via GigE
 - Stream packet continuity maintained (no gaps or discontinuities)
 - PMT updated with 4th CA descriptor
 - No ECM insertion failures or errors
-
-**Pass Criteria:**
-- CAS configuration updated successfully
-- New ECM appears in transport stream within 5 seconds
-- All ECM PIDs unique and distinct
-- Stream continues without interruption
-- PMT properly updated
-- No packet loss or stream corruption
-
----
 
 ### Test Case 3.9: ECM Insertion After CAS Configuration Removal
 **Test ID:** TC_REL1.2.15-030_009
@@ -963,6 +865,8 @@ Input Method: Unicast video streams via GigE
     - SuperCAS2 descriptor should be removed
     - MediaCipher, SuperCAS1, and SuperCAS3 descriptors remain
 
+
+18. Verify **PASS CRITERIA:** CAS successfully removed from configuration, Removed CAS ECM stops appearing in stream, Removal occurs within acceptable timeframe (2-5 seconds), Stream continuity preserved, Remaining ECMs unaffected, PMT descriptor count decremented correctly
 **Expected Results:**
 - CAS removal accepted without stream interruption
 - Removed CAS ECM disappears within 2-5 seconds of configuration change
@@ -970,16 +874,6 @@ Input Method: Unicast video streams via GigE
 - Stream packet continuity maintained (no gaps)
 - PMT updated with removal of corresponding CA descriptor
 - ECM insertion continues for remaining 3 CAS systems
-
-**Pass Criteria:**
-- CAS successfully removed from configuration
-- Removed CAS ECM stops appearing in stream
-- Removal occurs within acceptable timeframe (2-5 seconds)
-- Stream continuity preserved
-- Remaining ECMs unaffected
-- PMT descriptor count decremented correctly
-
----
 
 ### Test Case 3.10: PMT Descriptor for All CAS Systems
 **Test ID:** TC_REL1.2.15-030_010
@@ -1046,6 +940,8 @@ Input Method: Unicast video streams via GigE
 13. Capture and compare 3 different PMT instances to verify consistency
 14. Document PMT descriptor table with all 4 descriptors
 
+
+15. Verify **PASS CRITERIA:** All 4 CA descriptors present in PMT, Each descriptor has correct CAS system ID, ECM PID references match actual ECM streams, Descriptor structure valid per DVB specification, Descriptor content consistent across PMT instances
 **Expected Results:**
 - PMT contains exactly 4 CA descriptors
 - Each descriptor correctly identifies its CAS system ID
@@ -1054,15 +950,6 @@ Input Method: Unicast video streams via GigE
 - Descriptor ordering consistent across multiple PMTs
 - All CA data fields present and properly formatted
 - No missing or corrupted descriptors
-
-**Pass Criteria:**
-- All 4 CA descriptors present in PMT
-- Each descriptor has correct CAS system ID
-- ECM PID references match actual ECM streams
-- Descriptor structure valid per DVB specification
-- Descriptor content consistent across PMT instances
-
----
 
 ### Test Case 3.11: PMT Version Increment on CAS Change
 **Test ID:** TC_REL1.2.15-030_011
@@ -1104,18 +991,13 @@ Input Method: Unicast video streams via GigE
 16. Verify PMT version incremented again (e.g., from 4 to 5)
 17. Repeat configuration change 2-3 more times, documenting version increment each time
 
+
+18. Verify **PASS CRITERIA:** PMT version increments on each configuration change, Version numbering correct per DVB specification, Descriptor updates synchronized with version changes
 **Expected Results:**
 - PMT version increments with each configuration change
 - Version numbers sequential and correct
 - Descriptor count matches CAS configuration count
 - PMT version changes occur within 2-5 seconds of configuration update
-
-**Pass Criteria:**
-- PMT version increments on each configuration change
-- Version numbering correct per DVB specification
-- Descriptor updates synchronized with version changes
-
----
 
 ### Test Case 3.12: ECM Bandwidth Impact with All CAS
 **Test ID:** TC_REL1.2.15-030_012
@@ -1161,19 +1043,14 @@ Input Method: Unicast video streams via GigE
    - Verify frequency within spec (100-200ms per DVB)
    - Calculate jitter/variance
 
+
+10. Verify **PASS CRITERIA:** ECM bandwidth < 10% of total stream bitrate, Individual ECM frequencies within 100-200ms spec, Consistent ECM insertion rates for all 4 CAS systems
 **Expected Results:**
 - Total ECM bandwidth measurable and quantifiable
 - ECM bandwidth typically 2-5% of total stream
 - All ECM frequencies within specification
 - No excessive bandwidth consumption
 - Stream bitrate remains stable with 4 ECMs
-
-**Pass Criteria:**
-- ECM bandwidth < 10% of total stream bitrate
-- Individual ECM frequencies within 100-200ms spec
-- Consistent ECM insertion rates for all 4 CAS systems
-
----
 
 ### Test Case 3.13: ECM Encryption and Validity
 **Test ID:** TC_REL1.2.15-030_013
@@ -1222,6 +1099,8 @@ Input Method: Unicast video streams via GigE
    - Intentionally corrupt sample ECM CRC in analysis
    - Verify CRC check would fail
 
+
+10. Verify **PASS CRITERIA:** ECM data encrypted and unreadable, CRC-32 checksums valid for all samples, Encryption proper and specification-compliant, No data integrity issues detected
 **Expected Results:**
 - All ECM data properly encrypted with no readable plaintext
 - Encryption varies between ECM instances
@@ -1229,14 +1108,6 @@ Input Method: Unicast video streams via GigE
 - ECM structures match CAS specifications
 - No unencrypted sensitive data visible
 - ECM validity periods reasonable
-
-**Pass Criteria:**
-- ECM data encrypted and unreadable
-- CRC-32 checksums valid for all samples
-- Encryption proper and specification-compliant
-- No data integrity issues detected
-
----
 
 ### Test Case 3.14: ECM Insertion Frequency for Each CAS
 **Test ID:** TC_REL1.2.15-030_014
@@ -1279,20 +1150,14 @@ Input Method: Unicast video streams via GigE
    - Calculate standard deviation of intervals
    - Verify jitter acceptable (target: < 10% of mean interval)
 
+
+9. Verify **PASS CRITERIA:** 100% of ECM intervals within 100-200ms specification, Average frequency consistent for each CAS, Jitter acceptable (< 10% variance), No anomalous gaps or insertions
 **Expected Results:**
 - All ECM insertion intervals between 100-200ms per DVB spec
 - Consistent frequency for each CAS system
 - Low jitter/variance (< 10% of mean)
 - No irregular gaps or burst patterns
 - Each CAS maintains independent insertion schedule
-
-**Pass Criteria:**
-- 100% of ECM intervals within 100-200ms specification
-- Average frequency consistent for each CAS
-- Jitter acceptable (< 10% variance)
-- No anomalous gaps or insertions
-
----
 
 ### Test Case 3.15: ECM Splicing and Continuity
 **Test ID:** TC_REL1.2.15-030_015
@@ -1336,6 +1201,8 @@ Input Method: Unicast video streams via GigE
    - If possible, capture during network jitter or load changes
    - Verify ECM continuity maintained under stress
 
+
+10. Verify **PASS CRITERIA:** No ECM gaps > 250ms detected, Zero duplicate ECMs, 100% sequence continuity for all 4 ECM streams, No packet loss or reordering
 **Expected Results:**
 - No gaps in ECM insertion (except normal max intervals)
 - No duplicate ECM packets detected
@@ -1343,14 +1210,6 @@ Input Method: Unicast video streams via GigE
 - TS packet sequence unbroken
 - PCR continuous and monotonically increasing
 - Stream remains synchronous and valid
-
-**Pass Criteria:**
-- No ECM gaps > 250ms detected
-- Zero duplicate ECMs
-- 100% sequence continuity for all 4 ECM streams
-- No packet loss or reordering
-
----
 
 ### Test Case 3.16: ECM PIDs Allocation and Management (1,300+ mappings)
 **Test ID:** TC_REL1.2.15-030_016
@@ -1413,6 +1272,8 @@ Input Method: Unicast video streams via GigE
     - Verify CPU, memory, temperature levels reasonable
     - Check output throughput stable
 
+
+13. Verify **PASS CRITERIA:** 1,300 streams successfully active simultaneously, Zero PID collisions detected, All ECM PIDs unique and valid, 100% ECM insertion rate for all 1,300 streams, System stability maintained under load
 **Expected Results:**
 - All 1,300 streams ingested and active in Gateway VOD Status
 - Unique ECM PIDs allocated for each stream-CAS combination
@@ -1421,15 +1282,6 @@ Input Method: Unicast video streams via GigE
 - ECMs present for all streams with correct frequency
 - System remains stable with 1,300 active streams
 - APEX-NE EM responsive and no errors
-
-**Pass Criteria:**
-- 1,300 streams successfully active simultaneously
-- Zero PID collisions detected
-- All ECM PIDs unique and valid
-- 100% ECM insertion rate for all 1,300 streams
-- System stability maintained under load
-
----
 
 ### Test Case 3.17: CAT Table Update for ECM PIDs
 **Test ID:** TC_REL1.2.15-030_017
@@ -1483,6 +1335,8 @@ Input Method: Unicast video streams via GigE
     - Measure time from configuration change to new CAT appearance
     - Should appear within 2-5 seconds
 
+
+14. Verify **PASS CRITERIA:** CAT descriptors match configured CAS systems, All ECM PIDs in CAT have corresponding packets, CAT updates correctly with configuration changes, No missing or extra descriptors in CAT
 **Expected Results:**
 - CAT contains CA descriptors for all ECM systems
 - Each descriptor has correct CAS system ID and ECM PID
@@ -1490,12 +1344,6 @@ Input Method: Unicast video streams via GigE
 - CAT updates correctly when configuration changes
 - CAT version increments appropriately
 - Update occurs within 2-5 seconds
-
-**Pass Criteria:**
-- CAT descriptors match configured CAS systems
-- All ECM PIDs in CAT have corresponding packets
-- CAT updates correctly with configuration changes
-- No missing or extra descriptors in CAT
 
 ### Test Case 3.18: Service-Specific ECM Configuration Uniformity
 **Test ID:** TC_REL1.2.15-030_018
@@ -1536,19 +1384,14 @@ Input Method: Unicast video streams via GigE
    - Service/Stream | CAS1 | CAS2 | CAS3 | CAS4 | ECM Frequency | Status
 10. Verify consistency across all services
 
+
+11. Verify **PASS CRITERIA:** All services uniformly configured with 4 CAS systems, 100% ECM delivery consistency, No service-specific anomalies
 **Expected Results:**
 - All services/streams receive identical CAS configuration
 - All 4 ECMs present for each service
 - No service-specific variations
 - ECM frequency consistent across services
 - Uniform delivery regardless of service
-
-**Pass Criteria:**
-- All services uniformly configured with 4 CAS systems
-- 100% ECM delivery consistency
-- No service-specific anomalies
-
----
 
 ### Test Case 3.19: ECM Handling During Stream Pause/Resume
 **Test ID:** TC_REL1.2.15-030_019
@@ -1597,6 +1440,8 @@ Input Method: Unicast video streams via GigE
     - Stream playback normal
 13. Test pause/resume cycle multiple times (3-5 cycles)
 
+
+14. Verify **PASS CRITERIA:** Pause/resume transitions handled without errors, Stream remains active or appropriately paused during pause, Resume successful with no data loss, ECM continuity maintained across pause/resume
 **Expected Results:**
 - Stream pause handled gracefully
 - ECM behavior consistent (either continues or pauses with stream)
@@ -1604,14 +1449,6 @@ Input Method: Unicast video streams via GigE
 - No packet loss or corruption during pause/resume
 - PCR and stream timing maintained
 - No errors or warnings generated
-
-**Pass Criteria:**
-- Pause/resume transitions handled without errors
-- Stream remains active or appropriately paused during pause
-- Resume successful with no data loss
-- ECM continuity maintained across pause/resume
-
----
 
 ### Test Case 3.20: Dynamic CAS Addition with Active ECMs
 **Test ID:** TC_REL1.2.15-030_020
@@ -1665,6 +1502,8 @@ Input Method: Unicast video streams via GigE
     - Original ECM frequencies maintained
     - No interruption in original ECM streams
 
+
+12. Verify **PASS CRITERIA:** Configuration accepted without stream restart, New ECM inserted within 5 seconds, All 4 ECMs operational post-addition, Zero packet loss or corruption, Original ECM service uninterrupted
 **Expected Results:**
 - 3rd SuperCAS added without stream interruption
 - New ECM (SuperCAS3) appears within 5 seconds of configuration change
@@ -1673,15 +1512,6 @@ Input Method: Unicast video streams via GigE
 - Stream packet continuity maintained
 - No errors or warnings
 - Stream quality unaffected
-
-**Pass Criteria:**
-- Configuration accepted without stream restart
-- New ECM inserted within 5 seconds
-- All 4 ECMs operational post-addition
-- Zero packet loss or corruption
-- Original ECM service uninterrupted
-
----
 
 ### Test Case 3.21: ECM Update Propagation Time
 **Test ID:** TC_REL1.2.15-030_021
@@ -1731,18 +1561,13 @@ Input Method: Unicast video streams via GigE
 10. Document target requirement:
     - Target propagation time: < 2 seconds
 
+
+11. Verify **PASS CRITERIA:** Average propagation time < 2 seconds, 100% of changes propagate within 2 seconds, Variance < 500ms
 **Expected Results:**
 - Configuration changes reflected in ECM stream within 2 seconds
 - Consistent propagation time across multiple changes
 - Acceptable variance (< 500ms)
 - No excessive delays
-
-**Pass Criteria:**
-- Average propagation time < 2 seconds
-- 100% of changes propagate within 2 seconds
-- Variance < 500ms
-
----
 
 ### Test Case 3.22: ECM Error Recovery
 **Test ID:** TC_REL1.2.15-030_022
@@ -1786,6 +1611,8 @@ Input Method: Unicast video streams via GigE
    - Verify other services unaffected
 7. Document all error conditions observed and recovery actions
 
+
+8. Verify **PASS CRITERIA:** Errors detected and logged appropriately, System recovery successful, Stream quality unaffected or degrades gracefully, No system instability or crashes
 **Expected Results:**
 - System handles ECM errors gracefully
 - Error messages clear and logged
@@ -1793,14 +1620,6 @@ Input Method: Unicast video streams via GigE
 - ECMs recover automatically when error condition resolves
 - No cascading failures to other systems
 - Recovery within 30 seconds of error resolution
-
-**Pass Criteria:**
-- Errors detected and logged appropriately
-- System recovery successful
-- Stream quality unaffected or degrades gracefully
-- No system instability or crashes
-
----
 
 ### Test Case 3.23: ECM Validation Against CAS System IDs
 **Test ID:** TC_REL1.2.15-030_023
@@ -1845,19 +1664,14 @@ Input Method: Unicast video streams via GigE
    - Verify CAS system IDs in PMT descriptors match ECM CAS IDs
    - Verify one-to-one mapping
 
+
+9. Verify **PASS CRITERIA:** 100% of ECMs have valid CAS system ID, All CAS IDs match configuration, No unexpected CAS IDs found
 **Expected Results:**
 - All ECM CAS system IDs match configured CAS systems
 - No ECMs with unrecognized CAS IDs
 - All configured CAS have corresponding ECMs
 - PMT descriptors match ECM CAS IDs
 - Complete consistency verified
-
-**Pass Criteria:**
-- 100% of ECMs have valid CAS system ID
-- All CAS IDs match configuration
-- No unexpected CAS IDs found
-
----
 
 ### Test Case 3.24: PMT Consistency Across Multiple Captures
 **Test ID:** TC_REL1.2.15-030_024
@@ -1906,19 +1720,14 @@ Input Method: Unicast video streams via GigE
    - Create side-by-side comparison table
    - Verify all descriptors identical (except version)
 
+
+9. Verify **PASS CRITERIA:** 100% structural consistency across captures, All descriptors match exactly (except version), No anomalies or unexpected changes
 **Expected Results:**
 - PMT structure consistent across all captures
 - PMT descriptors and ES information unchanged
 - CAS system IDs and ECM PIDs consistent
 - Only PMT version may change if configuration updated
 - No unexpected variations
-
-**Pass Criteria:**
-- 100% structural consistency across captures
-- All descriptors match exactly (except version)
-- No anomalies or unexpected changes
-
----
 
 ### Test Case 3.25: ECM Performance Under Load (1,300+ mappings per blade)
 **Test ID:** TC_REL1.2.15-030_025
@@ -1987,6 +1796,8 @@ Input Method: Unicast video streams via GigE
     - Peak CPU utilization: [%]
     - Stream stability: [%]
 
+
+13. Verify **PASS CRITERIA:** ECM insertion success rate ≥ 99.9%, Average ECM frequency within 100-200ms spec, Error rate < 0.1%, 100% stream stability, Peak CPU < 85% utilization, Peak memory < 85% utilization, Output CRC error rate < 0.01%
 **Expected Results:**
 - ECMs successfully inserted for all 1,300 streams
 - Insertion frequency within specification
@@ -1995,19 +1806,6 @@ Input Method: Unicast video streams via GigE
 - System resources (CPU, memory, temperature) within acceptable ranges
 - Output stream quality maintained
 - No performance degradation observed
-
-**Pass Criteria:**
-- ECM insertion success rate ≥ 99.9%
-- Average ECM frequency within 100-200ms spec
-- Error rate < 0.1%
-- 100% stream stability
-- Peak CPU < 85% utilization
-- Peak memory < 85% utilization
-- Output CRC error rate < 0.01%
-
----
-
-# REQUIREMENT REL1.2.15-040: Transport Stream Mappings Capacity
 
 ### Test Case 4.1: Maximum 1,300 Mappings per Blade (APEX3K-NE)
 **Test ID:** TC_REL1.2.15-040_001  
@@ -2105,15 +1903,6 @@ Input Method: Unicast video streams via GigE
 - No mapping drops, errors, or UI performance issues
 - Stream playback verification successful for random sample mappings
 
-**Pass Criteria:**
-- Exactly 1,300 mappings created and active in GVOD Status
-- All mappings display correct Input IP, Output IP, and Program Number
-- 100% of mappings remain active throughout test (zero dropped mappings)
-- Device remains stable with no alarms, errors, or warnings
-- MPEG Tracker output quality verification passed
-
----
-
 ### Test Case 4.2: Reject Capacity Exceed (1,301st Mapping)
 **Test ID:** TC_REL1.2.15-040_002  
 **Severity:** HIGH  
@@ -2137,13 +1926,6 @@ Input Method: Unicast video streams via GigE
 - Clear error message: "Maximum 1,300 mappings reached" (or similar)
 - Existing 1,300 unaffected
 - System remains stable
-
-**Pass Criteria:**
-- Capacity limit enforced at 1,300
-- Error message clear and informative
-- No impact on existing mappings
-
----
 
 ### Test Case 4.3: Multi-Blade Capacity Isolation (APEX3K-NE)
 **Test ID:** TC_REL1.2.15-040_003  
@@ -2177,13 +1959,6 @@ Input Method: Unicast video streams via GigE
 - Capacity isolation maintained
 - No cross-blade interference
 
-**Pass Criteria:**
-- Capacity isolation verified
-- Total 3,900 operational
-- Rejection on capacity exceed
-
----
-
 ### Test Case 4.4: Capacity Maintained During Dynamic Addition
 **Test ID:** TC_REL1.2.15-040_004  
 **Severity:** MEDIUM  
@@ -2208,18 +1983,6 @@ Input Method: Unicast video streams via GigE
 - No disruption to existing 1,000
 - Performance acceptable at capacity
 
-**Pass Criteria:**
-- Addition successful without disruption
-- All mappings operational
-- Capacity reached smoothly
-
----
-
-# REQUIREMENT REL1.2.15-050: Pre-encrypted Service Detection and DTCP Processing
-
-## SECTION A: DTCP INPUT STREAMS IN GATEWAY VOD MODE
-
-### Reference Information - DTCP Feature Specifications
 **DTCP Configuration Location:** APEX-NE EM >> Chassis >> VOD >> Follow DTCP Descriptor
 
 **Key DTCP Differences in Gateway VOD Mode vs APEX 3000:**
@@ -2284,11 +2047,39 @@ Input Method: Unicast video streams via GigE
 - Output streams match input DTCP requirements
 - Tier level info visible in GVOD Status GUI
 
-**Pass Criteria:**
-- Follow DTCP parameter enabled successfully
-- DTCP descriptors followed on all 8 blades
-- Tier level info available on GVOD Status GUI
-- Output streams properly formatted
+**Monitoring Points:**
+- DTCP descriptor presence/absence in output
+- CCI/APS values preservation
+- Tier level information accuracy
+- Per-blade stream routing
+
+---
+
+
+1. Verify **PASS CRITERIA:** Follow DTCP parameter enabled successfully, DTCP descriptors followed on all 8 blades, Tier level info available on GVOD Status GUI, Output streams properly formatted
+1. Access APEX-NE EM >> Chassis >> VOD
+2. Locate parameter: **"Follow DTCP Session Control"**
+3. Verify parameter displays options: Enabled / Disabled (default = Disabled)
+4. Set "Follow DTCP Session Control" to **Enabled**
+5. Click **Save** or **Apply**
+6. Verify confirmation message (< 3 seconds)
+7. Configure M3-Server to send equal load across Blades
+8. Configure source device to unicast DTCP test streams to each Blade's Virtual IP
+9. Start DTCP stream input to Blade<1>
+10. Verify stream routing in: **APEX3K-NE EM >> Blades >> Select Blade<1> >> Gateway VOD Status** (TS and Mappings table)
+11. Monitor output via: **UDP output streams to CTE authorized set-top**
+12. Verify DTCP descriptor present in output stream
+13. Verify CCI/APS values in output match input (if Follow DTCP enabled)
+14. Repeat steps 9-13 for Blade<2> through Blade<8>
+15. Verify tier level info displayed on: **APEX-NE EM >> Blade >> Config >> GVOD Status GUI**
+
+**Expected Results (Per PFS):**
+- Parameter "Follow DTCP Session Control" accessible and functional
+- When Enabled: Follow DTCP descriptor if present
+- When descriptor absent: Use CTE settings
+- Tier type for CTE based on APS setting of DTCP
+- Output streams match input DTCP requirements
+- Tier level info visible in GVOD Status GUI
 
 **Monitoring Points:**
 - DTCP descriptor presence/absence in output
@@ -2329,12 +2120,6 @@ Input Method: Unicast video streams via GigE
 - CCI/APS values updated correctly
 - Stream continuity maintained
 - No service interruption during changes
-
-**Pass Criteria:**
-- All descriptor modifications followed
-- Output values verified via MPEG Tracker
-- Stream delivery uninterrupted
-- Multiple modification cycles successful
 
 **Monitoring Points:**
 - DTCP descriptor field changes
@@ -2377,12 +2162,6 @@ Input Method: Unicast video streams via GigE
 - Tier level updated on GVOD Status GUI
 - Tier type based on CTE settings
 
-**Pass Criteria:**
-- Reversion timing: 10 ± 1 second
-- CTE settings correctly applied
-- Stream continuity maintained
-- GVOD Status GUI reflects new tier
-
 **Monitoring Points:**
 - Exact reversion time measurement
 - PRKM RMD value changes
@@ -2423,17 +2202,6 @@ APEX 3000 reverts within 15 seconds; APEX NE reverts within **10 seconds** (5-se
 - All streams encrypted per CTE configuration
 - No DTCP descriptor influence on output
 
-**Pass Criteria:**
-- CTE settings enforced exclusively
-- DTCP descriptor modifications ignored
-- Output descriptor verified via MPEG Tracker
-- Stream encryption per CTE policy
-
----
-
-## SECTION B: PRE-ENCRYPTED INPUT STREAMS IN GATEWAY VOD MODE
-
-### Reference Information - Pre-encrypted Stream Specifications
 **Pre-encrypted Configuration Location:** APEX-NE EM >> VOD >> Session control configurations
 
 **Pre-encrypted Stream Types Tested:**
@@ -2507,14 +2275,55 @@ APEX 3000 reverts within 15 seconds; APEX NE reverts within **10 seconds** (5-se
 - No additional encryption layers added
 - No CTE ECM inserted
 
-**Pass Criteria:**
-- Pre-encrypted detection confirmed
-- **CA_descriptor IDENTICAL in output vs input**
-- No CTE CA_descriptor present
-- ECM PID preserved
-- Broadcast Auth viewing successful
-- CTE Auth viewing unsuccessful (due to different CAS, not double encryption)
-- No re-encryption confirmed
+**Monitoring Points:**
+- Input vs Output CA_descriptor comparison (MUST BE IDENTICAL)
+- ECM PID preservation
+- CTE CA_descriptor absence verification
+- PMT structure analysis
+- STB authorization verification (different CAS systems)
+
+**Critical Behavior Documented:**
+When Pre-encrypted Checking = ENABLED:
+- Input HAS CA_descriptor → Treated as pre-encrypted → PASS-THROUGH with SAME CA_descriptor
+- Input NO CA_descriptor → Treated as clear → Encrypt normally and insert CTE CA_descriptor
+
+---
+
+
+1. Verify **PASS CRITERIA:** Pre-encrypted detection confirmed, **CA_descriptor IDENTICAL in output vs input**, No CTE CA_descriptor present, ECM PID preserved, Broadcast Auth viewing successful, CTE Auth viewing unsuccessful (due to different CAS, not double encryption), No re-encryption confirmed
+1. Access: **APEX-NE EM >> VOD >> Session control configurations**
+2. Verify settings:
+   - Pre-encrypted Checking: **ENABLE** (mandatory for this test)
+   - CTE Encryption: FULL
+3. Configure source device to generate Broadcast Encrypted (Full) stream WITH CA_descriptor
+4. Record source CA_descriptor details: CA_System_ID, ECM PID, other parameters
+5. Unicast encrypted stream to Blade<1> Virtual IP
+6. Verify stream routing in: **APEX3K-NE EM >> Blades >> Select Blade<1> >> Gateway VOD Status** (TS and Mappings table)
+7. Monitor output via MPEG Tracker
+8. **VERIFY CRITICAL BEHAVIOR:** Capture output CA_descriptor from PMT
+9. Compare: Input CA_descriptor vs Output CA_descriptor (should be IDENTICAL)
+10. Verify output ECM PID matches source ECM PID (same ECM stream)
+11. Verify NO CTE CA_descriptor inserted (no re-encryption)
+12. **STB Test 1:** Broadcast Authorized STB (has source CAS key)
+    - Should be ABLE to decrypt and view stream
+    - Uses source CA_descriptor to decrypt
+13. **STB Test 2:** CTE Authorized STB (does NOT have source CAS key)
+    - Should NOT be able to decrypt
+    - Stream uses source's CA_descriptor, not CTE's
+    - Result: Unable to view (NOT because of double encryption, but different CAS)
+14. Verify stream quality/continuity unaffected
+15. Move to Blade<2>; repeat steps 3-14
+16. Continue for all 8 Blades
+
+**Expected Results (Per Spec - PRE-ENCRYPTED CHECKING ENABLED):**
+- Input with CA_descriptor detected as pre-encrypted
+- **APEX-NE DOES NOT RE-ENCRYPT** the stream
+- **SAME CA_descriptor copied to output PMT** (pass-through behavior)
+- Source ECM PID preserved in output
+- Broadcast Authorized STB can view (has source's CAS key)
+- CTE Authorized STB cannot view (does not have source's CAS key, uses different CA_descriptor)
+- No additional encryption layers added
+- No CTE ECM inserted
 
 **Monitoring Points:**
 - Input vs Output CA_descriptor comparison (MUST BE IDENTICAL)
@@ -2564,13 +2373,6 @@ When Pre-encrypted Checking = ENABLED:
 - Broadcast Auth working (source's CAS)
 - CTE Auth not working (different CAS)
 - Stream format preserved
-
-**Pass Criteria:**
-- FWK pre-encryption detected
-- CA_descriptor IDENTICAL in output
-- No CTE CA_descriptor present
-- ECM PID preserved
-- No re-encryption confirmed
 
 **Key Difference vs TC_050_005:**
 Only difference is stream type (FWK vs Full), behavior should be identical for pre-encrypted streams WITH CA_descriptor
@@ -2623,15 +2425,6 @@ Only difference is stream type (FWK vs Full), behavior should be identical for p
 - CTE Auth can view (CTE descriptor applied)
 - No source descriptor influence on output
 
-**Pass Criteria:**
-- Source CA_descriptor stripped confirmed
-- CTE CA_descriptor inserted confirmed
-- ECM PID changed confirmed
-- Re-encryption confirmed
-- Broadcast Auth viewing failed (expected)
-- CTE Auth viewing successful
-- Stream format: CTE-compliant
-
 **Monitoring Points:**
 - Input vs Output CA_descriptor comparison (MUST BE DIFFERENT)
 - Input vs Output ECM PID comparison (MUST BE DIFFERENT)
@@ -2683,14 +2476,6 @@ Only difference is stream type (FWK vs Full), behavior should be identical for p
 - CTE Auth can view
 - Stream encrypted normally (per CTE settings)
 
-**Pass Criteria:**
-- Clear input handled correctly
-- CTE CA_descriptor inserted
-- CTE encryption applied
-- Authorization working (CTE Auth only)
-
----
-
 ### Test Case 5.9: Mixed Inputs - Pre-encrypted (CA) + Clear (No CA)
 **Test ID:** TC_REL1.2.15-050_009  
 **Severity:** MEDIUM  
@@ -2728,12 +2513,6 @@ Only difference is stream type (FWK vs Full), behavior should be identical for p
 - Each handled per its content type
 - No interference between streams
 - Authorization correct for each type
-
-**Pass Criteria:**
-- Mixed streams handled correctly
-- CA_descriptor handling per content type
-- No cross-stream interference
-- Authorization working correctly for each
 
 **Key Behavior Verified:**
 - Input WITH CA_descriptor → Pre-encrypted → Pass-through (SAME CA_descriptor)
@@ -2775,12 +2554,6 @@ Only difference is stream type (FWK vs Full), behavior should be identical for p
 - Blade<2> (DISABLED): Input CA_descriptor stripped, replaced with CTE CA_descriptor
 - Same input stream handled differently based on configuration
 - Setting directly controls CA_descriptor preservation behavior
-
-**Pass Criteria:**
-- Setting controls CA_descriptor handling
-- ENABLED = Preserve CA_descriptor (pass-through)
-- DISABLED = Replace CA_descriptor (re-encrypt)
-- Configuration precedence verified
 
 **Critical Documentation:**
 Per APEX NE Specification:
@@ -2827,24 +2600,6 @@ Per APEX NE Specification:
 - Updates in real-time as configuration changes
 - All GVOD TS consolidated in single table view
 
-**Pass Criteria:**
-- GVOD status table present and complete
-- All GVOD TS listed in table format
-- Encryption status accurate and visible
-- Real-time updates working
-- Mapping details comprehensive
-- Element Manager displays all mappings
-- Encryption status shown for each
-- Status accurately reflects actual state
-- Updates in real-time as configuration changes
-
-**Pass Criteria:**
-- Status display present and visible
-- Accuracy verified against actual encryption
-- Real-time updates working
-
----
-
 ### Test Case 6.2: Encryption Status Detail - CAS Systems
 **Test ID:** TC_REL1.2.15-060_002  
 **Severity:** MEDIUM  
@@ -2871,13 +2626,6 @@ Per APEX NE Specification:
 - CAS systems listed individually
 - Detailed information comprehensive
 - Matches actual configuration
-
-**Pass Criteria:**
-- Detailed status shown
-- CAS systems identified correctly
-- Information complete and accurate
-
----
 
 ### Test Case 6.3: Bulk Status Display and Filtering
 **Test ID:** TC_REL1.2.15-060_003  
@@ -2906,15 +2654,6 @@ Per APEX NE Specification:
 - Filtering functional and accurate
 - Bulk operations work
 
-**Pass Criteria:**
-- Display performance good
-- Filtering accurate
-- Bulk operations functional
-
----
-
-# REQUIREMENT REL1.2.15-070: SDM Plug-in and MIB Updates
-
 ### Test Case 7.1: SDM Plug-in Configuration Support
 **Test ID:** TC_REL1.2.15-070_001  
 **Severity:** HIGH  
@@ -2939,12 +2678,6 @@ Per APEX NE Specification:
 - All options functional through SDM
 - Configuration saved and persistent
 - Changes propagate to APEX3K-NE
-
-**Pass Criteria:**
-- All options accessible via SDM
-- Configuration works through SDM interface
-
----
 
 ### Test Case 7.2: MIB File Updates - Gateway VOD MC Simulcrypt Parameter
 **Test ID:** TC_REL1.2.15-070_002  
@@ -2987,15 +2720,6 @@ Per APEX NE Specification:
 - config.ini file contains parameter definition
 - SNMP queries functional (if applicable)
 - SNMP set operations reflect correctly in EM
-
-**Pass Criteria:**
-- MIB parameter present and named correctly
-- Per-blade scope verified
-- ENABLE/DISABLE values present
-- config.ini file updated
-- SNMP integration functional
-
----
 
 ### Test Case 7.3: SDM Upgrade - Release 1.2.14-00 to 1.2.15-00
 **Test ID:** TC_REL1.2.15-070_003  
@@ -3095,36 +2819,11 @@ Per APEX NE Specification:
 - System stable with nominal performance
 - No functionality regression from 1.2.14-00
 
-**Pass Criteria:**
-- Version upgraded to 1.2.15-00
-- Configuration migration successful
-- All new features verified working
-- No regressions from previous version
-- System performance acceptable
-- SDM upgrade marked as PASS
-- Pre-encrypted streams handled correctly
-- CTE encryption functional
-- All 1,300+ GVOD mappings supported
-- GVOD status display functional
-   - Error counters
-3. Query each MIB object
-4. Verify data accuracy
-5. Test SNMP walk on new objects
-
 **Expected Results:**
 - MIB file properly loaded
 - All new objects accessible
 - SNMP queries return valid data
 - Data matches system state
-
-**Pass Criteria:**
-- MIB objects accessible
-- Data accurate
-- SNMP functionality verified
-
----
-
-# REQUIREMENT REL1.2.15-080: GUI Aurora Networks Branding
 
 ### Test Case 8.1: Aurora Networks Logo Consistency - Persistent Display Across Screens
 **Test ID:** TC_REL1.2.15-080_001  
@@ -3171,15 +2870,6 @@ Per APEX NE Specification:
 - Logo clearly associated with product
 - Branding consistent throughout application
 
-**Pass Criteria:**
-- Aurora logo present on minimum 8 different screens
-- Logo appearance identical on all screens
-- Logo position consistent and stable
-- No legacy branding detected
-- Professional appearance verified
-
----
-
 ### Test Case 8.2: Patent URL Verification - www.an-pat.com in About Section
 **Test ID:** TC_REL1.2.15-080_002  
 **Severity:** MEDIUM  
@@ -3222,40 +2912,6 @@ Per APEX NE Specification:
 - Professional presentation
 - URL consistent on multiple tests
 - No redirects to incorrect pages
-
-**Pass Criteria:**
-- Patent URL displayed as www.an-pat.com
-- URL clickable and functional
-- Browser opens and loads website
-- Aurora Networks patent page displays
-- Content loads without errors
-- Professional appearance
-- URL verified in About section
-
----
-
-# SUMMARY & EXECUTION GUIDE
-
-## Test Case Distribution by Requirement
-| Requirement | Test Cases | Priority | Status |
-| --- | --- | --- | --- |
-| REL1.2.15-010 | 6 | CRITICAL | ✓ |
-| REL1.2.15-020 | 3 | HIGH | ✓ |
-| REL1.2.15-030 | 25 | CRITICAL | ✓ EXTENSIVE |
-| REL1.2.15-040 | 4 | HIGH | ✓ |
-| REL1.2.15-050 | 4 | HIGH | ✓ |
-| REL1.2.15-060 | 3 | HIGH | ✓ |
-| REL1.2.15-070 | 3 | HIGH | ✓ |
-| REL1.2.15-080 | 2 | LOW | ✓ |
-| TOTAL | 50+ | Mixed | ✓ COMPLETE |
-
-## Test Execution Phases
-1. **Phase 1:** Configuration Tests (REL1.2.15-010, 020)
-2. **Phase 2:** Critical ECM/PMT Tests (REL1.2.15-030 - 25 tests)
-3. **Phase 3:** Capacity & Features (REL1.2.15-040, 050, 060)
-4. **Phase 4:** Integration & UI (REL1.2.15-070, 080)
-
----
 
 **Document Version:** 2.0 (APEX3K-NE Updated)  
 **Platform:** APEX3K-NE Network Element  
