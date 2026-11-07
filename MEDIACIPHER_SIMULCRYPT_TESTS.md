@@ -589,7 +589,7 @@ Input Method: Unicast video streams via GigE
 **Objective:** Verify 2nd external SuperCAS ECM insertion and verify both SuperCAS1 and SuperCAS2 ECMs present
 
 #### 3.0.5.1 Initial Condition
-- Test Case 3.4 passed (1st SuperCAS operational)
+- Test Case 3.0.4 passed (1st SuperCAS operational)
 - Gateway VOD configured and ENABLED on Blade<1>
   - Note: When GVOD is enabled on this blade, other TS types are NOT available for configuration
 - 1st external SuperCAS (SuperCAS1) configured and verified
@@ -637,7 +637,7 @@ Input Method: Unicast video streams via GigE
 **Objective:** Configure 3rd external SuperCAS to reach maximum system configuration (1 Internal MediaCipher + 3 External SuperCAS = 4 total CAS) and verify all 4 CAS ECMs inserted
 
 #### 3.0.6.1 Initial Condition
-- Test Case 3.5 passed (SuperCAS1 and SuperCAS2 operational)
+- Test Case 3.0.5 passed (SuperCAS1 and SuperCAS2 operational)
 - Gateway VOD configured and ENABLED on Blade<1>
   - When GVOD is enabled, other TS types are NOT available for configuration on this blade
 - 1st and 2nd external SuperCAS configured with working ECMs
@@ -699,7 +699,7 @@ Input Method: Unicast video streams via GigE
 **Objective:** Verify system rejects 4th external SuperCAS addition (system limit is 3 external, 1 internal = 4 max total)
 
 #### 3.0.7.1 Initial Condition
-- Test Case 3.6 passed (4 CAS systems operational)
+- Test Case 3.0.6 passed (4 CAS systems operational)
 - Gateway VOD configured and ENABLED on Blade<1>
   - When GVOD is enabled, other TS types are NOT available for configuration on this blade
 - Maximum configuration reached (1 Internal + 3 External)
@@ -749,11 +749,11 @@ Input Method: Unicast video streams via GigE
 **Objective:** Verify ECMs updated to include new CAS when 3rd SuperCAS added while stream active
 
 #### 3.0.8.1 Initial Condition
-- Test Case 3.5 passed (SuperCAS1 and SuperCAS2 active with 3 ECMs)
+- Test Case 3.0.5 passed (SuperCAS1 and SuperCAS2 active with 3 ECMs)
 - Gateway VOD configured and ENABLED on Blade<1>
   - When GVOD is enabled, other TS types are NOT available for configuration on this blade
 - VOD stream active and transmitting with 3 ECMs
-- 3 ECM PIDs documented from Test Case 3.5
+- 3 ECM PIDs documented from Test Case 3.0.5
 - 3rd SuperCAS available but not yet configured
 
 #### 3.0.8.3 Procedure
@@ -811,7 +811,7 @@ Input Method: Unicast video streams via GigE
 **Objective:** Verify ECMs updated when external CAS removed from configuration while stream active
 
 #### 3.0.9.1 Initial Condition
-- Test Case 3.6 passed (all 4 CAS systems operational with 4 ECMs)
+- Test Case 3.0.6 passed (all 4 CAS systems operational with 4 ECMs)
 - Gateway VOD configured and ENABLED on Blade<1>
   - When GVOD is enabled, other TS types are NOT available for configuration on this blade
 - VOD stream active with all 4 ECMs flowing continuously
@@ -871,7 +871,7 @@ Input Method: Unicast video streams via GigE
 **Objective:** Verify PMT contains CA descriptors for all 4 CAS systems with correct CAS system IDs and ECM PID references
 
 #### 3.0.10.1 Initial Condition
-- Test Case 3.6 passed (all 4 CAS configured)
+- Test Case 3.0.6 passed (all 4 CAS configured)
 - Gateway VOD configured and ENABLED on Blade<1>
   - When GVOD is enabled, other TS types are NOT available for configuration on this blade
 - VOD stream active with all 4 CAS systems
@@ -948,7 +948,7 @@ Input Method: Unicast video streams via GigE
 **Objective:** Verify PMT version increments correctly when CAS configuration changes
 
 #### 3.0.11.1 Initial Condition
-- Test Case 3.6 passed (4 CAS systems operational)
+- Test Case 3.0.6 passed (4 CAS systems operational)
 - Gateway VOD configured and ENABLED on Blade<1>
   - When GVOD is enabled, other TS types are NOT available for configuration on this blade
 - VOD stream active with known PMT version
@@ -997,7 +997,7 @@ Input Method: Unicast video streams via GigE
 **Objective:** Measure and verify ECM bandwidth usage with all 4 CAS systems active
 
 #### 3.0.12.1 Initial Condition
-- Test Case 3.6 passed (all 4 CAS operational)
+- Test Case 3.0.6 passed (all 4 CAS operational)
 - Gateway VOD configured and ENABLED on Blade<1>
   - When GVOD is enabled, other TS types are NOT available for configuration on this blade
 - VOD stream active with all 4 ECMs
@@ -1051,7 +1051,7 @@ Input Method: Unicast video streams via GigE
 **Objective:** Verify ECM data is properly encrypted and valid per CAS specification
 
 #### 3.0.13.1 Initial Condition
-- Test Case 3.6 passed
+- Test Case 3.0.6 passed
 - VOD stream active with all 4 ECMs
 - MPEG Tracker capture available with ECM packets
 - CAS system specifications available for reference
@@ -1109,7 +1109,7 @@ Input Method: Unicast video streams via GigE
 **Objective:** Verify ECM insertion frequency meets specification (120ms intervals, approximately 8 ECM packets per second) for all CAS systems
 
 #### 3.0.14.1 Initial Condition
-- Test Case 3.6 passed
+- Test Case 3.0.6 passed
 - Gateway VOD configured and ENABLED on Blade<1>
   - When GVOD is enabled, other TS types are NOT available for configuration on this blade
 - VOD stream active with all 4 ECMs
@@ -1160,7 +1160,7 @@ Input Method: Unicast video streams via GigE
 **Objective:** Verify ECM continuity across stream samples with no gaps or duplicates
 
 #### 3.0.15.1 Initial Condition
-- Test Case 3.6 passed
+- Test Case 3.0.6 passed
 - Gateway VOD configured and ENABLED on Blade<1>
   - When GVOD is enabled, other TS types are NOT available for configuration on this blade
 - VOD stream active with all 4 ECMs
@@ -1286,7 +1286,7 @@ Input Method: Unicast video streams via GigE
 **Objective:** Verify CAT (Conditional Access Table) includes all ECM PIDs and updates when CAS configuration changes
 
 #### 3.0.17.1 Initial Condition
-- Test Case 3.6 passed (4 CAS systems operational)
+- Test Case 3.0.6 passed (4 CAS systems operational)
 - Gateway VOD configured and ENABLED on Blade<1>
   - When GVOD is enabled, other TS types are NOT available for configuration on this blade
 - VOD stream active
@@ -1349,7 +1349,7 @@ Input Method: Unicast video streams via GigE
 **Objective:** Verify multiple streams with different services receive correct ECM configuration consistently
 
 #### 3.0.18.1 Initial Condition
-- Test Case 3.6 passed
+- Test Case 3.0.6 passed
 - Gateway VOD configured and ENABLED on Blade<1>
   - When GVOD is enabled, other TS types are NOT available for configuration on this blade
 - Multiple services configured (if available)
@@ -1630,7 +1630,7 @@ Input Method: Unicast video streams via GigE
 **Objective:** Verify ECM contains correct CAS system ID matching configured CAS systems
 
 #### 3.0.23.1 Initial Condition
-- All 4 CAS systems configured (Test Case 3.6 completed)
+- All 4 CAS systems configured (Test Case 3.0.6 completed)
 - Gateway VOD configured and ENABLED on Blade<1>
   - When GVOD is enabled, other TS types are NOT available for configuration on this blade
 - VOD stream active with all 4 ECMs
@@ -1740,7 +1740,7 @@ Input Method: Unicast video streams via GigE
 **Objective:** Verify ECM insertion operational and without delays for 1,300 simultaneous streams on single blade
 
 #### 3.0.25.1 Initial Condition
-- Test Case 3.16 completed (1,300 streams active)
+- Test Case 3.0.16 completed (1,300 streams active)
 - Gateway VOD configured and ENABLED on Blade<1>
   - When GVOD is enabled, other TS types are NOT available for configuration on this blade
 - All 4 CAS systems configured
@@ -1748,7 +1748,7 @@ Input Method: Unicast video streams via GigE
 - System monitoring tools available
 
 #### 3.0.25.3 Procedure
-1. Verify baseline state from Test Case 3.16:
+1. Verify baseline state from Test Case 3.0.16:
    - 1,300 VOD streams active and ingested
    - All streams appear in: **APEX3K-NE EM >> Blades >> Select Blade<1> >> Gateway VOD Status**
    - All streams showing as Active
