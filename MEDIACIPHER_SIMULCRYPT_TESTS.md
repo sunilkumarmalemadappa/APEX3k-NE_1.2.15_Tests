@@ -72,14 +72,14 @@ Input Method: Unicast video streams via GigE
 ### 1.0.1 Test Case: Enable MediaCipher SimulCrypt at Chassis Level (APEX3K-NE)
 **Test ID:** TC_REL1.2.15-010_001  
 **Severity:** CRITICAL  
-#### 1.0.1.2 Objectives
-**Objective:** Verify MediaCipher SimulCrypt enabled globally at chassis level via APEX-NE EM
-
 #### 1.0.1.1 Initial Condition
 - APEX3K-NE installed and operational
 - APEX-NE EM accessible and authenticated
 - No Gateway VOD streams currently configured with MediaCipher SimulCrypt
 - Administrator access available
+
+#### 1.0.1.2 Objectives
+**Objective:** Verify MediaCipher SimulCrypt enabled globally at chassis level via APEX-NE EM
 
 #### 1.0.1.3 Procedure
 1. Launch APEX-NE EM application
@@ -115,14 +115,14 @@ Input Method: Unicast video streams via GigE
 ### 1.0.2 Test Case: Enable MediaCipher SimulCrypt at Blade Level (APEX3K-NE)
 **Test ID:** TC_REL1.2.15-010_002  
 **Severity:** CRITICAL  
-#### 1.0.2.2 Objectives
-**Objective:** Verify blade-level SimulCrypt configuration via APEX3K-NE EM for isolated per-blade control
-
 #### 1.0.2.1 Initial Condition
 - Multi-blade APEX3K-NE system operational
 - APEX-NE EM accessible for both blades
 - Separate Gateway VOD configurations per blade
 - Administrator access available
+
+#### 1.0.2.2 Objectives
+**Objective:** Verify blade-level SimulCrypt configuration via APEX3K-NE EM for isolated per-blade control
 
 #### 1.0.2.3 Procedure
 1. Launch APEX-NE EM application
@@ -163,14 +163,14 @@ Input Method: Unicast video streams via GigE
 ### 1.0.3 Test Case: Disable MediaCipher SimulCrypt at Chassis Level
 **Test ID:** TC_REL1.2.15-010_003  
 **Severity:** HIGH  
-#### 1.0.3.2 Objectives
-**Objective:** Verify graceful disable of MediaCipher SimulCrypt globally at chassis level
-
 #### 1.0.3.1 Initial Condition
 - MediaCipher SimulCrypt currently enabled: **Simulcrypt >> General = Enable**
 - Multiple Gateway VOD streams actively encrypted
 - MPEG Tracker monitoring output streams
 - STBs receiving encrypted streams
+
+#### 1.0.3.2 Objectives
+**Objective:** Verify graceful disable of MediaCipher SimulCrypt globally at chassis level
 
 #### 1.0.3.3 Procedure
 1. Verify current state: Navigate to **Simulcrypt >> General**
@@ -205,13 +205,13 @@ Input Method: Unicast video streams via GigE
 ### 1.0.4 Test Case: Verify No Per-Stream Configuration Option Exists
 **Test ID:** TC_REL1.2.15-010_004  
 **Severity:** CRITICAL  
-#### 1.0.4.2 Objectives
-**Objective:** Confirm absence of per-transport-stream encryption configuration in APEX3K-NE EM
-
 #### 1.0.4.1 Initial Condition
 - Gateway VOD enabled: **Blade >> Select Blade<1> >> Config >> Enable Gateway VOD**
 - 5+ transport stream mappings exist: **Blade >> Select Blade<1> >> Gateway VOD Status** (verify TS and Mappings table)
 - APEX-NE EM fully accessible
+
+#### 1.0.4.2 Objectives
+**Objective:** Confirm absence of per-transport-stream encryption configuration in APEX3K-NE EM
 
 #### 1.0.4.3 Procedure
 1. Navigate to: **APEX3K-NE EM >> Blades >> Select Blade<1> >> Gateway VOD Status**
@@ -248,15 +248,15 @@ Input Method: Unicast video streams via GigE
 ### 1.0.5 Test Case: Gateway VOD Enabled - Regular TS Mappings Hidden on Blade
 **Test ID:** TC_REL1.2.15-010_005  
 **Severity:** MEDIUM  
-#### 1.0.5.2 Objectives
-**Objective:** Verify that enabling Gateway VOD on a blade makes other TS types unavailable for configuration on that blade (TS mapping configuration is restricted when GVOD is enabled)
-
 #### 1.0.5.1 Initial Condition
 - APEX3K-NE multi-blade system operational (minimum 2 blades)
 - Blade<1> has existing TS mappings configured (regular/standard TS)
 - Blade<2> also has TS mappings configured
 - APEX-NE EM fully accessible
 - Gateway VOD disabled on Blade<1> (other TS types available)
+
+#### 1.0.5.2 Objectives
+**Objective:** Verify that enabling Gateway VOD on a blade makes other TS types unavailable for configuration on that blade (TS mapping configuration is restricted when GVOD is enabled)
 
 #### 1.0.5.3 Procedure
 1. Navigate to: **APEX3K-NE EM >> Blades >> Select Blade<1> >> TS >> Mappings** (or regular TS configuration)
@@ -304,9 +304,6 @@ Input Method: Unicast video streams via GigE
 ### 2.0.1 Test Case: CTE-SCTE-52 Encryption Configuration and Verification
 **Test ID:** TC_REL1.2.15-020_001  
 **Severity:** HIGH  
-#### 2.0.1.2 Objectives
-**Objective:** Verify CTE encryption using SCTE-52 algorithm is configured in APEX3K-NE
-
 #### 2.0.1.1 Initial Condition
 - APEX3K-NE has CTE module installed
 - SCTE-52 support confirmed in system
@@ -335,6 +332,9 @@ Input Method: Unicast video streams via GigE
    - Verify audio synchronization with video (no lip-sync issues)
    - Document STB display: Signal lock status, Video resolution, Playback quality
 
+#### 2.0.1.2 Objectives
+**Objective:** Verify CTE encryption using SCTE-52 algorithm is configured in APEX3K-NE
+
 #### 2.0.1.4 Expected Results
 - CTE encryption with SCTE-52 active
 - Control words correctly inserted
@@ -346,9 +346,6 @@ Input Method: Unicast video streams via GigE
 ### 2.0.2 Test Case: SCTE-52 Compliance Across Multiple Streams (APEX3K-NE)
 **Test ID:** TC_REL1.2.15-020_002  
 **Severity:** HIGH  
-#### 2.0.2.2 Objectives
-**Objective:** Verify SCTE-52 compliance uniformity across all APEX3K-NE Gateway VOD streams
-
 #### 2.0.2.1 Initial Condition
 - CTE encryption configured at **APEX3K-NE EM >> Chassis >> VOD >> CTE configuration**
 - 10+ Gateway VOD streams active
@@ -372,6 +369,9 @@ Input Method: Unicast video streams via GigE
    - Confirm consistent audio synchronization across all streams
    - Document results for each stream
 
+#### 2.0.2.2 Objectives
+**Objective:** Verify SCTE-52 compliance uniformity across all APEX3K-NE Gateway VOD streams
+
 #### 2.0.2.4 Expected Results
 - All 10 streams use SCTE-52 encryption
 - Key structure consistent and valid across all
@@ -382,9 +382,6 @@ Input Method: Unicast video streams via GigE
 ### 2.0.3 Test Case: CTE-SCTE-52 Uniformity Across System
 **Test ID:** TC_REL1.2.15-020_003  
 **Severity:** MEDIUM  
-#### 2.0.3.2 Objectives
-**Objective:** Verify uniform CTE-SCTE-52 encryption across all Gateway VOD streams
-
 #### 2.0.3.1 Initial Condition
 - MediaCipher SimulCrypt enabled at: **Simulcrypt >> General = Enable**
 - 20+ streams active with various configurations
@@ -403,6 +400,9 @@ Input Method: Unicast video streams via GigE
    - Confirm no visual degradation (pixelation, frame rate drops, artifacts)
    - Verify audio quality and synchronization
    - Document video quality metrics for each stream
+
+#### 2.0.3.2 Objectives
+**Objective:** Verify uniform CTE-SCTE-52 encryption across all Gateway VOD streams
 
 #### 2.0.3.4 Expected Results
 - All 20+ streams use CTE-SCTE-52
@@ -428,9 +428,6 @@ Input Method: Unicast video streams via GigE
 ### 3.0.1 Test Case: ECM Insertion for Internal MediaCipher CAS (APEX3K-NE)
 **Test ID:** TC_REL1.2.15-030_001  
 **Severity:** CRITICAL  
-#### 3.0.1.2 Objectives
-**Objective:** Verify ECM insertion for MediaCipher CAS on APEX3K-NE
-
 #### 3.0.1.1 Initial Condition
 - MediaCipher SimulCrypt enabled: **Simulcrypt >> General = Enable**
 - Gateway VOD configured: **Blade >> Select Blade<1> >> Config >> Enable Gateway VOD**
@@ -453,6 +450,9 @@ Input Method: Unicast video streams via GigE
 7. Verify ECM credentials present
 8. Monitor frequency consistency
 
+#### 3.0.1.2 Objectives
+**Objective:** Verify ECM insertion for MediaCipher CAS on APEX3K-NE
+
 #### 3.0.1.4 Expected Results
 - ECM tables detected in transport stream
 - ECM PID correctly identified
@@ -468,9 +468,6 @@ Input Method: Unicast video streams via GigE
 ### 3.0.2 Test Case: Multiple Streams - Individual ECMs per Stream
 **Test ID:** TC_REL1.2.15-030_002
 **Severity:** HIGH
-#### 3.0.2.2 Objectives
-**Objective:** Verify that 5-10 simultaneous Gateway VOD streams receive individual ECMs with correct MediaCipher ID
-
 #### 3.0.2.1 Initial Condition
 - MediaCipher SimulCrypt enabled: **Simulcrypt >> General = Enable**
 - Gateway VOD configured and ENABLED: **Blade >> Select Blade<1> >> Config >> Enable Gateway VOD = ON**
@@ -478,6 +475,9 @@ Input Method: Unicast video streams via GigE
 - ECMG server configured: **Simulcrypt >> HOST configuration**
 - M3-Server capable of sending 5-10 simultaneous unicast streams
 - MPEG Tracker connected and operational
+
+#### 3.0.2.2 Objectives
+**Objective:** Verify that 5-10 simultaneous Gateway VOD streams receive individual ECMs with correct MediaCipher ID
 
 #### 3.0.2.3 Procedure
 1. Navigate to: **APEX3K-NE EM >> Simulcrypt >> General** and confirm MediaCipher SimulCrypt = **Enable**
@@ -511,15 +511,15 @@ Input Method: Unicast video streams via GigE
 ### 3.0.3 Test Case: PMT Update - ECM Descriptor Addition
 **Test ID:** TC_REL1.2.15-030_003
 **Severity:** HIGH
-#### 3.0.3.2 Objectives
-**Objective:** Verify PMT is updated with ECM descriptor when encryption is enabled, and PMT version increments
-
 #### 3.0.3.1 Initial Condition
 - Gateway VOD configured and ENABLED
   - Note: When GVOD is enabled on this blade, other TS types (DVB-C, DVB-S, etc.) are NOT available for configuration on this blade
 - Single VOD stream ready to start
 - MPEG Tracker connected
 - Initial PMT version documented (before starting encrypted stream)
+
+#### 3.0.3.2 Objectives
+**Objective:** Verify PMT is updated with ECM descriptor when encryption is enabled, and PMT version increments
 
 #### 3.0.3.3 Procedure
 1. Start unencrypted VOD stream input via M3-Server to Virtual IP
@@ -567,9 +567,6 @@ Input Method: Unicast video streams via GigE
 ### 3.0.4 Test Case: External SuperCAS 1 - ECM Insertion
 **Test ID:** TC_REL1.2.15-030_004
 **Severity:** HIGH
-#### 3.0.4.2 Objectives
-**Objective:** Verify ECM insertion for 1st external SuperCAS when configured at Simulcrypt >> CAS configuration
-
 #### 3.0.4.1 Initial Condition
 - MediaCipher SimulCrypt enabled
 - Gateway VOD configured and ENABLED on Blade<1>
@@ -577,6 +574,9 @@ Input Method: Unicast video streams via GigE
 - No external SuperCAS configured yet (only internal MediaCipher)
 - ECMG server capable of handling external CAS (SuperCAS)
 - M3-Server ready with test stream
+
+#### 3.0.4.2 Objectives
+**Objective:** Verify ECM insertion for 1st external SuperCAS when configured at Simulcrypt >> CAS configuration
 
 #### 3.0.4.3 Procedure
 1. Verify current configuration:
@@ -620,9 +620,6 @@ Input Method: Unicast video streams via GigE
 ### 3.0.5 Test Case: External SuperCAS 2 - ECM Insertion
 **Test ID:** TC_REL1.2.15-030_005
 **Severity:** HIGH
-#### 3.0.5.2 Objectives
-**Objective:** Verify 2nd external SuperCAS ECM insertion and verify both SuperCAS1 and SuperCAS2 ECMs present
-
 #### 3.0.5.1 Initial Condition
 - Test Case 3.0.4 passed (1st SuperCAS operational)
 - Gateway VOD configured and ENABLED on Blade<1>
@@ -630,6 +627,9 @@ Input Method: Unicast video streams via GigE
 - 1st external SuperCAS (SuperCAS1) configured and verified
 - 2nd external SuperCAS available (different CAS system ID)
 - VOD stream still active with SuperCAS1 ECMs
+
+#### 3.0.5.2 Objectives
+**Objective:** Verify 2nd external SuperCAS ECM insertion and verify both SuperCAS1 and SuperCAS2 ECMs present
 
 #### 3.0.5.3 Procedure
 1. With stream still active (from 3.4), navigate to: **APEX3K-NE EM >> Simulcrypt >> CAS configuration**
@@ -670,9 +670,6 @@ Input Method: Unicast video streams via GigE
 ### 3.0.6 Test Case: External SuperCAS 3 - Maximum Config (4 Total CAS)
 **Test ID:** TC_REL1.2.15-030_006
 **Severity:** HIGH
-#### 3.0.6.2 Objectives
-**Objective:** Configure 3rd external SuperCAS to reach maximum system configuration (1 Internal MediaCipher + 3 External SuperCAS = 4 total CAS) and verify all 4 CAS ECMs inserted
-
 #### 3.0.6.1 Initial Condition
 - Test Case 3.0.5 passed (SuperCAS1 and SuperCAS2 operational)
 - Gateway VOD configured and ENABLED on Blade<1>
@@ -680,6 +677,9 @@ Input Method: Unicast video streams via GigE
 - 1st and 2nd external SuperCAS configured with working ECMs
 - VOD stream active with 3 ECMs (MediaCipher + SuperCAS1 + SuperCAS2)
 - 3rd external SuperCAS available
+
+#### 3.0.6.2 Objectives
+**Objective:** Configure 3rd external SuperCAS to reach maximum system configuration (1 Internal MediaCipher + 3 External SuperCAS = 4 total CAS) and verify all 4 CAS ECMs inserted
 
 #### 3.0.6.3 Procedure
 1. With stream still active, navigate to: **APEX3K-NE EM >> Simulcrypt >> CAS configuration**
@@ -734,9 +734,6 @@ Input Method: Unicast video streams via GigE
 ### 3.0.7 Test Case: Reject 4th External SuperCAS (System Limit)
 **Test ID:** TC_REL1.2.15-030_007
 **Severity:** HIGH
-#### 3.0.7.2 Objectives
-**Objective:** Verify system enforces maximum limit of 3 external SuperCAS through UI constraint (total max: 1 internal + 3 external = 4)
-
 #### 3.0.7.1 Initial Condition
 - Test Case 3.0.6 passed (4 CAS systems operational)
 - Gateway VOD configured and ENABLED on Blade<1>
@@ -744,6 +741,9 @@ Input Method: Unicast video streams via GigE
 - Maximum configuration reached (1 Internal + 3 External)
 - 4 ECMs actively inserted for all CAS
 - APEX-NE EM interface accessible
+
+#### 3.0.7.2 Objectives
+**Objective:** Verify system enforces maximum limit of 3 external SuperCAS through UI constraint (total max: 1 internal + 3 external = 4)
 
 #### 3.0.7.3 Procedure
 1. Navigate to: **APEX3K-NE EM >> Simulcrypt >> CAS configuration**
@@ -789,9 +789,6 @@ Input Method: Unicast video streams via GigE
 ### 3.0.8 Test Case: ECM Insertion After CAS Configuration Change
 **Test ID:** TC_REL1.2.15-030_008
 **Severity:** HIGH
-#### 3.0.8.2 Objectives
-**Objective:** Verify ECMs updated to include new CAS when 3rd SuperCAS added while stream active
-
 #### 3.0.8.1 Initial Condition
 - Test Case 3.0.5 passed (SuperCAS1 and SuperCAS2 active with 3 ECMs)
 - Gateway VOD configured and ENABLED on Blade<1>
@@ -799,6 +796,9 @@ Input Method: Unicast video streams via GigE
 - VOD stream active and transmitting with 3 ECMs
 - 3 ECM PIDs documented from Test Case 3.0.5
 - 3rd SuperCAS available but not yet configured
+
+#### 3.0.8.2 Objectives
+**Objective:** Verify ECMs updated to include new CAS when 3rd SuperCAS added while stream active
 
 #### 3.0.8.3 Procedure
 1. Verify current state:
@@ -851,9 +851,6 @@ Input Method: Unicast video streams via GigE
 ### 3.0.9 Test Case: ECM Insertion After CAS Configuration Removal
 **Test ID:** TC_REL1.2.15-030_009
 **Severity:** HIGH
-#### 3.0.9.2 Objectives
-**Objective:** Verify ECMs updated when external CAS removed from configuration while stream active
-
 #### 3.0.9.1 Initial Condition
 - Test Case 3.0.6 passed (all 4 CAS systems operational with 4 ECMs)
 - Gateway VOD configured and ENABLED on Blade<1>
@@ -861,6 +858,9 @@ Input Method: Unicast video streams via GigE
 - VOD stream active with all 4 ECMs flowing continuously
 - All 4 ECM PIDs documented
 - All 4 CAS listed in configuration
+
+#### 3.0.9.2 Objectives
+**Objective:** Verify ECMs updated when external CAS removed from configuration while stream active
 
 #### 3.0.9.3 Procedure
 1. Verify current state:
@@ -911,9 +911,6 @@ Input Method: Unicast video streams via GigE
 ### 3.0.10 Test Case: PMT Descriptor for All CAS Systems
 **Test ID:** TC_REL1.2.15-030_010
 **Severity:** HIGH
-#### 3.0.10.2 Objectives
-**Objective:** Verify PMT contains CA descriptors for all 4 CAS systems with correct CAS system IDs and ECM PID references
-
 #### 3.0.10.1 Initial Condition
 - Test Case 3.0.6 passed (all 4 CAS configured)
 - Gateway VOD configured and ENABLED on Blade<1>
@@ -921,6 +918,9 @@ Input Method: Unicast video streams via GigE
 - VOD stream active with all 4 CAS systems
 - All 4 ECM PIDs identified and documented
 - MPEG Tracker connected
+
+#### 3.0.10.2 Objectives
+**Objective:** Verify PMT contains CA descriptors for all 4 CAS systems with correct CAS system IDs and ECM PID references
 
 #### 3.0.10.3 Procedure
 1. Verify configuration:
@@ -988,9 +988,6 @@ Input Method: Unicast video streams via GigE
 ### 3.0.11 Test Case: PMT Version Increment on CAS Change
 **Test ID:** TC_REL1.2.15-030_011
 **Severity:** MEDIUM
-#### 3.0.11.2 Objectives
-**Objective:** Verify PMT version increments correctly when CAS configuration changes
-
 #### 3.0.11.1 Initial Condition
 - Test Case 3.0.6 passed (4 CAS systems operational)
 - Gateway VOD configured and ENABLED on Blade<1>
@@ -998,6 +995,9 @@ Input Method: Unicast video streams via GigE
 - VOD stream active with known PMT version
 - MPEG Tracker connected
 - Baseline PMT version documented
+
+#### 3.0.11.2 Objectives
+**Objective:** Verify PMT version increments correctly when CAS configuration changes
 
 #### 3.0.11.3 Procedure
 1. Monitor current PMT from stream via MPEG Tracker
@@ -1037,9 +1037,6 @@ Input Method: Unicast video streams via GigE
 ### 3.0.12 Test Case: ECM Bandwidth Impact with All CAS
 **Test ID:** TC_REL1.2.15-030_012
 **Severity:** MEDIUM
-#### 3.0.12.2 Objectives
-**Objective:** Measure and verify ECM bandwidth usage with all 4 CAS systems active
-
 #### 3.0.12.1 Initial Condition
 - Test Case 3.0.6 passed (all 4 CAS operational)
 - Gateway VOD configured and ENABLED on Blade<1>
@@ -1047,6 +1044,9 @@ Input Method: Unicast video streams via GigE
 - VOD stream active with all 4 ECMs
 - MPEG Tracker connected
 - All 4 ECM PIDs identified
+
+#### 3.0.12.2 Objectives
+**Objective:** Measure and verify ECM bandwidth usage with all 4 CAS systems active
 
 #### 3.0.12.3 Procedure
 1. Verify configuration: **APEX3K-NE EM >> Simulcrypt >> CAS configuration** shows 4 CAS systems
@@ -1091,14 +1091,14 @@ Input Method: Unicast video streams via GigE
 ### 3.0.13 Test Case: ECM Encryption and Validity
 **Test ID:** TC_REL1.2.15-030_013
 **Severity:** HIGH
-#### 3.0.13.2 Objectives
-**Objective:** Verify ECM data is properly encrypted and valid per CAS specification
-
 #### 3.0.13.1 Initial Condition
 - Test Case 3.0.6 passed
 - VOD stream active with all 4 ECMs
 - MPEG Tracker capture available with ECM packets
 - CAS system specifications available for reference
+
+#### 3.0.13.2 Objectives
+**Objective:** Verify ECM data is properly encrypted and valid per CAS specification
 
 #### 3.0.13.3 Procedure
 1. Monitor ECM packets from stream via MPEG Tracker
@@ -1149,9 +1149,6 @@ Input Method: Unicast video streams via GigE
 ### 3.0.14 Test Case: ECM Insertion Frequency for Each CAS
 **Test ID:** TC_REL1.2.15-030_014
 **Severity:** MEDIUM
-#### 3.0.14.2 Objectives
-**Objective:** Verify ECM insertion frequency meets specification (120ms intervals, approximately 8 ECM packets per second) for all CAS systems
-
 #### 3.0.14.1 Initial Condition
 - Test Case 3.0.6 passed
 - Gateway VOD configured and ENABLED on Blade<1>
@@ -1159,6 +1156,9 @@ Input Method: Unicast video streams via GigE
 - VOD stream active with all 4 ECMs
 - MPEG Tracker capturing with sufficient resolution
 - All 4 ECM PIDs identified
+
+#### 3.0.14.2 Objectives
+**Objective:** Verify ECM insertion frequency meets specification (120ms intervals, approximately 8 ECM packets per second) for all CAS systems
 
 #### 3.0.14.3 Procedure
 1. Monitor 2000+ TS packets (20-30 seconds continuous) via MPEG Tracker
@@ -1200,9 +1200,6 @@ Input Method: Unicast video streams via GigE
 ### 3.0.15 Test Case: ECM Splicing and Continuity
 **Test ID:** TC_REL1.2.15-030_015
 **Severity:** HIGH
-#### 3.0.15.2 Objectives
-**Objective:** Verify ECM continuity across stream samples with no gaps or duplicates
-
 #### 3.0.15.1 Initial Condition
 - Test Case 3.0.6 passed
 - Gateway VOD configured and ENABLED on Blade<1>
@@ -1210,6 +1207,9 @@ Input Method: Unicast video streams via GigE
 - VOD stream active with all 4 ECMs
 - MPEG Tracker capturing full stream
 - All 4 ECM PIDs identified
+
+#### 3.0.15.2 Objectives
+**Objective:** Verify ECM continuity across stream samples with no gaps or duplicates
 
 #### 3.0.15.3 Procedure
 1. Monitor 3000+ TS packets (30+ seconds) via MPEG Tracker
@@ -1255,9 +1255,6 @@ Input Method: Unicast video streams via GigE
 ### 3.0.16 Test Case: ECM PIDs Allocation and Management (1,300+ mappings)
 **Test ID:** TC_REL1.2.15-030_016
 **Severity:** HIGH
-#### 3.0.16.2 Objectives
-**Objective:** Create 1,300 simultaneous streams and verify each receives unique ECM PID(s) with no collisions
-
 #### 3.0.16.1 Initial Condition
 - Single blade or isolated test blade (APEX3K-NE EM >> Blades >> Select Blade<1>)
 - Gateway VOD enabled on blade
@@ -1266,6 +1263,9 @@ Input Method: Unicast video streams via GigE
 - Sufficient system resources (CPU, memory, bandwidth)
 - MPEG Tracker connected to output
 - Configuration with 4 CAS systems (maximum)
+
+#### 3.0.16.2 Objectives
+**Objective:** Create 1,300 simultaneous streams and verify each receives unique ECM PID(s) with no collisions
 
 #### 3.0.16.3 Procedure
 1. Verify configuration:
@@ -1330,15 +1330,15 @@ Input Method: Unicast video streams via GigE
 ### 3.0.17 Test Case: CAT Table Update for ECM PIDs
 **Test ID:** TC_REL1.2.15-030_017
 **Severity:** MEDIUM
-#### 3.0.17.2 Objectives
-**Objective:** Verify CAT (Conditional Access Table) includes all ECM PIDs and updates when CAS configuration changes
-
 #### 3.0.17.1 Initial Condition
 - Test Case 3.0.6 passed (4 CAS systems operational)
 - Gateway VOD configured and ENABLED on Blade<1>
   - When GVOD is enabled, other TS types are NOT available for configuration on this blade
 - VOD stream active
 - MPEG Tracker connected
+
+#### 3.0.17.2 Objectives
+**Objective:** Verify CAT (Conditional Access Table) includes all ECM PIDs and updates when CAS configuration changes
 
 #### 3.0.17.3 Procedure
 1. Monitor TS packets from stream via MPEG Tracker (100+ packets minimum)
@@ -1395,9 +1395,6 @@ Input Method: Unicast video streams via GigE
 ### 3.0.18 Test Case: Service-Specific ECM Configuration Uniformity
 **Test ID:** TC_REL1.2.15-030_018
 **Severity:** MEDIUM
-#### 3.0.18.2 Objectives
-**Objective:** Verify multiple streams with different services receive correct ECM configuration consistently
-
 #### 3.0.18.1 Initial Condition
 - Test Case 3.0.6 passed
 - Gateway VOD configured and ENABLED on Blade<1>
@@ -1405,6 +1402,9 @@ Input Method: Unicast video streams via GigE
 - Multiple services configured (if available)
 - 5-10 streams active, possibly with different services
 - MPEG Tracker connected
+
+#### 3.0.18.2 Objectives
+**Objective:** Verify multiple streams with different services receive correct ECM configuration consistently
 
 #### 3.0.18.3 Procedure
 1. Verify multiple services configured:
@@ -1446,15 +1446,15 @@ Input Method: Unicast video streams via GigE
 ### 3.0.19 Test Case: ECM Handling During Stream Pause/Resume
 **Test ID:** TC_REL1.2.15-030_019
 **Severity:** MEDIUM
-#### 3.0.19.2 Objectives
-**Objective:** Verify ECM insertion continues or handles gracefully during stream pause/resume on M3-Server
-
 #### 3.0.19.1 Initial Condition
 - VOD stream active with all 4 ECMs flowing
 - Gateway VOD configured and ENABLED on Blade<1>
   - When GVOD is enabled, other TS types are NOT available for configuration on this blade
 - M3-Server pause/resume capability available
 - MPEG Tracker capturing
+
+#### 3.0.19.2 Objectives
+**Objective:** Verify ECM insertion continues or handles gracefully during stream pause/resume on M3-Server
 
 #### 3.0.19.3 Procedure
 1. Verify stream active:
@@ -1506,9 +1506,6 @@ Input Method: Unicast video streams via GigE
 ### 3.0.20 Test Case: Dynamic CAS Addition with Active ECMs
 **Test ID:** TC_REL1.2.15-030_020
 **Severity:** HIGH
-#### 3.0.20.2 Objectives
-**Objective:** Add 3rd SuperCAS to running stream with existing ECMs and verify new ECM inserted without stream interruption
-
 #### 3.0.20.1 Initial Condition
 - 2 SuperCAS + 1 MediaCipher (3 CAS total) operational with 3 ECMs flowing
 - Gateway VOD configured and ENABLED on Blade<1>
@@ -1516,6 +1513,9 @@ Input Method: Unicast video streams via GigE
 - VOD stream active and stable
 - MPEG Tracker capturing continuous stream
 - 3rd SuperCAS available but not configured
+
+#### 3.0.20.2 Objectives
+**Objective:** Add 3rd SuperCAS to running stream with existing ECMs and verify new ECM inserted without stream interruption
 
 #### 3.0.20.3 Procedure
 1. Verify baseline state:
@@ -1572,15 +1572,15 @@ Input Method: Unicast video streams via GigE
 ### 3.0.21 Test Case: ECM Update Propagation Time
 **Test ID:** TC_REL1.2.15-030_021
 **Severity:** MEDIUM
-#### 3.0.21.2 Objectives
-**Objective:** Measure time from CAS configuration change to ECM update in transport stream
-
 #### 3.0.21.1 Initial Condition
 - VOD stream active with baseline CAS configuration
 - Gateway VOD configured and ENABLED on Blade<1>
   - When GVOD is enabled, other TS types are NOT available for configuration on this blade
 - MPEG Tracker with precise timing capabilities
 - CAS configuration ready to change (add, remove, or modify)
+
+#### 3.0.21.2 Objectives
+**Objective:** Measure time from CAS configuration change to ECM update in transport stream
 
 #### 3.0.21.3 Procedure
 1. Establish baseline configuration:
@@ -1629,9 +1629,6 @@ Input Method: Unicast video streams via GigE
 ### 3.0.22 Test Case: ECM Error Recovery
 **Test ID:** TC_REL1.2.15-030_022
 **Severity:** HIGH
-#### 3.0.22.2 Objectives
-**Objective:** Verify ECM error handling and recovery
-
 #### 3.0.22.1 Initial Condition
 - VOD stream active with all 4 ECMs
 - Gateway VOD configured and ENABLED on Blade<1>
@@ -1639,6 +1636,9 @@ Input Method: Unicast video streams via GigE
 - APEX-NE EM accessible
 - System logging accessible
 - MPEG Tracker connected
+
+#### 3.0.22.2 Objectives
+**Objective:** Verify ECM error handling and recovery
 
 #### 3.0.22.3 Procedure
 1. Monitor current state:
@@ -1682,15 +1682,15 @@ Input Method: Unicast video streams via GigE
 ### 3.0.23 Test Case: ECM Validation Against CAS System IDs
 **Test ID:** TC_REL1.2.15-030_023
 **Severity:** MEDIUM
-#### 3.0.23.2 Objectives
-**Objective:** Verify ECM contains correct CAS system ID matching configured CAS systems
-
 #### 3.0.23.1 Initial Condition
 - All 4 CAS systems configured (Test Case 3.0.6 completed)
 - Gateway VOD configured and ENABLED on Blade<1>
   - When GVOD is enabled, other TS types are NOT available for configuration on this blade
 - VOD stream active with all 4 ECMs
 - MPEG Tracker capturing
+
+#### 3.0.23.2 Objectives
+**Objective:** Verify ECM contains correct CAS system ID matching configured CAS systems
 
 #### 3.0.23.3 Procedure
 1. Query configured CAS systems:
@@ -1735,15 +1735,15 @@ Input Method: Unicast video streams via GigE
 ### 3.0.24 Test Case: PMT Consistency Across Multiple Captures
 **Test ID:** TC_REL1.2.15-030_024
 **Severity:** MEDIUM
-#### 3.0.24.2 Objectives
-**Objective:** Verify PMT content consistent across multiple stream captures
-
 #### 3.0.24.1 Initial Condition
 - VOD stream active with stable configuration
 - Gateway VOD configured and ENABLED on Blade<1>
   - When GVOD is enabled, other TS types are NOT available for configuration on this blade
 - MPEG Tracker capable of multiple captures
 - All 4 CAS systems configured
+
+#### 3.0.24.2 Objectives
+**Objective:** Verify PMT content consistent across multiple stream captures
 
 #### 3.0.24.3 Procedure
 1. Perform PMT Monitoring Session 1:
@@ -1792,9 +1792,6 @@ Input Method: Unicast video streams via GigE
 ### 3.0.25 Test Case: ECM Performance Under Load (1,300+ mappings per blade)
 **Test ID:** TC_REL1.2.15-030_025
 **Severity:** CRITICAL
-#### 3.0.25.2 Objectives
-**Objective:** Verify ECM insertion operational and without delays for 1,300 simultaneous streams on single blade
-
 #### 3.0.25.1 Initial Condition
 - Test Case 3.0.16 completed (1,300 streams active)
 - Gateway VOD configured and ENABLED on Blade<1>
@@ -1802,6 +1799,9 @@ Input Method: Unicast video streams via GigE
 - All 4 CAS systems configured
 - MPEG Tracker connected
 - System monitoring tools available
+
+#### 3.0.25.2 Objectives
+**Objective:** Verify ECM insertion operational and without delays for 1,300 simultaneous streams on single blade
 
 #### 3.0.25.3 Procedure
 1. Verify baseline state from Test Case 3.0.16:
@@ -1876,9 +1876,6 @@ Input Method: Unicast video streams via GigE
 ### 4.0.1 Test Case: Maximum 1,300 Mappings per Blade (APEX3K-NE)
 **Test ID:** TC_REL1.2.15-040_001  
 **Severity:** HIGH  
-#### 4.0.1.2 Objectives
-**Objective:** Verify APEX3K-NE Gateway VOD can handle 1,300 simultaneous unicast streams from M3 server and display all mappings with correct input/output IPs and program numbers in GVOD Status
-
 #### 4.0.1.1 Initial Condition
 - Single blade or isolated test blade
 - Gateway VOD enabled: **APEX3K-NE EM >> Blades >> Select Blade<1> >> Config >> Enable Gateway VOD**
@@ -1955,6 +1952,9 @@ Input Method: Unicast video streams via GigE
     - Confirm no packet loss or errors
     - Sample 10-20 program numbers to verify correct content routing
 
+#### 4.0.1.2 Objectives
+**Objective:** Verify APEX3K-NE Gateway VOD can handle 1,300 simultaneous unicast streams from M3 server and display all mappings with correct input/output IPs and program numbers in GVOD Status
+
 #### 4.0.1.4 Expected Results
 - All 1,300 unicast streams from M3-Server successfully ingested by APEX3K-NE
 - GVOD Status displays exactly 1,300 TS mappings in the table
@@ -1973,9 +1973,6 @@ Input Method: Unicast video streams via GigE
 ### 4.0.2 Test Case: Reject Capacity Exceed (1,301st Mapping)
 **Test ID:** TC_REL1.2.15-040_002  
 **Severity:** HIGH  
-#### 4.0.2.2 Objectives
-**Objective:** Verify APEX3K-NE rejects mapping creation exceeding capacity limit
-
 #### 4.0.2.1 Initial Condition
 - 1,300 mappings already created and active
 - Attempting to add 1,301st mapping
@@ -1989,6 +1986,9 @@ Input Method: Unicast video streams via GigE
 6. Verify existing 1,300 mappings remain unaffected
 7. Verify no system instability
 
+#### 4.0.2.2 Objectives
+**Objective:** Verify APEX3K-NE rejects mapping creation exceeding capacity limit
+
 #### 4.0.2.4 Expected Results
 - 1,301st mapping rejected
 - Clear error message: "Maximum 1,300 mappings reached" (or similar)
@@ -1998,9 +1998,6 @@ Input Method: Unicast video streams via GigE
 ### 4.0.3 Test Case: Multi-Blade Capacity Isolation (APEX3K-NE)
 **Test ID:** TC_REL1.2.15-040_003  
 **Severity:** MEDIUM  
-#### 4.0.3.2 Objectives
-**Objective:** Verify each blade has independent 1,300 mapping capacity
-
 #### 4.0.3.1 Initial Condition
 - 3-blade APEX3K-NE system
 - All blades support Gateway VOD
@@ -2022,6 +2019,9 @@ Input Method: Unicast video streams via GigE
 8. Attempt 1,301st on Blade<2> (should fail)
 9. Verify Blade<1> and <3> unaffected
 
+#### 4.0.3.2 Objectives
+**Objective:** Verify each blade has independent 1,300 mapping capacity
+
 #### 4.0.3.4 Expected Results
 - Each blade supports full 1,300 independent
 - Total 3,900 mappings across 3 blades
@@ -2031,9 +2031,6 @@ Input Method: Unicast video streams via GigE
 ### 4.0.4 Test Case: Capacity Maintained During Dynamic Addition
 **Test ID:** TC_REL1.2.15-040_004  
 **Severity:** MEDIUM  
-#### 4.0.4.2 Objectives
-**Objective:** Verify capacity handling during dynamic stream addition
-
 #### 4.0.4.1 Initial Condition
 - Starting with 1,000 active mappings
 - Adding 300 more to reach 1,300 capacity
@@ -2046,6 +2043,9 @@ Input Method: Unicast video streams via GigE
 5. Verify all 1,300 active after completion
 6. Verify existing 1,000 remain uninterrupted
 7. Monitor performance after reaching capacity
+
+#### 4.0.4.2 Objectives
+**Objective:** Verify capacity handling during dynamic stream addition
 
 #### 4.0.4.4 Expected Results
 - 300 added successfully
@@ -2082,9 +2082,6 @@ Input Method: Unicast video streams via GigE
 ### 5.0.1 Test Case: Enable DTCP Follow Capability in Gateway VOD Mode
 **Test ID:** TC_REL1.2.15-050_001  
 **Severity:** CRITICAL  
-#### 5.0.1.2 Objectives
-**Objective:** Verify VOD_X6_022 - Blade in Gateway VOD Mode supports "Follow DTCP" capability via "Follow DTCP Session Control" parameter
-
 #### 5.0.1.1 Initial Condition
 - APEX3K-NE with multiple blades operational
 - APEX-NE EM accessible with administrator access
@@ -2097,6 +2094,9 @@ Input Method: Unicast video streams via GigE
 - Some routes removed from M3 Server to accommodate inputs from source device
 - Source device unicasting DTCP test streams to be routed by APEX NE
 - Each blade in Gateway VOD Mode
+
+#### 5.0.1.2 Objectives
+**Objective:** Verify VOD_X6_022 - Blade in Gateway VOD Mode supports "Follow DTCP" capability via "Follow DTCP Session Control" parameter
 
 #### 5.0.1.3 Procedure
 1. Access APEX-NE EM >> Chassis >> VOD
@@ -2158,9 +2158,6 @@ Input Method: Unicast video streams via GigE
 ### 5.0.2 Test Case: DTCP Descriptor Modified on Source Device
 **Test ID:** TC_REL1.2.15-050_002  
 **Severity:** HIGH  
-#### 5.0.2.2 Objectives
-**Objective:** Verify APEX3K-NE handles DTCP descriptor modifications from source device
-
 #### 5.0.2.1 Initial Condition
 - DTCP Follow enabled as per TC_REL1.2.15-050_001
 - DTCP test streams flowing to Blade<1>
@@ -2181,6 +2178,9 @@ Input Method: Unicast video streams via GigE
 11. Repeat for multiple CCI values (Full, FWK, FPK, Clear, Unencrypted)
 12. Monitor no disruption to stream delivery during modifications
 
+#### 5.0.2.2 Objectives
+**Objective:** Verify APEX3K-NE handles DTCP descriptor modifications from source device
+
 #### 5.0.2.4 Expected Results
 - DTCP descriptor modifications followed immediately
 - Output descriptor values match source modifications
@@ -2194,9 +2194,6 @@ Input Method: Unicast video streams via GigE
 ### 5.0.3 Test Case: DTCP Descriptor Loss and CTE Settings Reversion
 **Test ID:** TC_REL1.2.15-050_003  
 **Severity:** CRITICAL  
-#### 5.0.3.2 Objectives
-**Objective:** Verify VOD_X6_022 - When input DTCP descriptor lost, output PRKM RMD settings revert to CTE settings within **10 seconds** (APEX NE specific)
-
 #### 5.0.3.1 Initial Condition
 - DTCP Follow enabled
 - DTCP stream flowing to Blade<1>
@@ -2234,8 +2231,8 @@ APEX 3000 reverts within 15 seconds; APEX NE reverts within **10 seconds** (5-se
 ### 5.0.4 Test Case: DTCP Follow Disabled - CTE Settings Enforcement
 **Test ID:** TC_REL1.2.15-050_004  
 **Severity:** HIGH  
-#### 5.0.4.2 Objectives
-**Objective:** Verify when "Follow DTCP Session Control" is Disabled, CTE settings are used exclusively
+#### 5.0.3.2 Objectives
+**Objective:** Verify VOD_X6_022 - When input DTCP descriptor lost, output PRKM RMD settings revert to CTE settings within **10 seconds** (APEX NE specific)
 
 #### 5.0.4.1 Initial Condition
 - APEX3K-NE configured for Gateway VOD
@@ -2253,6 +2250,9 @@ APEX 3000 reverts within 15 seconds; APEX NE reverts within **10 seconds** (5-se
 8. Modify source DTCP descriptor (change APS/CCI values)
 9. Verify output does NOT follow modifications (still uses CTE settings)
 10. Monitor output stream quality/encryption
+
+#### 5.0.4.2 Objectives
+**Objective:** Verify when "Follow DTCP Session Control" is Disabled, CTE settings are used exclusively
 
 #### 5.0.4.4 Expected Results
 - Follow DTCP disabled → CTE settings applied to all streams
@@ -2284,9 +2284,6 @@ APEX 3000 reverts within 15 seconds; APEX NE reverts within **10 seconds** (5-se
 ### 5.0.5 Test Case: Pre-encrypted Service Detection - Full Encryption Input (ENABLED = PASS-THROUGH)
 **Test ID:** TC_REL1.2.15-050_005  
 **Severity:** CRITICAL  
-#### 5.0.5.2 Objectives
-**Objective:** Verify VOD_X6_023 - When Pre-encrypted Checking ENABLED: Input with CA_descriptor → Pass-through with same CA_descriptor (no re-encryption)
-
 #### 5.0.5.1 Initial Condition
 - Pre-encrypted content source available (Source APEX NE, NE2000/2500, or capable device)
 - Source capable of generating Broadcast Encrypted (Full) streams WITH CA_descriptor
@@ -2299,6 +2296,9 @@ APEX 3000 reverts within 15 seconds; APEX NE reverts within **10 seconds** (5-se
 - Pre-encrypted streams with CA_descriptor from source device
 - CTE Encryption setting = FULL
 - Pre-encrypted Checking = **ENABLED** ⭐ KEY SETTING
+
+#### 5.0.5.2 Objectives
+**Objective:** Verify VOD_X6_023 - When Pre-encrypted Checking ENABLED: Input with CA_descriptor → Pass-through with same CA_descriptor (no re-encryption)
 
 #### 5.0.5.3 Procedure
 1. Access: **APEX-NE EM >> VOD >> Session control configurations**
@@ -2354,9 +2354,6 @@ When Pre-encrypted Checking = ENABLED:
 ### 5.0.6 Test Case: Pre-encrypted Stream Detection - FWK Input (ENABLED = PASS-THROUGH)
 **Test ID:** TC_REL1.2.15-050_006  
 **Severity:** HIGH  
-#### 5.0.6.2 Objectives
-**Objective:** Verify when Pre-encrypted Checking ENABLED: FWK input with CA_descriptor → Pass-through with same CA_descriptor
-
 #### 5.0.6.1 Initial Condition
 - Source device capable of generating FWK encrypted stream WITH CA_descriptor
 - Pre-encrypted Checking = **ENABLED**
@@ -2383,6 +2380,9 @@ When Pre-encrypted Checking = ENABLED:
     - Connect separate Motorola DCX STB to APEX3K-NE output
     - Should NOT be able to view (different CA_descriptor, different CAS)
 
+#### 5.0.6.2 Objectives
+**Objective:** Verify when Pre-encrypted Checking ENABLED: FWK input with CA_descriptor → Pass-through with same CA_descriptor
+
 #### 5.0.6.4 Expected Results
 - FWK with CA_descriptor detected and passed through
 - **Same CA_descriptor copied to output**
@@ -2402,9 +2402,6 @@ Only difference is stream type (FWK vs Full), behavior should be identical for p
 ### 5.0.7 Test Case: Pre-encrypted Checking DISABLED - CTE Re-encryption Applied
 **Test ID:** TC_REL1.2.15-050_007  
 **Severity:** CRITICAL  
-#### 5.0.7.2 Objectives
-**Objective:** Verify when Pre-encrypted Checking DISABLED: APEX-NE strips CA_descriptor, re-encrypts, and inserts CTE CA_descriptor
-
 #### 5.0.7.1 Initial Condition
 - Pre-encrypted stream available WITH CA_descriptor (Broadcast Encrypted Full)
 - Pre-encrypted Checking = **DISABLED** ⭐ KEY SETTING
@@ -2442,6 +2439,9 @@ Only difference is stream type (FWK vs Full), behavior should be identical for p
     - Verify encrypted TS content plays WITHOUT glitches or macroblocks
     - Confirm smooth video rendering and audio sync
 
+#### 5.0.7.2 Objectives
+**Objective:** Verify when Pre-encrypted Checking DISABLED: APEX-NE strips CA_descriptor, re-encrypts, and inserts CTE CA_descriptor
+
 #### 5.0.7.4 Expected Results
 - Input CA_descriptor STRIPPED (removed from output)
 - New CTE CA_descriptor INSERTED
@@ -2463,9 +2463,6 @@ Only difference is stream type (FWK vs Full), behavior should be identical for p
 ### 5.0.8 Test Case: Clear Input with Pre-encrypted Checking ENABLED
 **Test ID:** TC_REL1.2.15-050_008  
 **Severity:** HIGH  
-#### 5.0.8.2 Objectives
-**Objective:** Verify when Pre-encrypted Checking ENABLED: Clear input (NO CA_descriptor) → Encrypt normally and insert CTE CA_descriptor
-
 #### 5.0.8.1 Initial Condition
 - Clear (unencrypted) VOD stream input
 - Input has NO CA_descriptor
@@ -2496,6 +2493,9 @@ Only difference is stream type (FWK vs Full), behavior should be identical for p
     - Verify encrypted TS content plays WITHOUT glitches or macroblocks
     - Confirm smooth video rendering and audio sync
 
+#### 5.0.8.2 Objectives
+**Objective:** Verify when Pre-encrypted Checking ENABLED: Clear input (NO CA_descriptor) → Encrypt normally and insert CTE CA_descriptor
+
 #### 5.0.8.4 Expected Results
 - Clear input (no CA_descriptor) encrypted with CTE
 - CTE CA_descriptor inserted in output
@@ -2509,9 +2509,6 @@ Only difference is stream type (FWK vs Full), behavior should be identical for p
 ### 5.0.9 Test Case: Mixed Inputs - Pre-encrypted (CA) + Clear (No CA)
 **Test ID:** TC_REL1.2.15-050_009  
 **Severity:** MEDIUM  
-#### 5.0.9.2 Objectives
-**Objective:** Verify Pre-encrypted Checking ENABLED handles mixed inputs correctly on same Blade
-
 #### 5.0.9.1 Initial Condition
 - Pre-encrypted Checking = **ENABLED**
 - Multiple stream inputs to same Blade
@@ -2538,6 +2535,9 @@ Only difference is stream type (FWK vs Full), behavior should be identical for p
    - CTE Auth: Connect Motorola DCX STB, can view (CTE encrypted), monitor for 1 minute, verify smooth playback without glitches
 9. Verify no cross-stream interference
 
+#### 5.0.9.2 Objectives
+**Objective:** Verify Pre-encrypted Checking ENABLED handles mixed inputs correctly on same Blade
+
 #### 5.0.9.4 Expected Results
 - Stream 1 (pre-encrypted with CA): Passed through with SAME CA_descriptor
   - **Video Playback Verified on Motorola DCX STB:** Broadcast Auth STB displays stream without glitches or macroblocks
@@ -2557,9 +2557,6 @@ Only difference is stream type (FWK vs Full), behavior should be identical for p
 ### 5.0.10 Test Case: Configuration Precedence - Pre-encrypted Checking Effects
 **Test ID:** TC_REL1.2.15-050_010  
 **Severity:** CRITICAL  
-#### 5.0.10.2 Objectives
-**Objective:** Verify Pre-encrypted Checking setting determines stream handling (CA_descriptor preservation vs replacement)
-
 #### 5.0.10.1 Initial Condition
 - Pre-encrypted stream WITH CA_descriptor available
 - MPEG Tracker monitoring output
@@ -2593,6 +2590,9 @@ Only difference is stream type (FWK vs Full), behavior should be identical for p
 12. Compare Blade<1> vs Blade<2> outputs
 13. Verify different CA_descriptor handling based on setting
 
+#### 5.0.10.2 Objectives
+**Objective:** Verify Pre-encrypted Checking setting determines stream handling (CA_descriptor preservation vs replacement)
+
 #### 5.0.10.4 Expected Results
 - Blade<1> (ENABLED): Input CA_descriptor preserved in output
   - **Video Playback Verified on Motorola DCX STB:** Broadcast Auth displays pass-through stream without glitches or macroblocks
@@ -2615,9 +2615,6 @@ Per APEX NE Specification:
 ### 6.0.1 Test Case: Element Manager Encryption Status Display - GVOD Status Table (APEX3K-NE)
 **Test ID:** TC_REL1.2.15-060_001  
 **Severity:** HIGH  
-#### 6.0.1.2 Objectives
-**Objective:** Verify encryption status and mapping details displayed in GVOD Status table
-
 #### 6.0.1.1 Initial Condition
 - APEX-NE EM interface accessible
 - Multiple GVOD mappings with encryption active
@@ -2640,6 +2637,9 @@ Per APEX NE Specification:
 9. Disable MediaCipher Simulcrypt at blade level and verify status changes
 10. Verify MPEG Tracker analysis matches displayed encryption status
 
+#### 6.0.1.2 Objectives
+**Objective:** Verify encryption status and mapping details displayed in GVOD Status table
+
 #### 6.0.1.4 Expected Results
 - GVOD status table displays all GVOD TS entries
 - Encryption status shown for each mapping
@@ -2651,9 +2651,6 @@ Per APEX NE Specification:
 ### 6.0.2 Test Case: Encryption Status Detail - CAS Systems
 **Test ID:** TC_REL1.2.15-060_002  
 **Severity:** MEDIUM  
-#### 6.0.2.2 Objectives
-**Objective:** Verify detailed status showing which CAS systems active
-
 #### 6.0.2.1 Initial Condition
 - Mapping with multiple CAS configured (MediaCipher + SuperCAS)
 - APEX-NE EM Mappings view accessible
@@ -2670,6 +2667,9 @@ Per APEX NE Specification:
 5. Test with different CAS configurations
 6. Verify detail level comprehensive
 
+#### 6.0.2.2 Objectives
+**Objective:** Verify detailed status showing which CAS systems active
+
 #### 6.0.2.4 Expected Results
 - Detailed status accessible
 - CAS systems listed individually
@@ -2679,9 +2679,6 @@ Per APEX NE Specification:
 ### 6.0.3 Test Case: Bulk Status Display and Filtering
 **Test ID:** TC_REL1.2.15-060_003  
 **Severity:** MEDIUM  
-#### 6.0.3.2 Objectives
-**Objective:** Verify Element Manager handles large mapping sets efficiently
-
 #### 6.0.3.1 Initial Condition
 - 1,000+ mappings configured
 - Various encryption states
@@ -2698,6 +2695,9 @@ Per APEX NE Specification:
 6. Test bulk status operations
 7. Verify pagination if applicable
 
+#### 6.0.3.2 Objectives
+**Objective:** Verify Element Manager handles large mapping sets efficiently
+
 #### 6.0.3.4 Expected Results
 - All mappings displayed
 - Performance acceptable (< 5 sec)
@@ -2712,9 +2712,6 @@ Per APEX NE Specification:
 ### 7.0.1 Test Case: SDM Plug-in Configuration Support
 **Test ID:** TC_REL1.2.15-070_001  
 **Severity:** HIGH  
-#### 7.0.1.2 Objectives
-**Objective:** Verify SDM plug-in supports MediaCipher SimulCrypt configuration
-
 #### 7.0.1.1 Initial Condition
 - SDM (Service Delivery Manager) environment available
 - SDM plug-in for APEX3K-NE installed
@@ -2729,6 +2726,9 @@ Per APEX NE Specification:
 6. Configure external SuperCAS (up to 3)
 7. Verify configuration persists
 
+#### 7.0.1.2 Objectives
+**Objective:** Verify SDM plug-in supports MediaCipher SimulCrypt configuration
+
 #### 7.0.1.4 Expected Results
 - SDM displays all configuration options
 - All options functional through SDM
@@ -2738,9 +2738,6 @@ Per APEX NE Specification:
 ### 7.0.2 Test Case: MIB File Updates - Gateway VOD MC Simulcrypt Parameter
 **Test ID:** TC_REL1.2.15-070_002  
 **Severity:** HIGH  
-#### 7.0.2.2 Objectives
-**Objective:** Verify MIB files contain Gateway VOD MC Simulcrypt parameter with per-blade configuration
-
 #### 7.0.2.1 Initial Condition
 - Build package with updated MIB files
 - config.ini file accessible
@@ -2769,6 +2766,9 @@ Per APEX NE Specification:
     - Set Gateway VOD MC simulcrypt = DISABLE
     - Verify reflected in APEX3K-NE EM
 
+#### 7.0.2.2 Objectives
+**Objective:** Verify MIB files contain Gateway VOD MC Simulcrypt parameter with per-blade configuration
+
 #### 7.0.2.4 Expected Results
 - Gateway VOD MC simulcrypt parameter found in MIB
 - Parameter documented with correct name
@@ -2781,9 +2781,6 @@ Per APEX NE Specification:
 ### 7.0.3 Test Case: SDM Upgrade - Release 1.2.14-00 to 1.2.15-00
 **Test ID:** TC_REL1.2.15-070_003  
 **Severity:** CRITICAL  
-#### 7.0.3.2 Objectives
-**Objective:** Verify APEX3K-NE upgrade from 1.2.14-00 to 1.2.15-00 via SDM includes all new features
-
 #### 7.0.3.1 Initial Condition
 - APEX3K-NE running release 1.2.14-00
 - SDM device available for upgrade
@@ -2866,16 +2863,8 @@ Per APEX NE Specification:
    - Performance nominal
    - Resource utilization normal
 
-#### 7.0.3.4 Expected Results
-- Upgrade completes successfully
-- Version shows 1.2.15-00 after upgrade
-- All configuration persisted
-- Gateway VOD MC Simulcrypt parameter present
-- All new features (Simulcrypt, CTE, Pre-encrypted) functional
-- MPEG Tracker analysis shows correct encryption
-- MIB files updated with new parameter
-- System stable with nominal performance
-- No functionality regression from 1.2.14-00
+#### 7.0.3.2 Objectives
+**Objective:** Verify APEX3K-NE upgrade from 1.2.14-00 to 1.2.15-00 via SDM includes all new features
 
 #### 7.0.3.4 Expected Results
 - MIB file properly loaded
@@ -2891,9 +2880,6 @@ Per APEX NE Specification:
 ### 8.0.1 Test Case: Aurora Networks Logo Consistency - Persistent Display Across Screens
 **Test ID:** TC_REL1.2.15-080_001  
 **Severity:** MEDIUM  
-#### 8.0.1.2 Objectives
-**Objective:** Verify Aurora Networks logo displays consistently and persistently across all APEX-NE EM screens
-
 #### 8.0.1.1 Initial Condition
 - APEX-NE EM interface accessible
 - Administrator authenticated
@@ -2925,6 +2911,9 @@ Per APEX NE Specification:
 23. Verify no legacy company logos visible
 24. Document all screens with logo verification
 
+#### 8.0.1.2 Objectives
+**Objective:** Verify Aurora Networks logo displays consistently and persistently across all APEX-NE EM screens
+
 #### 8.0.1.4 Expected Results
 - Aurora Networks logo visible on every screen
 - Logo appearance consistent across all navigation
@@ -2937,9 +2926,6 @@ Per APEX NE Specification:
 ### 8.0.2 Test Case: Patent URL Verification - www.an-pat.com in About Section
 **Test ID:** TC_REL1.2.15-080_002  
 **Severity:** MEDIUM  
-#### 8.0.2.2 Objectives
-**Objective:** Verify Aurora Networks patent URL (www.an-pat.com) correctly displayed in About section and functional
-
 #### 8.0.2.1 Initial Condition
 - APEX-NE EM About section accessible
 - Web browser available for URL testing
@@ -2965,6 +2951,9 @@ Per APEX NE Specification:
 16. Close browser window and return to APEX-NE EM
 17. Verify About section still displays correctly
 18. Test URL multiple times to ensure consistency
+
+#### 8.0.2.2 Objectives
+**Objective:** Verify Aurora Networks patent URL (www.an-pat.com) correctly displayed in About section and functional
 
 #### 8.0.2.4 Expected Results
 - Patent URL clearly displayed in About section
