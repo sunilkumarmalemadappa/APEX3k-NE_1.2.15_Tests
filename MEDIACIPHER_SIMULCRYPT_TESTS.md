@@ -696,7 +696,7 @@ Input Method: Unicast video streams via GigE
 **Test ID:** TC_REL1.2.15-030_007
 **Severity:** HIGH
 #### 3.0.7.2 Objectives
-**Objective:** Verify system rejects 4th external SuperCAS addition (system limit is 3 external, 1 internal = 4 max total)
+**Objective:** Verify system enforces maximum limit of 3 external SuperCAS through UI constraint (total max: 1 internal + 3 external = 4)
 
 #### 3.0.7.1 Initial Condition
 - Test Case 3.0.6 passed (4 CAS systems operational)
@@ -708,39 +708,44 @@ Input Method: Unicast video streams via GigE
 
 #### 3.0.7.3 Procedure
 1. Navigate to: **APEX3K-NE EM >> Simulcrypt >> CAS configuration**
-2. Verify all 4 CAS listed (MediaCipher + 3 external SuperCAS)
-3. Verify stream still active: **APEX3K-NE EM >> Blades >> Select Blade<1> >> Gateway VOD Status** shows stream as Active
-4. Verify MPEG Tracker showing all 4 ECM streams active
-5. Attempt to add 4th external SuperCAS:
-   - Click **Add** or **Configure CAS** button
-   - Select CAS Type: **External SuperCAS**
-   - Enter 4th SuperCAS system ID: **0x9801** (or alternate)
-   - Configure ECMG server for 4th SuperCAS
-6. Click **Save** or **Apply**
-7. Observe system response (should show error within 2-3 seconds)
-8. Verify error message displayed:
-   - Message should indicate "Maximum number of CAS reached" or similar
-   - Should specify limit is 3 external SuperCAS
-   - Should clarify total limit is 4 CAS (1 internal + 3 external)
-9. Verify no 4th CAS added to configuration list
-10. Click **OK** or **Close** to dismiss error dialog
-11. Navigate back to **CAS configuration** and verify still shows only 4 CAS (original configuration preserved)
-12. Verify stream still active: **Gateway VOD Status** should show stream as Active
-13. Connect MPEG Tracker and verify:
-    - Still detecting 4 ECM streams (no new 4th ECM added)
+2. Verify all 4 CAS listed (MediaCipher + 3 external SuperCAS):
+   - 1 Internal MediaCipher (0x4AD0)
+   - 3 External SuperCAS rows filled
+3. Observe CAS configuration table structure:
+   - Verify CAS table has exactly 3 rows for external SuperCAS configuration
+   - Note that 4th row is NOT available (UI enforces max 3 external CAS)
+4. Verify stream still active: **APEX3K-NE EM >> Blades >> Select Blade<1> >> Gateway VOD Status** shows stream as Active
+5. Verify MPEG Tracker showing all 4 ECM streams active
+6. Attempt to add 4th external SuperCAS:
+   - Look for **Add** or **Configure CAS** button
+   - If button is disabled/grayed out: Document that button is disabled when max reached
+   - If no 4th row available: Confirm only 3 rows exist in CAS table
+   - Attempt to click any non-existent add function: Should not be possible
+7. Verify UI prevents 4th CAS addition through one of these mechanisms:
+   - Add button disabled when max CAS reached
+   - No 4th row available in CAS configuration table
+   - Gray-out/disabled state for exceeding limits
+8. Verify error handling (if user attempts workaround):
+   - If any error dialog appears: Document message
+   - Expected: System prevents addition without allowing user to attempt entry
+9. Navigate back to **CAS configuration** and verify still shows only 4 CAS (1 internal + 3 external)
+10. Verify stream still active: **Gateway VOD Status** should show stream as Active
+11. Connect MPEG Tracker and verify:
+    - Still detecting 4 ECM streams (no new 4th ECM attempted to be added)
     - Original 4 ECMs still present and valid
     - No interruption or stream discontinuity
-14. Document error message and timestamp
+12. Document UI behavior preventing 4th CAS configuration
 
 
-15. Verify **PASS CRITERIA:** 4th SuperCAS addition is rejected with appropriate error, Error message explains system limit (3 external SuperCAS max), CAS configuration remains unchanged at 4 systems, Stream stability maintained, No ECM insertion failures or stream discontinuities
+13. Verify **PASS CRITERIA:** UI enforces maximum limit by preventing 4th external SuperCAS configuration, Add button disabled or no 4th row available when limit reached, CAS configuration remains at 4 systems (max), Stream stability maintained without any error attempts, No ECM insertion failures or stream discontinuities
 #### 3.0.7.4 Expected Results
-- System properly rejects 4th external SuperCAS addition
-- Error message clearly indicates maximum limit reached
-- Configuration reverts to previous state (4 CAS systems preserved)
+- UI properly enforces maximum CAS limit (3 external SuperCAS)
+- System prevents 4th external CAS addition at UI level
+- Add button disabled or no 4th configuration row visible when max reached
+- Configuration remains at 4 CAS systems (1 internal + 3 external)
 - Stream continues uninterrupted
 - Original 4 ECM streams remain active and valid
-- No system instability or errors
+- No system errors or warnings when attempting to exceed limit
 
 ### 3.0.8 Test Case: ECM Insertion After CAS Configuration Change
 **Test ID:** TC_REL1.2.15-030_008
