@@ -592,11 +592,12 @@ Input Method: Unicast video streams via GigE
      - Confirm Input IP, Output IP, and Program Number match expectations
    - Document sample mappings (e.g., TS #1, #650, #1300)
 
-6. Monitor system resource utilization:
-   - Check CPU usage: Should be within acceptable limits (target: <85%)
-   - Check memory utilization: Should be within acceptable limits (target: <90%)
-   - Check throughput: Verify output bitrate matches expected for 1,300 streams
-   - Monitor on APEX-NE EM System Dashboard or similar
+6. Monitor device stability and stream throughput:
+   - Verify APEX3K-NE device remains operational (no alarms/warnings in APEX-NE EM)
+   - Check device temperature: Monitor via APEX-NE EM System Dashboard (if available)
+   - Verify output throughput: Confirm device is processing and forwarding all 1,300 streams
+   - Confirm device responsiveness: APEX-NE EM interface remains responsive (no hangs/timeouts)
+   - Check for any error messages or warnings in system logs
 
 7. Test stream quality and playback:
    - Select 3 random streams from the 1,300 (e.g., TS #100, #650, #1250)
@@ -629,7 +630,8 @@ Input Method: Unicast video streams via GigE
   - Correct Output IP (192.168.1.101 - Output IP)
   - Unique Program Number (1000-2299 range or configured)
   - Active/Online status for all mappings
-- System resources remain within acceptable limits during operation
+- APEX3K-NE device remains stable and operational with no alarms/errors
+- Device temperature within normal operating range
 - All streams remain active for continuous 2+ minute monitoring period
 - MPEG Tracker confirms output stream quality and integrity
 - No mapping drops, errors, or UI performance issues
@@ -639,7 +641,7 @@ Input Method: Unicast video streams via GigE
 - Exactly 1,300 mappings created and active in GVOD Status
 - All mappings display correct Input IP, Output IP, and Program Number
 - 100% of mappings remain active throughout test (zero dropped mappings)
-- System performance remains acceptable (CPU <85%, Memory <90%)
+- Device remains stable with no alarms, errors, or warnings
 - MPEG Tracker output quality verification passed
 
 ---
