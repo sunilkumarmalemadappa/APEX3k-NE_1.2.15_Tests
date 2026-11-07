@@ -411,7 +411,7 @@ Input Method: Unicast video streams via GigE
    - Search for ECM (0x80) tables
    - Identify ECM PID assigned
    - Verify MediaCipher system ID in ECM
-   - Verify ECM insertion frequency (typical: 100-200ms intervals)
+   - Verify ECM insertion frequency (typical: 120ms intervals, approximately 8 ECM packets per second)
    - Validate ECM structure per DVB-CSA2
 6. Verify ECM credentials present
 7. Monitor frequency consistency
@@ -419,7 +419,7 @@ Input Method: Unicast video streams via GigE
 **Expected Results:**
 - ECM tables detected in transport stream
 - ECM PID correctly identified
-- ECM frequency within spec (100-200ms)
+- ECM frequency within spec (120ms intervals, ~8 packets/second)
 - ECM syntax valid per DVB-CSA2
 - MediaCipher credentials in ECM
 - MPEG Tracker confirms ECM presence
@@ -454,17 +454,17 @@ Input Method: Unicast video streams via GigE
    - Extract MediaCipher system ID from each ECM
 9. Document all 5-10 ECM PIDs and their associated streams
 10. Verify each stream has received at least 2-3 ECM packets
-11. Verify ECM frequency consistent (100-200ms intervals per DVB spec)
+11. Verify ECM frequency consistent (120ms intervals, approximately 8 ECM packets per second per DVB spec)
 12. Export MPEG Tracker analysis and save results
 
 
-13. Verify **PASS CRITERIA:** 100% of 5-10 streams have ECMs inserted, Each stream ECM PID is unique, MediaCipher system ID present and correct in all ECMs, ECM frequency consistent across all streams
+13. Verify **PASS CRITERIA:** 100% of 5-10 streams have ECMs inserted, Each stream ECM PID is unique, MediaCipher system ID present and correct in all ECMs, ECM frequency consistent (120ms intervals, ~8 packets/second) across all streams
 **Expected Results:**
 - All 5-10 streams appear in APEX3K-NE Gateway VOD Status as Active
 - Each stream generates unique ECM packets with distinct PID
 - Each ECM contains correct MediaCipher CAS system ID
 - ECM packets detected for all 5-10 streams in MPEG Tracker output
-- ECM insertion frequency within specification (100-200ms intervals)
+- ECM insertion frequency within specification (120ms intervals, ~8 packets/second)
 - No ECM collisions or duplicate PIDs across streams
 
 ### Test Case 3.3: PMT Update - ECM Descriptor Addition
@@ -556,7 +556,7 @@ Input Method: Unicast video streams via GigE
 12. For SuperCAS1 ECM, verify:
     - CAS system ID = 0x4B46 (or configured SuperCAS ID)
     - ECM data structure valid per SuperCAS specification
-    - ECM frequency within spec (100-200ms)
+    - ECM frequency within spec (120ms intervals, ~8 packets/second)
 13. Extract and document both ECM streams:
     - ECM PID 1: MediaCipher (system ID 0x4AD0)
     - ECM PID 2: SuperCAS1 (system ID 0x4B46)
@@ -604,7 +604,7 @@ Input Method: Unicast video streams via GigE
     - ECM 1: MediaCipher (0x4AD0)
     - ECM 2: SuperCAS1 (0x4B46)
     - ECM 3: SuperCAS2 (0x4BB8)
-14. Document all 3 ECM PIDs and verify each has continuous insertion (100-200ms frequency)
+14. Document all 3 ECM PIDs and verify each has continuous insertion (120ms frequency, ~8 packets/second)
 15. Extract 50 packets of each ECM type and verify structure validity
 
 
@@ -658,13 +658,13 @@ Input Method: Unicast video streams via GigE
 13. Verify each ECM:
     - Correct CAS system ID
     - Valid structure per DVB specification
-    - Consistent insertion frequency (100-200ms)
+    - Consistent insertion frequency (120ms intervals, ~8 ECM packets/second)
     - PID unique and distinct from others
 14. Monitor PMT for CA descriptors:
     - Should have 4 CA descriptors total
     - Each descriptor references correct CAS system ID and ECM PID
 15. Calculate total ECM bandwidth:
-    - Measure total ECM packets per second
+    - Measure total ECM packets per second (target: ~8 packets/second per ECM)
     - Document bandwidth impact on stream
 
 
@@ -1001,7 +1001,7 @@ Input Method: Unicast video streams via GigE
    - ECM packet ratio = ECM packets / Total packets
    - ECM bandwidth = Total bitrate × ECM packet ratio
 6. Document for each individual ECM:
-   - ECM frequency (packets per second)
+   - ECM frequency (packets per second): Target ~8 packets/second per ECM, intervals ~120ms
    - Estimated bandwidth per CAS
    - Example: MediaCipher ECM: 10 packets/sec × 184 bytes = 18.4 kbps
 7. Calculate total ECM bandwidth:
@@ -1012,11 +1012,11 @@ Input Method: Unicast video streams via GigE
    - Verify total ECM bandwidth < [acceptable threshold]
 9. Verify ECM frequency consistency:
    - Measure time intervals between consecutive ECMs for each PID
-   - Verify frequency within spec (100-200ms per DVB)
+   - Verify frequency within spec (120ms intervals, ~8 packets/second per DVB)
    - Calculate jitter/variance
 
 
-10. Verify **PASS CRITERIA:** ECM bandwidth < 10% of total stream bitrate, Individual ECM frequencies within 100-200ms spec, Consistent ECM insertion rates for all 4 CAS systems
+10. Verify **PASS CRITERIA:** ECM bandwidth < 10% of total stream bitrate, Individual ECM frequencies within 120ms intervals (~8 packets/second) spec, Consistent ECM insertion rates for all 4 CAS systems
 **Expected Results:**
 - Total ECM bandwidth measurable and quantifiable
 - ECM bandwidth typically 2-5% of total stream
@@ -1084,7 +1084,7 @@ Input Method: Unicast video streams via GigE
 ### Test Case 3.14: ECM Insertion Frequency for Each CAS
 **Test ID:** TC_REL1.2.15-030_014
 **Severity:** MEDIUM
-**Objective:** Verify ECM insertion frequency meets DVB specification (100-200ms typical) for all CAS systems
+**Objective:** Verify ECM insertion frequency meets specification (120ms intervals, approximately 8 ECM packets per second) for all CAS systems
 
 **Pre-conditions:**
 - Test Case 3.6 passed
@@ -1123,9 +1123,9 @@ Input Method: Unicast video streams via GigE
    - Verify jitter acceptable (target: < 10% of mean interval)
 
 
-9. Verify **PASS CRITERIA:** 100% of ECM intervals within 100-200ms specification, Average frequency consistent for each CAS, Jitter acceptable (< 10% variance), No anomalous gaps or insertions
+9. Verify **PASS CRITERIA:** 100% of ECM intervals within 120ms specification (~8 packets/second), Average frequency consistent for each CAS, Jitter acceptable (< 10% variance), No anomalous gaps or insertions
 **Expected Results:**
-- All ECM insertion intervals between 100-200ms per DVB spec
+- All ECM insertion intervals between 120ms per specification (~8 packets/second)
 - Consistent frequency for each CAS system
 - Low jitter/variance (< 10% of mean)
 - No irregular gaps or burst patterns
@@ -1157,8 +1157,8 @@ Input Method: Unicast video streams via GigE
    - Verify payload differs between consecutive ECMs
 5. Verify no missing ECMs:
    - Measure time gaps between consecutive ECMs of same PID
-   - Gaps should never exceed 250ms (approximately twice max insertion interval)
-   - Document any gaps approaching 200ms
+   - Gaps should never exceed 250ms (approximately 2x the normal 120ms interval)
+   - Document any gaps approaching 150ms or larger
 6. Verify splicing points (if stream spliced/edited):
    - If captured across multiple splice events, verify ECM continuity maintained
    - Verify no loss of ECM at splice boundaries
@@ -1237,7 +1237,7 @@ Input Method: Unicast video streams via GigE
 11. Verify ECM insertion:
     - For random sample of streams (at least 100), verify:
     - ECM packets present for each stream
-    - ECM frequency within spec (100-200ms)
+    - ECM frequency within spec (120ms intervals, ~8 packets/second)
     - No ECM packet loss
 12. Monitor system performance:
     - Check APEX3K-NE stability: **APEX-NE EM** interface responsive, no warnings/errors
@@ -1350,7 +1350,7 @@ Input Method: Unicast video streams via GigE
    - CAS system IDs identical across all services
    - ECM PID scheme consistent
 8. Compare ECM delivery:
-   - Verify each stream receives regular ECMs (100-200ms frequency)
+   - Verify each stream receives regular ECMs (120ms intervals, ~8 packets/second)
    - Verify no service-specific ECM gaps
 9. Document comparison table:
    - Service/Stream | CAS1 | CAS2 | CAS3 | CAS4 | ECM Frequency | Status
@@ -1383,7 +1383,7 @@ Input Method: Unicast video streams via GigE
    - MPEG Tracker showing regular TS packets and ECMs
 2. Document baseline ECM pattern:
    - Count ECM packets over 10-second window before pause
-   - Verify normal frequency (100-200ms intervals)
+   - Verify normal frequency (120ms intervals, ~8 packets/second)
 3. Issue pause command on M3-Server:
    - Using M3-Server interface, pause the VOD playback
    - Stream input halts but connection remains open
@@ -1463,7 +1463,7 @@ Input Method: Unicast video streams via GigE
 9. Verify ECM insertion characteristics for new SuperCAS3:
    - ECM PID is unique (not collision with existing 3)
    - CAS system ID = 0x5601
-   - Insertion frequency within spec (100-200ms)
+   - Insertion frequency within spec (120ms intervals, ~8 packets/second)
 10. Verify stream continuity:
     - No packet loss around configuration change point
     - TS packet sequence continuous
@@ -1734,7 +1734,7 @@ Input Method: Unicast video streams via GigE
    - Sample 100 random streams from the 1,300
    - For each sample stream, verify:
      - ECM packets present for all 4 CAS (or appropriate CAS for that stream)
-     - ECM frequency within spec (100-200ms)
+     - ECM frequency within spec (120ms intervals, ~8 packets/second)
      - No missing ECMs or gaps
    - Calculate: Number of streams with valid ECMs / 100 sample streams
    - Target: 100% of sampled streams have valid ECMs
@@ -1769,7 +1769,7 @@ Input Method: Unicast video streams via GigE
     - Stream stability: [%]
 
 
-13. Verify **PASS CRITERIA:** ECM insertion success rate ≥ 99.9%, Average ECM frequency within 100-200ms spec, Error rate < 0.1%, 100% stream stability, Peak CPU < 85% utilization, Peak memory < 85% utilization, Output CRC error rate < 0.01%
+13. Verify **PASS CRITERIA:** ECM insertion success rate ≥ 99.9%, Average ECM frequency within 120ms spec (~8 packets/second), Error rate < 0.1%, 100% stream stability, Peak CPU < 85% utilization, Peak memory < 85% utilization, Output CRC error rate < 0.01%
 **Expected Results:**
 - ECMs successfully inserted for all 1,300 streams
 - Insertion frequency within specification
