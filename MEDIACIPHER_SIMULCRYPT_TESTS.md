@@ -449,8 +449,9 @@ Input Method: Unicast video streams via GigE
    - Verify MediaCipher system ID in ECM
    - Verify ECM insertion frequency (typical: 120ms intervals, approximately 8 ECM packets per second)
    - Validate ECM structure per DVB-CSA2
-6. Verify ECM credentials present
-7. Monitor frequency consistency
+6. Connect Motorola DCX Settop box to APEX3K-NE RF output, monitor video playback for 1-2 minutes, verify encrypted TS content plays WITHOUT glitches or macroblocks, confirm smooth rendering and audio sync
+7. Verify ECM credentials present
+8. Monitor frequency consistency
 
 #### 3.0.1.4 Expected Results
 - ECM tables detected in transport stream
@@ -459,6 +460,7 @@ Input Method: Unicast video streams via GigE
 - ECM syntax valid per DVB-CSA2
 - MediaCipher credentials in ECM
 - MPEG Tracker confirms ECM presence
+- **Video Playback Verified on Motorola DCX STB:** Encrypted content displays without glitches or macroblocks, Continuous playback maintained, Smooth rendering and audio synchronization confirmed
 - **Monitoring Points:** MPEG Tracker: Verify ECM packets and PID, APEX-NE EM: Monitor ECMG connectivity at **Simulcrypt >> HOST configuration**, Check ECM error rate (target: < 0.01%)
 
 ---
@@ -492,7 +494,8 @@ Input Method: Unicast video streams via GigE
 9. Document all 5-10 ECM PIDs and their associated streams
 10. Verify each stream has received at least 2-3 ECM packets
 11. Verify ECM frequency consistent (120ms intervals, approximately 8 ECM packets per second per DVB spec)
-12. Export MPEG Tracker analysis and save results
+12. Connect Motorola DCX Settop box to APEX3K-NE RF output, monitor video playback for 1-2 minutes across multiple streams, verify encrypted TS content plays WITHOUT glitches or macroblocks, confirm smooth rendering and audio sync on all streams
+13. Export MPEG Tracker analysis and save results
 
 
 13. Verify **PASS CRITERIA:** 100% of 5-10 streams have ECMs inserted, Each stream ECM PID is unique, MediaCipher system ID present and correct in all ECMs, ECM frequency consistent (120ms intervals, ~8 packets/second) across all streams
@@ -503,6 +506,7 @@ Input Method: Unicast video streams via GigE
 - ECM packets detected for all 5-10 streams in MPEG Tracker output
 - ECM insertion frequency within specification (120ms intervals, ~8 packets/second)
 - No ECM collisions or duplicate PIDs across streams
+- **Video Playback Verified on Motorola DCX STB:** Encrypted content displays without glitches or macroblocks on all streams, Continuous playback maintained across multiple simultaneous streams, Smooth rendering and audio synchronization confirmed for all streams
 
 ### 3.0.3 Test Case: PMT Update - ECM Descriptor Addition
 **Test ID:** TC_REL1.2.15-030_003
@@ -547,9 +551,10 @@ Input Method: Unicast video streams via GigE
     - Verify ES information unchanged (except descriptor addition)
     - Confirm PCR PID unchanged
     - Verify only descriptors added, no removal of existing elements
+14. Connect Motorola DCX Settop box to APEX3K-NE RF output, monitor video playback for 1-2 minutes after PMT update, verify encrypted TS content plays WITHOUT glitches or macroblocks, confirm smooth rendering and audio sync
 
 
-14. Verify **PASS CRITERIA:** PMT version incremented from baseline, CA descriptor with MediaCipher system ID present in PMT, ECM PID valid and referenced correctly, PMT structure valid per DVB-SI specification
+15. Verify **PASS CRITERIA:** PMT version incremented from baseline, CA descriptor with MediaCipher system ID present in PMT, ECM PID valid and referenced correctly, PMT structure valid per DVB-SI specification
 #### 3.0.3.4 Expected Results
 - PMT version incremented (increased by at least 1)
 - New CA descriptor added to PMT with MediaCipher system ID
@@ -557,6 +562,7 @@ Input Method: Unicast video streams via GigE
 - PMT syntax valid per DVB standard
 - All ES information preserved
 - MPEG Tracker confirms PMT descriptor presence
+- **Video Playback Verified on Motorola DCX STB:** Encrypted content displays without glitches or macroblocks, Continuous playback maintained after PMT update, Smooth rendering and audio synchronization confirmed
 
 ### 3.0.4 Test Case: External SuperCAS 1 - ECM Insertion
 **Test ID:** TC_REL1.2.15-030_004
@@ -596,18 +602,20 @@ Input Method: Unicast video streams via GigE
     - CAS system ID = 0x4B46 (or configured SuperCAS ID)
     - ECM data structure valid per SuperCAS specification
     - ECM frequency within spec (120ms intervals, ~8 packets/second)
-13. Extract and document both ECM streams:
+13. Connect Motorola DCX Settop box to APEX3K-NE RF output, monitor video playback for 1-2 minutes, verify encrypted TS content plays WITHOUT glitches or macroblocks, confirm smooth rendering and audio sync
+14. Extract and document both ECM streams:
     - ECM PID 1: MediaCipher (system ID 0x4AD0)
     - ECM PID 2: SuperCAS1 (system ID 0x4B46)
 
 
-14. Verify **PASS CRITERIA:** CAS configuration accepts 1st external SuperCAS without error, ECMs generated for both internal and 1st external CAS, SuperCAS1 ECM PID unique and distinct from MediaCipher, Stream continues without interruption
+15. Verify **PASS CRITERIA:** CAS configuration accepts 1st external SuperCAS without error, ECMs generated for both internal and 1st external CAS, SuperCAS1 ECM PID unique and distinct from MediaCipher, Stream continues without interruption, Video playback verified on STB with no glitches or artifacts
 #### 3.0.4.4 Expected Results
 - 1st external SuperCAS successfully added to CAS configuration
 - VOD stream now receives ECMs for both MediaCipher and SuperCAS1
 - Two distinct ECM PIDs present in transport stream
 - SuperCAS1 CAS system ID correctly present in its ECM
 - Both ECM streams have valid structure and frequency
+- **Video Playback Verified on Motorola DCX STB:** Encrypted content displays without glitches or macroblocks, Continuous playback maintained, Smooth rendering and audio synchronization confirmed
 
 ### 3.0.5 Test Case: External SuperCAS 2 - ECM Insertion
 **Test ID:** TC_REL1.2.15-030_005
@@ -645,10 +653,11 @@ Input Method: Unicast video streams via GigE
     - ECM 2: SuperCAS1 (0x4B46)
     - ECM 3: SuperCAS2 (0x4BB8)
 14. Document all 3 ECM PIDs and verify each has continuous insertion (120ms frequency, ~8 packets/second)
-15. Extract 50 packets of each ECM type and verify structure validity
+15. Connect Motorola DCX Settop box to APEX3K-NE RF output, monitor video playback for 1-2 minutes, verify encrypted TS content plays WITHOUT glitches or macroblocks, confirm smooth rendering and audio sync
+16. Extract 50 packets of each ECM type and verify structure validity
 
 
-16. Verify **PASS CRITERIA:** CAS configuration accepts 2nd external SuperCAS, Total of 3 ECMs present (1 internal + 2 external), All three ECM PIDs unique and distinct, Each ECM correctly identifies its CAS system, Stream stability maintained throughout configuration change
+17. Verify **PASS CRITERIA:** CAS configuration accepts 2nd external SuperCAS, Total of 3 ECMs present (1 internal + 2 external), All three ECM PIDs unique and distinct, Each ECM correctly identifies its CAS system, Stream stability maintained throughout configuration change, Video playback verified on STB with no glitches or artifacts
 #### 3.0.5.4 Expected Results
 - 2nd external SuperCAS successfully added to configuration
 - Stream now receives ECMs for MediaCipher, SuperCAS1, and SuperCAS2
@@ -656,6 +665,7 @@ Input Method: Unicast video streams via GigE
 - Each ECM contains correct CAS system ID
 - All ECM streams have valid structure and consistent frequency
 - Original SuperCAS1 ECM continues unaffected
+- **Video Playback Verified on Motorola DCX STB:** Encrypted content displays without glitches or macroblocks, Continuous playback maintained, Smooth rendering and audio synchronization confirmed
 
 ### 3.0.6 Test Case: External SuperCAS 3 - Maximum Config (4 Total CAS)
 **Test ID:** TC_REL1.2.15-030_006
@@ -707,9 +717,10 @@ Input Method: Unicast video streams via GigE
 15. Calculate total ECM bandwidth:
     - Measure total ECM packets per second (target: ~8 packets/second per ECM)
     - Document bandwidth impact on stream
+16. Connect Motorola DCX Settop box to APEX3K-NE RF output, monitor video playback for 1-2 minutes, verify encrypted TS content plays WITHOUT glitches or macroblocks, confirm smooth rendering and audio sync
 
 
-16. Verify **PASS CRITERIA:** CAS configuration successfully accepts 3rd external SuperCAS, Total of 4 ECM PIDs present and verified, All ECM PIDs unique and consistent, All CAS system IDs correct and verified, PMT properly updated with all 4 CA descriptors, Stream remains stable throughout
+17. Verify **PASS CRITERIA:** CAS configuration successfully accepts 3rd external SuperCAS, Total of 4 ECM PIDs present and verified, All ECM PIDs unique and consistent, All CAS system IDs correct and verified, PMT properly updated with all 4 CA descriptors, Stream remains stable throughout, Video playback verified on STB with no glitches or artifacts
 #### 3.0.6.4 Expected Results
 - 3rd external SuperCAS successfully configured
 - Maximum configuration reached (4 total CAS systems)
@@ -718,6 +729,7 @@ Input Method: Unicast video streams via GigE
 - PMT contains 4 CA descriptors with correct CAS IDs and ECM PIDs
 - Stream bandwidth accommodates all 4 ECM streams
 - No stream discontinuities or errors
+- **Video Playback Verified on Motorola DCX STB:** Encrypted content displays without glitches or macroblocks, Continuous playback maintained, Smooth rendering and audio synchronization confirmed
 
 ### 3.0.7 Test Case: Reject 4th External SuperCAS (System Limit)
 **Test ID:** TC_REL1.2.15-030_007
@@ -1227,9 +1239,10 @@ Input Method: Unicast video streams via GigE
 9. Simulate real-world stream conditions:
    - If possible, capture during network jitter or load changes
    - Verify ECM continuity maintained under stress
+10. Connect Motorola DCX Settop box to APEX3K-NE RF output, monitor video playback for 1-2 minutes, verify encrypted TS content plays WITHOUT glitches or macroblocks, confirm smooth rendering and audio sync across ECM transitions
 
 
-10. Verify **PASS CRITERIA:** No ECM gaps > 250ms detected, Zero duplicate ECMs, 100% sequence continuity for all 4 ECM streams, No packet loss or reordering
+11. Verify **PASS CRITERIA:** No ECM gaps > 250ms detected, Zero duplicate ECMs, 100% sequence continuity for all 4 ECM streams, No packet loss or reordering, Video playback stable and continuous on STB with no artifacts at ECM boundaries
 #### 3.0.15.4 Expected Results
 - No gaps in ECM insertion (except normal max intervals)
 - No duplicate ECM packets detected
@@ -1237,6 +1250,7 @@ Input Method: Unicast video streams via GigE
 - TS packet sequence unbroken
 - PCR continuous and monotonically increasing
 - Stream remains synchronous and valid
+- **Video Playback Verified on Motorola DCX STB:** Encrypted content displays without glitches or macroblocks, Continuous playback maintained throughout ECM transitions, Smooth rendering and audio synchronization confirmed
 
 ### 3.0.16 Test Case: ECM PIDs Allocation and Management (1,300+ mappings)
 **Test ID:** TC_REL1.2.15-030_016
@@ -1299,9 +1313,10 @@ Input Method: Unicast video streams via GigE
     - Check APEX3K-NE stability: **APEX-NE EM** interface responsive, no warnings/errors
     - Verify CPU, memory, temperature levels reasonable
     - Check output throughput stable
+13. Connect Motorola DCX Settop box to APEX3K-NE RF output, monitor video playback for 1-2 minutes from one of the 1,300 streams, verify encrypted TS content plays WITHOUT glitches or macroblocks under multi-stream load, confirm smooth rendering and audio sync
 
 
-13. Verify **PASS CRITERIA:** 1,300 streams successfully active simultaneously, Zero PID collisions detected, All ECM PIDs unique and valid, 100% ECM insertion rate for all 1,300 streams, System stability maintained under load
+14. Verify **PASS CRITERIA:** 1,300 streams successfully active simultaneously, Zero PID collisions detected, All ECM PIDs unique and valid, 100% ECM insertion rate for all 1,300 streams, System stability maintained under load, Video playback stable under heavy multi-stream conditions
 #### 3.0.16.4 Expected Results
 - All 1,300 streams ingested and active in Gateway VOD Status
 - Unique ECM PIDs allocated for each stream-CAS combination
@@ -1310,6 +1325,7 @@ Input Method: Unicast video streams via GigE
 - ECMs present for all streams with correct frequency
 - System remains stable with 1,300 active streams
 - APEX-NE EM responsive and no errors
+- **Video Playback Verified on Motorola DCX STB:** Encrypted content displays without glitches or macroblocks even under 1,300-stream load, Continuous playback maintained, Smooth rendering and audio synchronization confirmed
 
 ### 3.0.17 Test Case: CAT Table Update for ECM PIDs
 **Test ID:** TC_REL1.2.15-030_017
@@ -1363,9 +1379,10 @@ Input Method: Unicast video streams via GigE
 13. Check CAT update timing:
     - Measure time from configuration change to new CAT appearance
     - Should appear within 2-5 seconds
+14. Connect Motorola DCX Settop box to APEX3K-NE RF output, monitor video playback for 1-2 minutes before and after CAT update, verify encrypted TS content plays WITHOUT glitches or macroblocks, confirm smooth rendering and audio sync throughout CAT transition
 
 
-14. Verify **PASS CRITERIA:** CAT descriptors match configured CAS systems, All ECM PIDs in CAT have corresponding packets, CAT updates correctly with configuration changes, No missing or extra descriptors in CAT
+15. Verify **PASS CRITERIA:** CAT descriptors match configured CAS systems, All ECM PIDs in CAT have corresponding packets, CAT updates correctly with configuration changes, No missing or extra descriptors in CAT, Video playback stable across CAT updates
 #### 3.0.17.4 Expected Results
 - CAT contains CA descriptors for all ECM systems
 - Each descriptor has correct CAS system ID and ECM PID
@@ -1373,6 +1390,7 @@ Input Method: Unicast video streams via GigE
 - CAT updates correctly when configuration changes
 - CAT version increments appropriately
 - Update occurs within 2-5 seconds
+- **Video Playback Verified on Motorola DCX STB:** Encrypted content displays without glitches or macroblocks before and after CAT update, Continuous playback maintained throughout transition, Smooth rendering and audio synchronization confirmed
 
 ### 3.0.18 Test Case: Service-Specific ECM Configuration Uniformity
 **Test ID:** TC_REL1.2.15-030_018
@@ -1412,16 +1430,18 @@ Input Method: Unicast video streams via GigE
    - Verify no service-specific ECM gaps
 9. Document comparison table:
    - Service/Stream | CAS1 | CAS2 | CAS3 | CAS4 | ECM Frequency | Status
-10. Verify consistency across all services
+10. Connect Motorola DCX Settop box to APEX3K-NE RF output, monitor video playback for 1-2 minutes across multiple services, verify encrypted TS content plays WITHOUT glitches or macroblocks for all services, confirm smooth rendering and audio sync consistently
+11. Verify consistency across all services
 
 
-11. Verify **PASS CRITERIA:** All services uniformly configured with 4 CAS systems, 100% ECM delivery consistency, No service-specific anomalies
+12. Verify **PASS CRITERIA:** All services uniformly configured with 4 CAS systems, 100% ECM delivery consistency, No service-specific anomalies, Video playback consistent and artifact-free across all services
 #### 3.0.18.4 Expected Results
 - All services/streams receive identical CAS configuration
 - All 4 ECMs present for each service
 - No service-specific variations
 - ECM frequency consistent across services
 - Uniform delivery regardless of service
+- **Video Playback Verified on Motorola DCX STB:** Encrypted content displays without glitches or macroblocks for all services, Continuous playback maintained, Smooth rendering and audio synchronization confirmed consistently across all services
 
 ### 3.0.19 Test Case: ECM Handling During Stream Pause/Resume
 **Test ID:** TC_REL1.2.15-030_019
@@ -1470,9 +1490,10 @@ Input Method: Unicast video streams via GigE
     - No discontinuities or corruption
     - Stream playback normal
 13. Test pause/resume cycle multiple times (3-5 cycles)
+14. Connect Motorola DCX Settop box to APEX3K-NE RF output, monitor video playback for 1-2 minutes including pause/resume cycles, verify encrypted TS content plays WITHOUT glitches or macroblocks before, during, and after pause operations, confirm smooth rendering and audio sync maintained across pause/resume transitions
 
 
-14. Verify **PASS CRITERIA:** Pause/resume transitions handled without errors, Stream remains active or appropriately paused during pause, Resume successful with no data loss, ECM continuity maintained across pause/resume
+15. Verify **PASS CRITERIA:** Pause/resume transitions handled without errors, Stream remains active or appropriately paused during pause, Resume successful with no data loss, ECM continuity maintained across pause/resume, Video remains smooth and artifact-free during and after pause/resume
 #### 3.0.19.4 Expected Results
 - Stream pause handled gracefully
 - ECM behavior consistent (either continues or pauses with stream)
@@ -1480,6 +1501,7 @@ Input Method: Unicast video streams via GigE
 - No packet loss or corruption during pause/resume
 - PCR and stream timing maintained
 - No errors or warnings generated
+- **Video Playback Verified on Motorola DCX STB:** Encrypted content displays without glitches or macroblocks before, during, and after pause operations, Continuous playback quality maintained, Smooth rendering and audio synchronization confirmed across pause/resume transitions
 
 ### 3.0.20 Test Case: Dynamic CAS Addition with Active ECMs
 **Test ID:** TC_REL1.2.15-030_020
@@ -1533,9 +1555,10 @@ Input Method: Unicast video streams via GigE
     - Original ECM PIDs unchanged
     - Original ECM frequencies maintained
     - No interruption in original ECM streams
+12. Connect Motorola DCX Settop box to APEX3K-NE RF output, monitor video playback for 1-2 minutes including moment of CAS addition, verify encrypted TS content plays WITHOUT glitches or macroblocks before and after CAS addition, confirm smooth rendering and audio sync maintained across dynamic CAS addition
 
 
-12. Verify **PASS CRITERIA:** Configuration accepted without stream restart, New ECM inserted within 5 seconds, All 4 ECMs operational post-addition, Zero packet loss or corruption, Original ECM service uninterrupted
+13. Verify **PASS CRITERIA:** Configuration accepted without stream restart, New ECM inserted within 5 seconds, All 4 ECMs operational post-addition, Zero packet loss or corruption, Original ECM service uninterrupted, Video playback smooth and continuous across dynamic CAS addition
 #### 3.0.20.4 Expected Results
 - 3rd SuperCAS added without stream interruption
 - New ECM (SuperCAS3) appears within 5 seconds of configuration change
@@ -1544,6 +1567,7 @@ Input Method: Unicast video streams via GigE
 - Stream packet continuity maintained
 - No errors or warnings
 - Stream quality unaffected
+- **Video Playback Verified on Motorola DCX STB:** Encrypted content displays without glitches or macroblocks before and after CAS addition, Continuous playback maintained throughout dynamic configuration change, Smooth rendering and audio synchronization confirmed
 
 ### 3.0.21 Test Case: ECM Update Propagation Time
 **Test ID:** TC_REL1.2.15-030_021
