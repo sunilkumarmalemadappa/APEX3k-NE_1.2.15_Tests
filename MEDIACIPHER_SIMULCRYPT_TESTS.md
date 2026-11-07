@@ -544,38 +544,103 @@ Input Method: Unicast video streams via GigE
 ### Test Case 4.1: Maximum 1,300 Mappings per Blade (APEX3K-NE)
 **Test ID:** TC_REL1.2.15-040_001  
 **Severity:** HIGH  
-**Objective:** Verify APEX3K-NE supports 1,300 transport stream mappings per blade
+**Objective:** Verify APEX3K-NE Gateway VOD can handle 1,300 simultaneous unicast streams from M3 server and display all mappings with correct input/output IPs and program numbers in GVOD Status
 
 **Pre-conditions:**
 - Single blade or isolated test blade
-- Gateway VOD enabled: **Blade >> Select Blade<1> >> Config >> Enable Gateway VOD**
-- Virtual IP and Output IP configured
-- M3-Server VOD streamer available
-- Sufficient system resources
+- Gateway VOD enabled: **APEX3K-NE EM >> Blades >> Select Blade<1> >> Config >> Enable Gateway VOD**
+- Virtual IP (Ingress) configured: example 192.168.1.100 (where M3-Server sends streams)
+- Output IP (Egress) configured: example 192.168.1.101 (where APEX3K-NE sends TS output)
+- M3-Server VOD streamer available and operational with capability to send 1,300 simultaneous unicast streams
+- Sufficient system resources for 1,300 concurrent streams
+- MPEG Tracker connected after APEX3K RF output for monitoring
 
 **Test Steps:**
-1. Configure Virtual IP: example 192.168.1.100
-2. Configure Output IP: example 192.168.1.101
-3. Start M3-Server with unicast stream input targeting Virtual IP
-4. Monitor in APEX-NE EM: **APEX3K-NE EM >> Blades >> Select Blade<1> >> Gateway VOD Status** (TS and Mappings table)
-5. Create 1,300 different stream mappings (may be automated script)
-6. Verify all 1,300 mappings listed in Mappings screen
-7. Monitor system resource utilization (CPU, memory, throughput)
-8. Verify all streams active and operational
-9. Test playback of sample mappings
-10. Monitor MPEG Tracker for output stream quality
+1. Verify Gateway VOD configuration in APEX-NE EM:
+   - Navigate to: **APEX3K-NE EM >> Blades >> Select Blade<1> >> Config**
+   - Confirm Gateway VOD = **Enable**
+   - Confirm Virtual IP (Ingress) = **192.168.1.100** (or configured value)
+   - Confirm Output IP (Egress) = **192.168.1.101** (or configured value)
+
+2. Start M3-Server unicast stream generation:
+   - Launch M3-Server application
+   - Configure to send **1,300 different unicast streams** to the Virtual IP (192.168.1.100)
+   - Each stream should have a unique program number (e.g., PN 1000-2299)
+   - Start streaming from M3-Server (streams will be sent to APEX3K-NE Virtual IP)
+
+3. Monitor stream ingestion in APEX3K-NE:
+   - Wait 5-10 seconds for streams to reach APEX3K-NE
+   - Navigate to: **APEX3K-NE EM >> Blades >> Select Blade<1> >> Gateway VOD Status**
+   - Observe TS and Mappings table for incoming streams
+
+4. Verify all 1,300 TS mappings are displayed:
+   - Confirm table shows all 1,300 transport stream mappings
+   - Scroll through the table to verify complete list
+   - Each row should display:
+     - **TS ID/Index** (1-1300)
+     - **Input IP** = 192.168.1.100 (Virtual IP - source)
+     - **Input Port** (port used by M3-Server)
+     - **Program Number** (unique for each stream: 1000-2299 or configured range)
+     - **Output IP** = 192.168.1.101 (Output IP - destination)
+     - **Output Port** (APEX3K-NE assigned)
+     - **Status** = Active/Online
+     - **Encryption Status** (if applicable)
+
+5. Verify mapping accuracy:
+   - Select 5 random mappings from different sections (first 10, middle 650, last 10):
+     - Click on each mapping to verify detailed information
+     - Confirm Input IP, Output IP, and Program Number match expectations
+   - Document sample mappings (e.g., TS #1, #650, #1300)
+
+6. Monitor system resource utilization:
+   - Check CPU usage: Should be within acceptable limits (target: <85%)
+   - Check memory utilization: Should be within acceptable limits (target: <90%)
+   - Check throughput: Verify output bitrate matches expected for 1,300 streams
+   - Monitor on APEX-NE EM System Dashboard or similar
+
+7. Test stream quality and playback:
+   - Select 3 random streams from the 1,300 (e.g., TS #100, #650, #1250)
+   - Verify each stream can be decoded/monitored
+   - Confirm video/audio output is active
+   - Monitor via MPEG Tracker for packet structure and integrity
+
+8. Verify all streams remain active:
+   - Monitor for minimum 2 minutes
+   - Navigate to: **APEX3K-NE EM >> Blades >> Select Blade<1> >> Gateway VOD Status**
+   - Confirm all 1,300 mappings still show as Active
+   - Check for any dropped or offline mappings (should be zero)
+
+9. Stress test with rapid monitoring:
+   - Repeatedly refresh GVOD Status table (5-10 times in 30 seconds)
+   - Verify all 1,300 mappings still display correctly
+   - Confirm no UI lag or performance degradation
+
+10. Monitor MPEG Tracker for output verification:
+    - Connect MPEG Tracker to APEX3K-NE RF output
+    - Verify output stream quality and integrity
+    - Confirm no packet loss or errors
+    - Sample 10-20 program numbers to verify correct content routing
 
 **Expected Results:**
-- All 1,300 mappings created successfully
-- All show as active in APEX-NE EM
-- System resources within acceptable limits
-- Stream quality acceptable
-- No mapping drops or errors
+- All 1,300 unicast streams from M3-Server successfully ingested by APEX3K-NE
+- GVOD Status displays exactly 1,300 TS mappings in the table
+- Each mapping displays:
+  - Correct Input IP (192.168.1.100 - Virtual IP)
+  - Correct Output IP (192.168.1.101 - Output IP)
+  - Unique Program Number (1000-2299 range or configured)
+  - Active/Online status for all mappings
+- System resources remain within acceptable limits during operation
+- All streams remain active for continuous 2+ minute monitoring period
+- MPEG Tracker confirms output stream quality and integrity
+- No mapping drops, errors, or UI performance issues
+- Stream playback verification successful for random sample mappings
 
 **Pass Criteria:**
-- 1,300 mappings operational
-- No mapping drops
-- Performance acceptable
+- Exactly 1,300 mappings created and active in GVOD Status
+- All mappings display correct Input IP, Output IP, and Program Number
+- 100% of mappings remain active throughout test (zero dropped mappings)
+- System performance remains acceptable (CPU <85%, Memory <90%)
+- MPEG Tracker output quality verification passed
 
 ---
 
